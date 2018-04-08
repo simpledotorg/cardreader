@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180408052658) do
+ActiveRecord::Schema.define(version: 20180408052743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "blood_pressures", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.integer "systolic"
+    t.integer "diastolic"
+    t.date "measured_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_blood_pressures_on_patient_id"
+  end
 
   create_table "facilities", force: :cascade do |t|
     t.string "name"
@@ -31,5 +41,6 @@ ActiveRecord::Schema.define(version: 20180408052658) do
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
 
+  add_foreign_key "blood_pressures", "patients"
   add_foreign_key "patients", "facilities"
 end
