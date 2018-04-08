@@ -13,13 +13,13 @@
 
 <h2>Facility Not Listed?</h2>
 
-<%= form_with(model: @new_facility, local: true) do |form| %>
-  <% if @new_facility.errors.any? %>
+<%= form_with(model: @facility, local: true) do |form| %>
+  <% if @facility.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@new_facility.errors.count, "error") %> prohibited this facility from being saved:</h2>
+      <h2><%= pluralize(@facility.errors.count, "error") %> prohibited this facility from being saved:</h2>
 
       <ul>
-      <% facility.errors.full_messages.each do |message| %>
+      <% @facility.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>

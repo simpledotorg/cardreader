@@ -5,7 +5,7 @@ class FacilitiesController < ApplicationController
   # GET /facilities.json
   def index
     @facilities = Facility.all
-    @new_facility = Facility.new
+    @facility = Facility.new
   end
 
   # GET /facilities/1
@@ -25,6 +25,7 @@ class FacilitiesController < ApplicationController
   # POST /facilities
   # POST /facilities.json
   def create
+    @facilities = Facility.all
     @facility = Facility.new(facility_params)
 
     respond_to do |format|
@@ -32,7 +33,7 @@ class FacilitiesController < ApplicationController
         format.html { redirect_to @facility, notice: 'Facility was successfully created.' }
         format.json { render :show, status: :created, location: @facility }
       else
-        format.html { render :new }
+        format.html { render :index }
         format.json { render json: @facility.errors, status: :unprocessable_entity }
       end
     end
