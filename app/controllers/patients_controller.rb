@@ -1,4 +1,5 @@
 class PatientsController < ApplicationController
+  before_action :set_facility, only: [:index, :show, :new, :edit, :update, :destroy]
   before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
   # GET /patients
@@ -62,7 +63,10 @@ class PatientsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    def set_facility
+      @facility = Facility.find(params[:facility_id])
+    end
+
     def set_patient
       @patient = Patient.find(params[:id])
     end

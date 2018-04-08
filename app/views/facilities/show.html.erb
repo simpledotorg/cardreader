@@ -1,14 +1,3 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @facility.district %>: <%= @facility.name %></h1>
 
-<p>
-  <strong>Name:</strong>
-  <%= @facility.name %>
-</p>
-
-<p>
-  <strong>District:</strong>
-  <%= @facility.district %>
-</p>
-
-<%= link_to 'Edit', edit_facility_path(@facility) %> |
-<%= link_to 'Back', facilities_path %>
+<%= link_to "Add Treatment Card", new_facility_patient_path(@facility, @patient), class: "btn btn-primary" %>
