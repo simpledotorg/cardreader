@@ -2,28 +2,41 @@
 
 <h1>Facilities</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>District</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @facilities.each do |facility| %>
-      <tr>
-        <td><%= facility.name %></td>
-        <td><%= facility.district %></td>
-        <td><%= link_to 'Show', facility %></td>
-        <td><%= link_to 'Edit', edit_facility_path(facility) %></td>
-        <td><%= link_to 'Destroy', facility, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<% @facilities.group_by(&:district).sort.each do |district, district_facilities| %>
+  <h2><%= district %></h2>
+  <ul>
+    <% district_facilities.sort.each do |facility| %>
+      <li><%= link_to facility.name, facility %></li>
     <% end %>
-  </tbody>
-</table>
+  </ul>
+<% end %>
 
-<br>
+<h2>Facility Not Listed?</h2>
 
-<%= link_to 'New Facility', new_facility_path %>
+<%= form_with(model: @new_facility, local: true) do |form| %>
+  <% if @new_facility.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@new_facility.errors.count, "error") %> prohibited this facility from being saved:</h2>
+
+      <ul>
+      <% facility.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :facility_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :district %>
+    <%= form.text_field :district, id: :facility_district %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

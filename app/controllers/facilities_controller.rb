@@ -5,6 +5,7 @@ class FacilitiesController < ApplicationController
   # GET /facilities.json
   def index
     @facilities = Facility.all
+    @new_facility = Facility.new
   end
 
   # GET /facilities/1
