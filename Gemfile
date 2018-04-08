@@ -17,6 +17,7 @@ gem 'spectre_scss'
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-rails'
+  gem 'rb-readline'
 end
 
 group :development do
