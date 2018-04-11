@@ -1,5 +1,17 @@
-<h1>New Patient</h1>
+<ul class="breadcrumb">
+  <li class="breadcrumb-item">
+    <%= link_to "Districts", root_path %>
+  </li>
+  <li class="breadcrumb-item">
+    <%= link_to @district.name, district_path(@district) %>
+  </li>
+  <li class="breadcrumb-item">
+    <%= link_to @facility.name, district_facility_path(@district, @facility) %>
+  </li>
+</ul>
+
+<h1>New Treatment Card</h1>
 
 <%= render 'form', patient: @patient %>
 
-<%= link_to 'Back', facility_path(@facility) %>
+<%= link_to 'Back', district_facility_path(@district, @facility) %>

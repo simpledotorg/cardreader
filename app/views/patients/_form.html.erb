@@ -1,4 +1,4 @@
-<%= form_with(model: [@facility, patient], local: true) do |form| %>
+<%= form_with(model: [@district, @facility, patient], local: true) do |form| %>
   <% if patient.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(patient.errors.count, "error") %> prohibited this patient from being saved:</h2>
@@ -11,22 +11,46 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :card_id %>
-    <%= form.number_field :card_id, id: :patient_card_id %>
+  <div class="form-group">
+    <%= form.label :treatment_number, class: "form-label" %>
+    <div class="input-group">
+      <span class="input-group-addon">2018-</span>
+      <%= form.number_field :treatment_number, id: :patient_treatment_number, class: "form-input" %>
+    </div>
+    <p class="form-input-hint">You don't need to type the zeroes; they will be added automatically</p>
   </div>
 
-  <div class="field">
-    <%= form.label :registered_on %>
-    <%= form.date_select :registered_on, id: :patient_registered_on %>
+  <div class="form-group">
+    <%= form.label :registered_on, class: "form-label" %>
+    <%= form.text_field :registered_on, id: :patient_registered_on, class: "form-input" %>
   </div>
 
-  <div class="field">
-    <%= form.label :facility_id %>
-    <%= form.text_field :facility_id, id: :patient_facility_id %>
-  </div>
+  <% 6.times do %>
+    <div class="columns">
+      <div class="column col-4">
+        <div class="form-group">
+          <%= form.label :systolic, class: "form-label" %>
+          <%= form.text_field :systolic, id: :systolic, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="column col-4">
+        <div class="form-group">
+          <%= form.label :diastolic, class: "form-label" %>
+          <%= form.text_field :diastolic, id: :diastolic, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="column col-4">
+        <div class="form-group">
+          <%= form.label :measured_on, class: "form-label" %>
+          <%= form.text_field :measured_on, id: :measured_on, class: "form-input" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Save Treatment Card", class: "btn btn-primary" %>
   </div>
 <% end %>

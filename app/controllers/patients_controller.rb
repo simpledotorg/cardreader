@@ -1,4 +1,5 @@
 class PatientsController < ApplicationController
+  before_action :set_district, only: [:index, :show, :new, :edit, :update, :destroy]
   before_action :set_facility, only: [:index, :show, :new, :edit, :update, :destroy]
   before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
@@ -63,6 +64,10 @@ class PatientsController < ApplicationController
   end
 
   private
+    def set_district
+      @district = District.find(params[:district_id])
+    end
+
     def set_facility
       @facility = Facility.find(params[:facility_id])
     end
@@ -73,6 +78,6 @@ class PatientsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def patient_params
-      params.require(:patient).permit(:card_id, :registered_on, :facility_id)
+      params.require(:patient).permit(:treatment_number, :registered_on, :facility_id)
     end
 end
