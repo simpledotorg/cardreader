@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :facilities do
-    resources :patients
+  root "districts#index"
+
+  resources :districts do
+    resources :facilities do
+      resources :patients
+    end
   end
 end

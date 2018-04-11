@@ -5,3 +5,34 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Facility.destroy_all
+Patient.destroy_all
+BloodPressure.destroy_all
+
+3.times.each do
+  district = District.create(
+    name: Faker::Address.state
+  )
+
+  3.times.each do
+    facility = district.facilities.create(
+      name: Faker::Address.city
+    )
+
+    3.times.each do |id|
+      patient = facility.patients.create(
+        treatment_number: "2018-%08i" % (id + 1),
+        registered_on: Faker::Date.between(3.months.ago, Date.today),
+      )
+
+      3.times.each do
+        patient.blood_pressures.create(
+          systolic: Faker::Number.between(140, 190),
+          diastolic: Faker::Number.between(90, 140),
+          measured_on: Faker::Date.between(3.months.ago, Date.today),
+        )
+      end
+    end
+  end
+end

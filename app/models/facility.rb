@@ -1,8 +1,10 @@
 class Facility < ApplicationRecord
-  has_many :patients
+  belongs_to :district
 
-  validates :district, presence: true
+  has_many :patients, dependent: :destroy
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: :district, message: "should be unique per district" }
+
+  validates :district, presence: true
 end

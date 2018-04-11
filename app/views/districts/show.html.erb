@@ -1,0 +1,16 @@
+<h1><%= @district.name %></h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Facilities</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @district.facilities.order(:name).each do |facility| %>
+      <tr>
+        <td><%= link_to facility.name, district_facility_path(@district, facility) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,4 +1,5 @@
 class FacilitiesController < ApplicationController
+  before_action :set_district, only: [:index, :show, :edit, :update, :destroy]
   before_action :set_facility, only: [:show, :edit, :update, :destroy]
 
   # GET /facilities
@@ -64,6 +65,10 @@ class FacilitiesController < ApplicationController
   end
 
   private
+    def set_district
+      @district = District.find(params[:district_id])
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_facility
       @facility = Facility.find(params[:id])

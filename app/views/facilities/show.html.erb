@@ -1,3 +1,29 @@
-<h1><%= @facility.district %>: <%= @facility.name %></h1>
+<ul class="breadcrumb">
+  <li class="breadcrumb-item">
+    <%= link_to "Districts", root_path %>
+  </li>
+  <li class="breadcrumb-item">
+    <%= link_to @district.name, district_path(@district) %>
+  </li>
+</ul>
 
-<%= link_to "Add Treatment Card", new_facility_patient_path(@facility, @patient), class: "btn btn-primary" %>
+<h1><%= @district.name %>: <%= @facility.name %></h1>
+
+<%= link_to "Add Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Patient Treatment Number</th>
+      <th>Registration Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @facility.patients.order(:treatment_number).each do |patient| %>
+      <tr>
+        <td><%= link_to patient.treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
+        <td><%= patient.registered_on.strftime("%d-%m-%Y") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
