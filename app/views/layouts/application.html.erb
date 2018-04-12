@@ -12,6 +12,11 @@
     <%= console if Rails.env.development? %>
     <div class="container grid-lg">
       <%= yield %>
+
+      <footer>
+        <div class="divider"></div>
+        <p>Confused? Have questions? Contact <%= ENV.fetch("CONTACT_NAME") %> on WhatsApp at <%= ENV.fetch("CONTACT_PHONE") %></p>
+      </footer>
     </div>
   </body>
 </html>
