@@ -1,6 +1,6 @@
 class PatientsController < ApplicationController
-  before_action :set_district, only: [:index, :show, :new, :edit, :update, :destroy]
-  before_action :set_facility, only: [:index, :show, :new, :edit, :update, :destroy]
+  before_action :set_district
+  before_action :set_facility
   before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
   # GET /patients
@@ -16,7 +16,10 @@ class PatientsController < ApplicationController
 
   # GET /patients/new
   def new
-    @patient = Patient.new
+    @patient = @facility.patients.build
+    5.times do
+      @patient.blood_pressures.build
+    end
   end
 
   # GET /patients/1/edit
@@ -26,11 +29,11 @@ class PatientsController < ApplicationController
   # POST /patients
   # POST /patients.json
   def create
-    @patient = Patient.new(patient_params)
+    @patient = Patient.new(patient_params.merge(facility: @facility))
 
     respond_to do |format|
       if @patient.save
-        format.html { redirect_to @patient, notice: 'Patient was successfully created.' }
+        format.html { redirect_to [@district, @facility, @patient], notice: 'Patient was successfully created.' }
         format.json { render :show, status: :created, location: @patient }
       else
         format.html { render :new }
@@ -44,7 +47,7 @@ class PatientsController < ApplicationController
   def update
     respond_to do |format|
       if @patient.update(patient_params)
-        format.html { redirect_to @patient, notice: 'Patient was successfully updated.' }
+        format.html { redirect_to [@district, @facility, @patient], notice: 'Patient was successfully updated.' }
         format.json { render :show, status: :ok, location: @patient }
       else
         format.html { render :edit }
@@ -78,6 +81,15 @@ class PatientsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def patient_params
-      params.require(:patient).permit(:treatment_number, :registered_on, :facility_id)
+      params.require(:patient).permit(
+        :treatment_number,
+        :registered_on,
+        blood_pressures_attributes: [
+          :id,
+          :systolic,
+          :diastolic,
+          :measured_on
+        ]
+      )
     end
 end

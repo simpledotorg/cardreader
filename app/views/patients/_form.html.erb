@@ -25,26 +25,26 @@
     <%= form.text_field :registered_on, id: :patient_registered_on, class: "form-input" %>
   </div>
 
-  <% 6.times do %>
+  <%= form.fields_for :blood_pressures do |bp_form| %>
     <div class="columns">
       <div class="column col-4">
         <div class="form-group">
-          <%= form.label :systolic, class: "form-label" %>
-          <%= form.text_field :systolic, id: :systolic, class: "form-input" %>
+          <%= bp_form.label :systolic, class: "form-label" %>
+          <%= bp_form.text_field :systolic, id: :systolic, class: "form-input" %>
         </div>
       </div>
 
       <div class="column col-4">
         <div class="form-group">
-          <%= form.label :diastolic, class: "form-label" %>
-          <%= form.text_field :diastolic, id: :diastolic, class: "form-input" %>
+          <%= bp_form.label :diastolic, class: "form-label" %>
+          <%= bp_form.text_field :diastolic, id: :diastolic, class: "form-input" %>
         </div>
       </div>
 
       <div class="column col-4">
         <div class="form-group">
-          <%= form.label :measured_on, class: "form-label" %>
-          <%= form.text_field :measured_on, id: :measured_on, class: "form-input" %>
+          <%= bp_form.label :measured_on, class: "form-label" %>
+          <%= bp_form.text_field :measured_on, id: :measured_on, class: "form-input" %>
         </div>
       </div>
     </div>
