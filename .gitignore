@@ -18,6 +18,9 @@
 
 .byebug_history
 
+# Ignore rspec artifacts
+spec/examples.txt
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
