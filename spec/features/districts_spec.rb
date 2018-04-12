@@ -33,5 +33,19 @@ RSpec.feature "Districts", type: :feature do
     it "does not show facilities from other districts" do
       expect(page).not_to have_link(bathinda_chc.name)
     end
+
+    describe "adding a facility" do
+      it "displays the new facility" do
+        fill_in "facility name", with: "PHC Paldi"
+        click_button "Add Facility"
+
+        expect(page).to have_link("PHC Paldi")
+      end
+
+      it "shows the correct error if name is blank" do
+        click_button "Add Facility"
+        expect(page).to have_content("Name can't be blank")
+      end
+    end
   end
 end

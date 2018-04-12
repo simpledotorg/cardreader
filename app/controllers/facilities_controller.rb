@@ -1,5 +1,5 @@
 class FacilitiesController < ApplicationController
-  before_action :set_district, only: [:index, :show, :edit, :update, :destroy]
+  before_action :set_district
   before_action :set_facility, only: [:show, :edit, :update, :destroy]
 
   # GET /facilities
@@ -26,15 +26,16 @@ class FacilitiesController < ApplicationController
   # POST /facilities
   # POST /facilities.json
   def create
-    @facilities = Facility.all
-    @facility = Facility.new(facility_params)
+    @facility = Facility.new(facility_params.merge(district: @district))
 
     respond_to do |format|
       if @facility.save
-        format.html { redirect_to @facility, notice: 'Facility was successfully created.' }
+        format.html { redirect_to district_path(@district), notice: 'Facility was successfully created.' }
         format.json { render :show, status: :created, location: @facility }
       else
-        format.html { render :index }
+        @facilities = Facility.all
+
+        format.html { render "districts/show" }
         format.json { render json: @facility.errors, status: :unprocessable_entity }
       end
     end
@@ -76,6 +77,6 @@ class FacilitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def facility_params
-      params.require(:facility).permit(:name, :district)
+      params.require(:facility).permit(:name)
     end
 end
