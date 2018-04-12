@@ -6,18 +6,27 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+District.destroy_all
 Facility.destroy_all
 Patient.destroy_all
 BloodPressure.destroy_all
 
-3.times.each do
+%w(
+  Bathinda
+  Gurdaspur
+  Hoshiarpur
+  Mansa
+  Pathankot
+).each do |district_name|
   district = District.create(
-    name: Faker::Address.state
+    name: district_name
   )
 
   3.times.each do
+    facility_type = %w(DH SDH CHC PHC).sample
+
     facility = district.facilities.create(
-      name: Faker::Address.city
+      name: "#{facility_type} #{Faker::Address.city}"
     )
 
     3.times.each do |id|
