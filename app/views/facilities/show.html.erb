@@ -1,13 +1,9 @@
 <ul class="breadcrumb">
-  <li class="breadcrumb-item">
-    <%= link_to "Districts", root_path %>
-  </li>
-  <li class="breadcrumb-item">
-    <%= link_to @district.name, district_path(@district) %>
-  </li>
+  <%= render "layouts/breadcrumbs/home" %>
+  <%= render "layouts/breadcrumbs/district" %>
 </ul>
 
-<h1><%= @district.name %>: <%= @facility.name %></h1>
+<h1><%= @facility.name %></h1>
 
 <%= link_to "Add Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %>
 
