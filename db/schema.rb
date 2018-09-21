@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180410163432) do
+ActiveRecord::Schema.define(version: 20180921013251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(version: 20180410163432) do
     t.date "measured_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "blood_sugar"
+    t.string "amlodipine"
+    t.string "telmisartan"
+    t.string "enalpril"
+    t.string "chlorthalidone"
+    t.string "aspirin"
+    t.string "statin"
+    t.string "beta_blocker"
+    t.boolean "referred_to_specialist"
+    t.date "next_visit_on"
     t.index ["patient_id"], name: "index_blood_pressures_on_patient_id"
   end
 
@@ -45,6 +55,31 @@ ActiveRecord::Schema.define(version: 20180410163432) do
     t.bigint "facility_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "alternate_id_number"
+    t.string "name"
+    t.string "gender"
+    t.integer "age"
+    t.string "house_number"
+    t.string "street_number"
+    t.string "area"
+    t.string "village"
+    t.string "district"
+    t.string "pincode"
+    t.string "phone"
+    t.string "alternate_phone"
+    t.boolean "already_on_treatment"
+    t.boolean "prior_heart_attack"
+    t.boolean "heard_attack_in_last_3_years"
+    t.boolean "prior_stroke"
+    t.boolean "chronic_kidney_disease"
+    t.string "medication1_name"
+    t.string "medication1_dose"
+    t.string "medication2_name"
+    t.string "medication2_dose"
+    t.string "medication3_name"
+    t.string "medication3_dose"
+    t.string "medication4_name"
+    t.string "medication4_dose"
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
 
