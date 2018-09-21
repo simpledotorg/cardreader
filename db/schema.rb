@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20180921013251) do
     t.string "medication3_name"
     t.string "medication3_dose"
     t.string "medication4_name"
-    t.string "medication5_dose"
+    t.string "medication4_dose"
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
 
