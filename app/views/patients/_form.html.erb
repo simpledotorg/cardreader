@@ -1,56 +1,113 @@
-<%= form_with(model: [@district, @facility, patient], local: true) do |form| %>
-  <% if patient.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(patient.errors.count, "error") %> prohibited this patient from being saved:</h2>
+<div class="row">
+  <div class="col-md-6">
+    <%= bootstrap_form_with(model: [@district, @facility, patient], local: true, label_errors: true) do |form| %>
+      <%= form.text_field :registered_on, label: "Date of registration", help: "DD/MM/YYYY" %>
+      <%= form.number_field :treatment_number, prepend: "2018-", help: "No need to type leading zeroes; they will be added automatically" %>
+      <%= form.text_field :alternate_id_number, label: "Aadhaar number or any other ID number" %>
 
-      <ul>
-      <% patient.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+      <h4>A. Patient Identification Information</h4>
+
+      <%= form.text_field  :name %>
+      <%= form.text_field  :gender %>
+      <%= form.number_field :age %>
+      <%= form.text_field  :house_number %>
+      <%= form.text_field  :street_number %>
+      <%= form.text_field  :area, label: "Area/Colony" %>
+      <%= form.text_field  :village, label: "Village/Town" %>
+      <%= form.text_field  :district, label: "District name" %>
+      <%= form.text_field  :pincode %>
+      <%= form.text_field  :phone, label: "Patient phone" %>
+      <%= form.text_field  :alternate_phone %>
+
+      <h4>B. Diagnosis</h4>
+
+      <%= form.text_field  :already_on_treatment %>
+      <%= form.text_field  :prior_heart_attack %>
+      <%= form.text_field  :heard_attack_in_last_3_years %>
+      <%= form.text_field  :prior_stroke %>
+      <%= form.text_field  :chronic_kidney_disease %>
+
+      <h4>C. Hypertension Treatment at Registration</h4>
+
+      <% 4.times do |i| %>
+        <div class="form-row">
+          <div class="col-8">
+            <%= form.text_field "medication#{i + 1}_name".to_sym, label: "Medication" %>
+          </div>
+          <div class="col-4">
+            <%= form.text_field "medication#{i + 1}_dose".to_sym, label: "Dose" %>
+          </div>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="form-group">
-    <%= form.label :treatment_number, class: "form-label" %>
-    <div class="input-group">
-      <span class="input-group-addon">2018-</span>
-      <%= form.number_field :treatment_number, id: :patient_treatment_number, class: "form-input" %>
-    </div>
-    <p class="form-input-hint">You don't need to type the zeroes; they will be added automatically</p>
-  </div>
+      <h4>Initial and Follow Up Visits</h4>
 
-  <div class="form-group">
-    <%= form.label :registered_on, class: "form-label" %>
-    <%= form.text_field :registered_on, id: :patient_registered_on, class: "form-input" %>
-  </div>
+      <% visit_number = 1 %>
+      <%= form.fields_for :blood_pressures do |bp_form| %>
+        <hr>
+        <h5>Visit <%= visit_number %></h5>
 
-  <%= form.fields_for :blood_pressures do |bp_form| %>
-    <div class="columns">
-      <div class="column col-4">
-        <div class="form-group">
-          <%= bp_form.label :systolic, class: "form-label" %>
-          <%= bp_form.text_field :systolic, id: :systolic, class: "form-input" %>
+        <div class="form-row">
+          <div class="col-3">
+            <%= bp_form.text_field :measured_on, label: "Date attended" %>
+          </div>
+          <div class="col-3">
+            <%= bp_form.text_field :systolic %>
+          </div>
+          <div class="col-3">
+            <%= bp_form.text_field :diastolic %>
+          </div>
+          <div class="col-3">
+            <%= bp_form.text_field :blood_sugar %>
+          </div>
         </div>
-      </div>
 
-      <div class="column col-4">
-        <div class="form-group">
-          <%= bp_form.label :diastolic, class: "form-label" %>
-          <%= bp_form.text_field :diastolic, id: :diastolic, class: "form-input" %>
+        <h6>Treatment dose and Codes</h6>
+
+        <div class="form-row">
+          <div class="col-3">
+            <%= form.text_field  :amlodipine %>
+          </div>
+          <div class="col-3">
+            <%= form.text_field  :telmisartan %>
+          </div>
+          <div class="col-3">
+            <%= form.text_field  :enalpril %>
+          </div>
+          <div class="col-3">
+            <%= form.text_field  :chlorthalidone %>
+          </div>
         </div>
-      </div>
 
-      <div class="column col-4">
-        <div class="form-group">
-          <%= bp_form.label :measured_on, class: "form-label" %>
-          <%= bp_form.text_field :measured_on, id: :measured_on, class: "form-input" %>
+        <div class="form-row">
+          <div class="col-3">
+            <%= form.text_field  :aspirin %>
+          </div>
+          <div class="col-3">
+            <%= form.text_field  :statin %>
+          </div>
+          <div class="col-3">
+            <%= form.text_field  :beta_blocker %>
+          </div>
         </div>
-      </div>
-    </div>
-  <% end %>
 
-  <div class="actions">
-    <%= form.submit "Save Treatment Card", class: "btn btn-primary" %>
+        <div class="form-row">
+          <div class="col-3">
+            <%= form.text_field  :referred_to_specialist %>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-3">
+            <%= form.text_field  :next_visit_on %>
+          </div>
+        </div>
+
+        <% visit_number += 1 %>
+      <% end %>
+
+      <div class="actions">
+        <%= form.submit "Save Treatment Card", class: "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

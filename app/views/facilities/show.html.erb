@@ -5,9 +5,11 @@
 
 <h1><%= @facility.name %></h1>
 
-<%= link_to "Add Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %>
+<p>
+  <%= link_to "Add Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %>
+</p>
 
-<table class="table table-striped">
+<table class="table table-hover">
   <thead>
     <tr>
       <th>Patient Treatment Number</th>
