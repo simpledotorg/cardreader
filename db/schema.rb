@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20180921013251) do
     t.bigint "facility_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "alternate_id"
+    t.string "alternate_id_number"
     t.string "name"
     t.string "gender"
     t.integer "age"
