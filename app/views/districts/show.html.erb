@@ -22,17 +22,12 @@
 <section>
   <h3>Facility not listed?</h3>
 
-  <%= form_with(model: [@district, @facility], local: true) do |form| %>
-    <div class="form-group <%= @facility.errors.any? ? "has-error" : nil %>">
-      <%= form.label :name, "What's the facility name?", class: "form-label" %>
-      <%= form.text_field :name, id: :facility_name, class: "form-input" %>
-      <% if @facility.errors.any? %>
-        <p class="form-input-hint">Name <%= @facility.errors[:name].join(", ") %></p>
+  <div class="row">
+    <div class="col-6">
+      <%= bootstrap_form_with(model: [@district, @facility], local: true, label_errors: true) do |form| %>
+        <%= form.text_field :name, id: :facility_name, class: "form-input" %>
+        <%= form.primary "Add Facility" %>
       <% end %>
     </div>
-
-    <div class="actions">
-      <%= form.submit "Add Facility", class: "btn btn-primary" %>
-    </div>
-  <% end %>
+  </div>
 </section>
