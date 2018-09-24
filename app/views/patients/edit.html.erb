@@ -1,6 +1,20 @@
-<h1>Editing Patient</h1>
+<ul class="breadcrumb">
+  <li class="breadcrumb-item">
+    <%= link_to "Districts", root_path %>
+  </li>
+  <li class="breadcrumb-item">
+    <%= link_to @district.name, district_path(@district) %>
+  </li>
+  <li class="breadcrumb-item">
+    <%= link_to @facility.name, district_facility_path(@district, @facility) %>
+  </li>
+  <li class="breadcrumb-item">
+    <%= link_to "Patient #{@patient.treatment_number}", district_facility_patient_path(@district, @facility, @patient) %>
+  </li>
+</ul>
+
+<h1>Edit Patient <%= @patient.treatment_number %></h1>
 
 <%= render 'form', patient: @patient %>
 
-<%= link_to 'Show', @patient %> |
-<%= link_to 'Back', patients_path %>
+<%= link_to 'Back', district_facility_path(@district, @facility) %>
