@@ -25,7 +25,7 @@
   <div class="row">
     <div class="col-6">
       <%= bootstrap_form_with(model: [@district, @facility], local: true, label_errors: true) do |form| %>
-        <%= form.text_field :name, id: :facility_name, class: "form-input" %>
+        <%= form.text_field :name, class: "form-input", label: "Facility name" %>
         <%= form.primary "Add Facility" %>
       <% end %>
     </div>
