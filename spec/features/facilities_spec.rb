@@ -1,9 +1,8 @@
 require 'rails_helper'
 
 RSpec.feature "Facilities", type: :feature do
-  let!(:mansa) { create(:district, name: "Mansa") }
-
-  let!(:facility) { create(:facility, district: mansa, name: "District Hospital") }
+  let!(:district) { create(:district, name: "Mansa") }
+  let!(:facility) { create(:facility, district: district, name: "District Hospital") }
 
   describe "show" do
     let!(:patient_1) { create(:patient, facility: facility) }
