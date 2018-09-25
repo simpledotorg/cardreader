@@ -6,7 +6,8 @@ git_source(:github) do |repo_name|
 end
 
 
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2'
+gem 'bootsnap', '~> 1.3.2'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.7'
 gem 'sass-rails', '~> 5.0'
@@ -19,6 +20,7 @@ gem "bootstrap_form", ">= 4.0.0.alpha1"
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'faker'
   gem 'pry-rails'
   gem 'rb-readline'
 
@@ -27,7 +29,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'faker'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'web-console', '>= 3.3.0'
 end
