@@ -89,7 +89,7 @@ class PatientsController < ApplicationController
         :gender,
         :age,
         :house_number,
-        :street_number,
+        :street_name,
         :area,
         :village,
         :district,

@@ -9,7 +9,7 @@ FactoryBot.define do
     gender "Male"
     age 65
     house_number ""
-    street_number ""
+    street_name ""
     area "Test Area"
     village "Test Village"
     district "Mansa"
