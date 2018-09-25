@@ -6,7 +6,7 @@ RSpec.feature "Patients", type: :feature do
 
   describe "show" do
     let!(:patient) { create(:patient, facility: facility) }
-    let!(:blood_pressures) { create_list(:blood_pressure, 3, patient: patient) }
+    let!(:visits) { create_list(:visit, 3, patient: patient) }
 
     before do
       visit district_facility_path(district, facility)
@@ -19,7 +19,7 @@ RSpec.feature "Patients", type: :feature do
     end
 
     it "shows blood pressures" do
-      patient.blood_pressures.each do |bp|
+      patient.visits.each do |bp|
         expect(page).to have_content("#{bp.systolic} / #{bp.diastolic}")
       end
     end
@@ -27,7 +27,7 @@ RSpec.feature "Patients", type: :feature do
 
   describe "edit" do
     let!(:patient) { create(:patient, facility: facility) }
-    let!(:blood_pressures) { create_list(:blood_pressure, 3, patient: patient) }
+    let!(:visits) { create_list(:visit, 3, patient: patient) }
 
     before do
       visit district_facility_path(district, facility)

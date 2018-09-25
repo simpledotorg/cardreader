@@ -18,7 +18,7 @@ class PatientsController < ApplicationController
   def new
     @patient = @facility.patients.build
     5.times do
-      @patient.blood_pressures.build
+      @patient.visits.build
     end
   end
 
@@ -109,7 +109,7 @@ class PatientsController < ApplicationController
         :medication3_dose,
         :medication4_name,
         :medication4_dose,
-        blood_pressures_attributes: [
+        visits_attributes: [
           :id,
           :systolic,
           :diastolic,

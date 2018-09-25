@@ -51,10 +51,10 @@
     </tr>
   </thead>
   <tbody>
-    <% @patient.blood_pressures.order(:measured_on).each do |blood_pressure| %>
+    <% @patient.visits.order(:measured_on).each do |visit| %>
       <tr>
-        <td><%= blood_pressure.measured_on.strftime("%d-%m-%Y") %></td>
-        <td><%= blood_pressure.systolic %> / <%= blood_pressure.diastolic %></td>
+        <td><%= visit.measured_on.strftime("%d-%m-%Y") %></td>
+        <td><%= visit.systolic %> / <%= visit.diastolic %></td>
       </tr>
     <% end %>
   </tbody>

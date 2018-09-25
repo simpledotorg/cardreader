@@ -9,7 +9,7 @@
 District.destroy_all
 Facility.destroy_all
 Patient.destroy_all
-BloodPressure.destroy_all
+Visit.destroy_all
 
 %w(
   Bathinda
@@ -36,7 +36,7 @@ BloodPressure.destroy_all
       )
 
       3.times.each do
-        patient.blood_pressures.create(
+        patient.visits.create(
           systolic: Faker::Number.between(140, 190),
           diastolic: Faker::Number.between(90, 140),
           measured_on: Faker::Date.between(3.months.ago, Date.today),

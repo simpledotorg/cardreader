@@ -45,14 +45,14 @@
   <h4>Initial and Follow Up Visits</h4>
   <div class="row">
     <% visit_number = 1 %>
-    <%= form.fields_for :blood_pressures do |bp_form| %>
+    <%= form.fields_for :visits do |visit_form| %>
       <div class="col-sm-4 col-md-3 col-lg-2 border-left">
         <h5 class="border-bottom pb-3">Visit <%= visit_number %></h5>
 
-        <%= bp_form.text_field :measured_on, label: "Date attended" %>
-        <%= bp_form.text_field :systolic %>
-        <%= bp_form.text_field :diastolic %>
-        <%= bp_form.text_field :blood_sugar %>
+        <%= visit_form.text_field :measured_on, label: "Date attended" %>
+        <%= visit_form.text_field :systolic %>
+        <%= visit_form.text_field :diastolic %>
+        <%= visit_form.text_field :blood_sugar %>
 
         <hr>
 
