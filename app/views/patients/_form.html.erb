@@ -44,3 +44,19 @@
 
   <%= form.submit "Save Treatment Card", class: "btn btn-primary" %>
 <% end %>
+
+ <script>
+   $(function() {
+     $("#patient_treatment_number").on("input", function() {
+       treatment_number = $(this).val();
+       max_length = 8;
+
+       prefix = "2018-";
+       if (treatment_number.length < max_length) {
+         prefix += "0".repeat(max_length - treatment_number.length);
+       }
+
+       $(this).parent(".input-group").find(".input-group-text").html(prefix);
+     });
+   });
+ </script>
