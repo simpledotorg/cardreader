@@ -5,6 +5,6 @@
   <%= render "layouts/breadcrumbs/patient" %>
 </ul>
 
-<h1>Edit Patient <%= @patient.treatment_number %></h1>
+<h1>Edit Patient <%= @patient.formatted_treatment_number %></h1>
 
 <%= render 'form', patient: @patient %>

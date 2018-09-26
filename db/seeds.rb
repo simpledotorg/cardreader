@@ -31,7 +31,7 @@ Visit.destroy_all
 
     5.times.each do |id|
       patient = facility.patients.create(
-        treatment_number: "2018-%08i" % (id + 1),
+        treatment_number: id + 1,
         registered_on: Faker::Date.between(3.months.ago, Date.today),
         name: "Test User #{id + 1}",
         age: rand(18..80),

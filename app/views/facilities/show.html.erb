@@ -17,7 +17,7 @@
   <tbody>
     <% @facility.patients.order(:treatment_number).each do |patient| %>
       <tr>
-        <td><%= link_to patient.treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
+        <td><%= link_to patient.formatted_treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
         <td><%= patient.registered_on.strftime("%d-%m-%Y") %></td>
       </tr>
     <% end %>

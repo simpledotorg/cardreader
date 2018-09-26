@@ -8,7 +8,7 @@
 <%= link_to "Delete Visit", district_facility_patient_visit_path(@district, @facility, @patient, @visit), method: :delete, class: "btn btn-sm btn-danger float-right", data: { confirm: "Are you sure you want to delete this visit?" } %>
 
 <h1>
-  <small class="text-muted">Patient <%= @patient.treatment_number %></small><br>
+  <small class="text-muted">Patient <%= @patient.formatted_treatment_number %></small><br>
   Edit Visit
 </h1>
 

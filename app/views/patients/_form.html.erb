@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-6">
       <%= form.text_field :registered_on, label: "Date of registration", help: "DD/MM/YYYY" %>
-      <%= form.number_field :treatment_number, prepend: "2018-", help: "No need to type leading zeroes; they will be added automatically" %>
+      <%= form.number_field :treatment_number, prepend: @patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically" %>
       <%= form.text_field :alternate_id_number, label: "Aadhaar number or any other ID number" %>
 
       <h4>A. Patient Identification Information</h4>
