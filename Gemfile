@@ -32,6 +32,11 @@ end
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'web-console', '>= 3.3.0'
+  gem 'capistrano', '~> 3.10'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-passenger'
+  gem 'capistrano-rails-console', require: false
 end
 
 group :test do
