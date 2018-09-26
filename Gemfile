@@ -17,7 +17,6 @@ gem 'dotenv-rails'
 gem 'jquery-rails'
 gem 'bootstrap', '~> 4.1.3'
 gem "bootstrap_form", ">= 4.0.0.alpha1"
-gem 'autoprefixer-rails', '8.6.5'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
