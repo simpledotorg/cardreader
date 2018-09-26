@@ -4,10 +4,14 @@ RSpec.feature "Visits", type: :feature do
   let!(:district) { create(:district, name: "Mansa") }
   let!(:facility) { create(:facility, district: district, name: "District Hospital") }
   let!(:patient) { create(:patient, facility: facility) }
+  let!(:visits) { create_list(:visit, 3, patient: patient) }
+
+  before do
+    visit district_facility_patient_path(district, facility, patient)
+  end
 
   describe "new" do
     before do
-      visit district_facility_patient_path(district, facility, patient)
       click_link "Add Visit Details"
     end
 
@@ -24,12 +28,7 @@ RSpec.feature "Visits", type: :feature do
   end
 
   describe "edit" do
-    let!(:patient) { create(:patient, facility: facility) }
-    let!(:visits) { create_list(:visit, 3, patient: patient) }
-
     before do
-      visit district_facility_patient_path(district, facility, patient)
-
       within find("tr", text: "#{visits.first.systolic} / #{visits.first.diastolic}") do
         click_link "Edit"
       end
@@ -46,6 +45,20 @@ RSpec.feature "Visits", type: :feature do
         expect(page).to have_content("Amlodipine: 20mg")
         expect(page).to have_content("Telmisartan: 90mg")
       end
+    end
+  end
+
+  describe "delete" do
+    before do
+      within find("tr", text: "#{visits.first.systolic} / #{visits.first.diastolic}") do
+        click_link "Edit"
+      end
+
+      click_link "Delete Visit"
+    end
+
+    it "deletes the visit" do
+      expect(page).not_to have_content("#{visits.first.systolic} / #{visits.first.diastolic}")
     end
   end
 end

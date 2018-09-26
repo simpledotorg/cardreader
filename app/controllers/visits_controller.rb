@@ -47,7 +47,7 @@ class VisitsController < ApplicationController
   def destroy
     @visit.destroy
     respond_to do |format|
-      format.html { redirect_to [@district, @facility, @patient], notice: 'Visit was successfully destroyed.' }
+      format.html { redirect_to [@district, @facility, @patient], notice: 'Visit was successfully deleted.' }
       format.json { head :no_content }
     end
   end
