@@ -9,7 +9,7 @@
 District.destroy_all
 Facility.destroy_all
 Patient.destroy_all
-BloodPressure.destroy_all
+Visit.destroy_all
 
 %w(
   Bathinda
@@ -29,17 +29,27 @@ BloodPressure.destroy_all
       name: "#{facility_type} #{Faker::Address.city}"
     )
 
-    3.times.each do |id|
+    5.times.each do |id|
       patient = facility.patients.create(
         treatment_number: "2018-%08i" % (id + 1),
         registered_on: Faker::Date.between(3.months.ago, Date.today),
+        name: "Test User #{id + 1}",
+        age: rand(18..80),
+        village: "Test Village #{id + 1}",
+        district: district.name,
+        phone: "9123456789"
       )
 
       3.times.each do
-        patient.blood_pressures.create(
-          systolic: Faker::Number.between(140, 190),
-          diastolic: Faker::Number.between(90, 140),
-          measured_on: Faker::Date.between(3.months.ago, Date.today),
+        measured_on = Faker::Date.between(3.months.ago, Date.today)
+
+        patient.visits.create(
+          systolic: rand(110..190),
+          diastolic: rand(70.140),
+          measured_on: measured_on,
+          amlodipine: "10mg",
+          telmisartan: "40mg",
+          next_visit_on: measured_on + 1.month
         )
       end
     end

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :blood_pressure do
+  factory :visit do
     patient
 
     systolic { rand(100.160) }

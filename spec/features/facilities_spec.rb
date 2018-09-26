@@ -11,7 +11,7 @@ RSpec.feature "Facilities", type: :feature do
 
     before do
       visit root_path
-      click_link mansa.name
+      click_link district.name
       click_link facility.name
     end
 

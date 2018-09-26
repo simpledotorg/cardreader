@@ -10,30 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180921013251) do
+ActiveRecord::Schema.define(version: 2018_09_25_021950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "blood_pressures", force: :cascade do |t|
-    t.bigint "patient_id"
-    t.integer "systolic"
-    t.integer "diastolic"
-    t.date "measured_on"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "blood_sugar"
-    t.string "amlodipine"
-    t.string "telmisartan"
-    t.string "enalpril"
-    t.string "chlorthalidone"
-    t.string "aspirin"
-    t.string "statin"
-    t.string "beta_blocker"
-    t.boolean "referred_to_specialist"
-    t.date "next_visit_on"
-    t.index ["patient_id"], name: "index_blood_pressures_on_patient_id"
-  end
 
   create_table "districts", force: :cascade do |t|
     t.string "name"
@@ -60,7 +40,7 @@ ActiveRecord::Schema.define(version: 20180921013251) do
     t.string "gender"
     t.integer "age"
     t.string "house_number"
-    t.string "street_number"
+    t.string "street_name"
     t.string "area"
     t.string "village"
     t.string "district"
@@ -83,6 +63,26 @@ ActiveRecord::Schema.define(version: 20180921013251) do
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
 
-  add_foreign_key "blood_pressures", "patients"
+  create_table "visits", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.integer "systolic"
+    t.integer "diastolic"
+    t.date "measured_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "blood_sugar"
+    t.string "amlodipine"
+    t.string "telmisartan"
+    t.string "enalpril"
+    t.string "chlorthalidone"
+    t.string "aspirin"
+    t.string "statin"
+    t.string "beta_blocker"
+    t.boolean "referred_to_specialist"
+    t.date "next_visit_on"
+    t.index ["patient_id"], name: "index_visits_on_patient_id"
+  end
+
   add_foreign_key "patients", "facilities"
+  add_foreign_key "visits", "patients"
 end
