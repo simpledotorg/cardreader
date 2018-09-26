@@ -6,7 +6,7 @@
 
 <%= link_to "Edit Patient", edit_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-secondary float-right" %>
 
-<h1>Treatment Number <%= @patient.treatment_number %></h1>
+<h1>Treatment Number <%= @patient.formatted_treatment_number %></h1>
 
 <div class="row my-5">
   <div class="col-md-6">

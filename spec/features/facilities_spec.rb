@@ -16,12 +16,12 @@ RSpec.feature "Facilities", type: :feature do
     end
 
     it "shows all treatment cards in the facility" do
-      expect(page).to have_link(patient_1.treatment_number)
-      expect(page).to have_link(patient_2.treatment_number)
+      expect(page).to have_link(patient_1.formatted_treatment_number)
+      expect(page).to have_link(patient_2.formatted_treatment_number)
     end
 
     it "does not show treatment cards from another facility" do
-      expect(page).not_to have_link(other_patient.treatment_number)
+      expect(page).not_to have_link(other_patient.formatted_treatment_number)
     end
   end
 end

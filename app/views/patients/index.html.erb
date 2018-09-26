@@ -15,7 +15,7 @@
   <tbody>
     <% @patients.each do |patient| %>
       <tr>
-        <td><%= patient.treatment_number %></td>
+        <td><%= patient.formatted_treatment_number %></td>
         <td><%= patient.registered_on %></td>
         <td><%= patient.facility %></td>
         <td><%= link_to 'Show', patient %></td>
