@@ -108,13 +108,7 @@ class PatientsController < ApplicationController
         :medication3_name,
         :medication3_dose,
         :medication4_name,
-        :medication4_dose,
-        visits_attributes: [
-          :id,
-          :systolic,
-          :diastolic,
-          :measured_on
-        ]
+        :medication4_dose
       )
     end
 end

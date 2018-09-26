@@ -1,0 +1,13 @@
+<ul class="breadcrumb">
+  <%= render "layouts/breadcrumbs/home" %>
+  <%= render "layouts/breadcrumbs/district" %>
+  <%= render "layouts/breadcrumbs/facility" %>
+  <%= render "layouts/breadcrumbs/patient" %>
+</ul>
+
+<h1>
+  <small class="text-muted">Patient <%= @patient.treatment_number %></small><br>
+  Edit Visit
+</h1>
+
+<%= render 'form', visit: @visit %>

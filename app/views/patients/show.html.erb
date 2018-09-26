@@ -43,11 +43,17 @@
   </ul>
 </div>
 
-<table class="table table-striped">
+<%= link_to "Add Visit Details", new_district_facility_patient_visit_path(@district, @facility, @patient), class: "btn btn-primary" %>
+
+<table class="table table-hover">
   <thead>
     <tr>
       <th>Date Attended</th>
       <th>Blood Pressure</th>
+      <th>Blood Sugar</th>
+      <th>Medications</th>
+      <th>Next Visit</th>
+      <th>
     </tr>
   </thead>
   <tbody>
@@ -55,6 +61,18 @@
       <tr>
         <td><%= visit.measured_on.strftime("%d-%m-%Y") %></td>
         <td><%= visit.systolic %> / <%= visit.diastolic %></td>
+        <td><%= visit.blood_sugar %></td>
+        <td>
+          <ul class="list-unstyled">
+            <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
+              <% if visit.send(drug).present? %>
+                <li><%= drug.to_s.humanize %>: <%= visit.send(drug)%></li>
+              <% end %>
+            <% end %>
+          </ul>
+        </td>
+        <td><%= visit.next_visit_on %></td>
+        <td class="align-middle"><%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-small btn-secondary my-0" %></td>
       </tr>
     <% end %>
   </tbody>
