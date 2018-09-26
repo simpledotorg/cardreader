@@ -9,38 +9,42 @@
 <h1>Treatment Number <%= @patient.treatment_number %></h1>
 
 <div class="row my-5">
-  <ul class="list-group col-md-6">
-    <h3>Patient Identification Information</h3>
-    <li class="list-group-item"><strong>registered_on</strong>: <%= @patient.registered_on %></li>
-    <li class="list-group-item"><strong>alternate_id_number</strong>: <%= @patient.alternate_id_number %></li>
-    <li class="list-group-item"><strong>name</strong>: <%= @patient.name %></li>
-    <li class="list-group-item"><strong>gender</strong>: <%= @patient.gender %></li>
-    <li class="list-group-item"><strong>age</strong>: <%= @patient.age %></li>
-    <li class="list-group-item"><strong>house_number</strong>: <%= @patient.house_number %></li>
-    <li class="list-group-item"><strong>street_name</strong>: <%= @patient.street_name %></li>
-    <li class="list-group-item"><strong>area</strong>: <%= @patient.area %></li>
-    <li class="list-group-item"><strong>village</strong>: <%= @patient.village %></li>
-    <li class="list-group-item"><strong>district</strong>: <%= @patient.district %></li>
-    <li class="list-group-item"><strong>pincode</strong>: <%= @patient.pincode %></li>
-    <li class="list-group-item"><strong>phone</strong>: <%= @patient.phone %></li>
-    <li class="list-group-item"><strong>alternate_phone</strong>: <%= @patient.alternate_phone %></li>
-  </ul>
-  <ul class="list-group col-md-6">
-    <h3>Medical History</h3>
-    <li class="list-group-item"><strong>already_on_treatment</strong>: <%= @patient.already_on_treatment %></li>
-    <li class="list-group-item"><strong>prior_heart_attack</strong>: <%= @patient.prior_heart_attack %></li>
-    <li class="list-group-item"><strong>heard_attack_in_last_3_years</strong>: <%= @patient.heard_attack_in_last_3_years %></li>
-    <li class="list-group-item"><strong>prior_stroke</strong>: <%= @patient.prior_stroke %></li>
-    <li class="list-group-item"><strong>chronic_kidney_disease</strong>: <%= @patient.chronic_kidney_disease %></li>
-    <li class="list-group-item"><strong>medication1_name</strong>: <%= @patient.medication1_name %></li>
-    <li class="list-group-item"><strong>medication1_dose</strong>: <%= @patient.medication1_dose %></li>
-    <li class="list-group-item"><strong>medication2_name</strong>: <%= @patient.medication2_name %></li>
-    <li class="list-group-item"><strong>medication2_dose</strong>: <%= @patient.medication2_dose %></li>
-    <li class="list-group-item"><strong>medication3_name</strong>: <%= @patient.medication3_name %></li>
-    <li class="list-group-item"><strong>medication3_dose</strong>: <%= @patient.medication3_dose %></li>
-    <li class="list-group-item"><strong>medication4_name</strong>: <%= @patient.medication4_name %></li>
-    <li class="list-group-item"><strong>medication4_dose</strong>: <%= @patient.medication4_dose %></li>
-  </ul>
+  <div class="col-md-6">
+    <h3>A. Patient Identification Information</h3>
+    <ul class="list-group">
+      <li class="list-group-item"><strong>Date of Registration</strong>: <%= @patient.registered_on %></li>
+      <li class="list-group-item"><strong>Aadhaar / Alternate ID Number</strong>: <%= @patient.alternate_id_number %></li>
+      <li class="list-group-item"><strong>Name</strong>: <%= @patient.name %></li>
+      <li class="list-group-item"><strong>Gender</strong>: <%= @patient.gender %></li>
+      <li class="list-group-item"><strong>Age</strong>: <%= @patient.age %></li>
+      <li class="list-group-item"><strong>House number</strong>: <%= @patient.house_number %></li>
+      <li class="list-group-item"><strong>Street name</strong>: <%= @patient.street_name %></li>
+      <li class="list-group-item"><strong>Area/Colony</strong>: <%= @patient.area %></li>
+      <li class="list-group-item"><strong>Village/Town</strong>: <%= @patient.village %></li>
+      <li class="list-group-item"><strong>District</strong>: <%= @patient.district %></li>
+      <li class="list-group-item"><strong>Pincode</strong>: <%= @patient.pincode %></li>
+      <li class="list-group-item"><strong>Patient phone</strong>: <%= @patient.phone %></li>
+      <li class="list-group-item"><strong>Alternate phone</strong>: <%= @patient.alternate_phone %></li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <h3>B. Diagnosis</h3>
+    <ul class="list-group">
+      <li class="list-group-item"><strong>Already on treatment?</strong>: <%= @patient.already_on_treatment? ? "Yes" : "No " %></li>
+      <li class="list-group-item"><strong>Prior heart attack?</strong>: <%= @patient.prior_heart_attack? ? "Yes" : "No " %></li>
+      <li class="list-group-item"><strong>Heart attack in last 3 years?</strong>: <%= @patient.heard_attack_in_last_3_years? ? "Yes" : "No " %></li>
+      <li class="list-group-item"><strong>Prior stroke?</strong>: <%= @patient.prior_stroke? ? "Yes" : "No " %></li>
+      <li class="list-group-item"><strong>Chronic kidney disease?</strong>: <%= @patient.chronic_kidney_disease? ? "Yes" : "No " %></li>
+    </ul>
+
+    <h3 class="mt-4">C. Hypertension treatment at registration</h3>
+    <ul class="list-group">
+      <li class="list-group-item"><strong>Medication 1</strong>: <%= [@patient.medication1_name, @patient.medication1_dose].join(" ") %></li>
+      <li class="list-group-item"><strong>Medication 2</strong>: <%= [@patient.medication2_name, @patient.medication2_dose].join(" ") %></li>
+      <li class="list-group-item"><strong>Medication 3</strong>: <%= [@patient.medication3_name, @patient.medication3_dose].join(" ") %></li>
+      <li class="list-group-item"><strong>Medication 4</strong>: <%= [@patient.medication4_name, @patient.medication4_dose].join(" ") %></li>
+    </ul>
+  </div>
 </div>
 
 <%= link_to "Add Visit Details", new_district_facility_patient_visit_path(@district, @facility, @patient), class: "btn btn-primary" %>

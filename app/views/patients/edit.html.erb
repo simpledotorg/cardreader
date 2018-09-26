@@ -1,20 +1,10 @@
 <ul class="breadcrumb">
-  <li class="breadcrumb-item">
-    <%= link_to "Districts", root_path %>
-  </li>
-  <li class="breadcrumb-item">
-    <%= link_to @district.name, district_path(@district) %>
-  </li>
-  <li class="breadcrumb-item">
-    <%= link_to @facility.name, district_facility_path(@district, @facility) %>
-  </li>
-  <li class="breadcrumb-item">
-    <%= link_to "Patient #{@patient.treatment_number}", district_facility_patient_path(@district, @facility, @patient) %>
-  </li>
+  <%= render "layouts/breadcrumbs/home" %>
+  <%= render "layouts/breadcrumbs/district" %>
+  <%= render "layouts/breadcrumbs/facility" %>
+  <%= render "layouts/breadcrumbs/patient" %>
 </ul>
 
 <h1>Edit Patient <%= @patient.treatment_number %></h1>
 
 <%= render 'form', patient: @patient %>
-
-<%= link_to 'Back', district_facility_path(@district, @facility) %>
