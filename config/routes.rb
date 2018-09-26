@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   resources :districts do
     resources :facilities do
-      resources :patients
+      resources :patients do
+        resources :visits
+      end
     end
   end
 end

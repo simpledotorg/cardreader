@@ -36,7 +36,7 @@ RSpec.feature "Districts", type: :feature do
 
     describe "adding a facility" do
       it "displays the new facility" do
-        fill_in "facility name", with: "PHC Paldi"
+        fill_in "Facility name", with: "PHC Paldi"
         click_button "Add Facility"
 
         expect(page).to have_link("PHC Paldi")
@@ -44,7 +44,7 @@ RSpec.feature "Districts", type: :feature do
 
       it "shows the correct error if name is blank" do
         click_button "Add Facility"
-        expect(page).to have_content("Name can't be blank")
+        expect(page).to have_content("Facility name can't be blank")
       end
     end
   end
