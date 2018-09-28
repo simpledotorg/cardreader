@@ -2,13 +2,20 @@
   <div class="row">
     <div class="col-md-6">
       <%= form.text_field :registered_on, label: "Date of registration", help: "DD/MM/YYYY" %>
-      <%= form.number_field :treatment_number, prepend: @patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically" %>
+      <%= form.text_field :treatment_number, prepend: @patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically" %>
       <%= form.text_field :alternate_id_number, label: "Aadhaar number or any other ID number" %>
 
       <h4>A. Patient Identification Information</h4>
 
       <%= form.text_field  :name %>
-      <%= form.text_field  :gender %>
+
+      <%= form.label :gender %>
+      <%= form.form_group :gender do %>
+        <%= form.radio_button :gender, "Female", inline: true %>
+        <%= form.radio_button :gender, "Male", inline: true %>
+        <%= form.radio_button :gender, "Transgender", inline: true %>
+      <% end %>
+
       <%= form.number_field :age %>
       <%= form.text_field  :house_number %>
       <%= form.text_field  :street_name %>
