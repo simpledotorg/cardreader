@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_25_021950) do
+ActiveRecord::Schema.define(version: 2018_09_28_010817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,13 @@ ActiveRecord::Schema.define(version: 2018_09_25_021950) do
     t.string "beta_blocker"
     t.boolean "referred_to_specialist"
     t.date "next_visit_on"
+    t.string "losartan"
+    t.string "medication1_name"
+    t.string "medication1_dose"
+    t.string "medication2_name"
+    t.string "medication2_dose"
+    t.string "medication3_name"
+    t.string "medication3_dose"
     t.index ["patient_id"], name: "index_visits_on_patient_id"
   end
 

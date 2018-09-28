@@ -1,21 +1,33 @@
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
-      <%= form.text_field :measured_on, label: "Date attended" %>
+      <%= form.text_field :measured_on, label: "Date attended", help: "Format: YYYY-MM-DD" %>
       <%= form.text_field :systolic %>
       <%= form.text_field :diastolic %>
       <%= form.text_field :blood_sugar %>
 
-      <hr>
+      <h4>Treatment doses</h4>
+      <%= form.text_field :amlodipine, label: "Amlodipine dose"%>
+      <%= form.text_field :telmisartan, label: "Telmisartan dose"%>
+      <%= form.text_field :enalpril, label: "Enalpril dose"%>
+      <%= form.text_field :chlorthalidone, label: "Chlorthalidone dose"%>
+      <%= form.text_field :aspirin, label: "Aspirin dose"%>
+      <%= form.text_field :statin, label: "Statin dose"%>
+      <%= form.text_field :beta_blocker, label: "Beta blocker dose"%>
+      <%= form.text_field :losartan, label: "Losartan dose"%>
 
-      <%= form.text_field  :amlodipine %>
-      <%= form.text_field  :telmisartan %>
-      <%= form.text_field  :enalpril %>
-      <%= form.text_field  :chlorthalidone %>
-      <%= form.text_field  :aspirin %>
-      <%= form.text_field  :statin %>
-      <%= form.text_field  :beta_blocker %>
-      <%= form.text_field  :next_visit_on %>
+      <% 3.times do |i| %>
+        <div class="form-row">
+          <div class="col-8">
+            <%= form.text_field "medication#{i + 1}_name".to_sym, label: "Other Medication" %>
+          </div>
+          <div class="col-4">
+            <%= form.text_field "medication#{i + 1}_dose".to_sym, label: "Dose" %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= form.text_field  :next_visit_on, help: "Format: YYYY-MM-DD" %>
       <%= form.check_box :referred_to_specialist %>
     </div>
   </div>

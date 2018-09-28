@@ -20,10 +20,13 @@ RSpec.feature "Visits", type: :feature do
       fill_in "Systolic", with: 145
       fill_in "Diastolic", with: 95
       fill_in "Amlodipine", with: "10mg"
+      fill_in "visit_medication1_name", with: "Ibuprofen"
+      fill_in "visit_medication1_dose", with: "200mg"
       click_button "Create Visit"
 
       expect(page).to have_content("145 / 95")
       expect(page).to have_content("Amlodipine: 10mg")
+      expect(page).to have_content("Ibuprofen: 200mg")
     end
   end
 
