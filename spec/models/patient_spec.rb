@@ -4,6 +4,11 @@ RSpec.describe Patient, type: :model do
   subject(:patient) { build(:patient) }
 
   describe "#formatted_treatment_number=" do
+    it "works with empty treatment numbers" do
+      patient.treatment_number = nil
+      expect(patient.formatted_treatment_number).to eq("2018-00000000")
+    end
+
     it "adds leading zeroes" do
       patient.treatment_number = 1234
       expect(patient.formatted_treatment_number).to eq("2018-00001234")
@@ -21,6 +26,11 @@ RSpec.describe Patient, type: :model do
   end
 
   describe "#treatment_number_prefix" do
+    it "works with empty treatment numbers" do
+      patient.treatment_number = nil
+      expect(patient.treatment_number_prefix).to eq("2018-00000000")
+    end
+
     it "adds leading zeroes" do
       patient.treatment_number = 1234
       expect(patient.treatment_number_prefix).to eq("2018-0000")
