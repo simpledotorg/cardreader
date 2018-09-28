@@ -21,11 +21,13 @@
 
       <h4>B. Diagnosis</h4>
 
-      <%= form.text_field  :already_on_treatment %>
-      <%= form.text_field  :prior_heart_attack %>
-      <%= form.text_field  :heard_attack_in_last_3_years %>
-      <%= form.text_field  :prior_stroke %>
-      <%= form.text_field  :chronic_kidney_disease %>
+      <div class="mb-4">
+        <%= form.check_box :already_on_treatment %>
+        <%= form.check_box :prior_heart_attack %>
+        <%= form.check_box :heard_attack_in_last_3_years %>
+        <%= form.check_box :prior_stroke %>
+        <%= form.check_box :chronic_kidney_disease %>
+      </div>
 
       <h4>C. Hypertension Treatment at Registration</h4>
 
