@@ -3,9 +3,12 @@ require 'rails_helper'
 RSpec.describe Patient, type: :model do
   subject(:patient) { build(:patient) }
 
-  it { is_expected.to validate_presence_of(:treatment_number) }
+  it { should belong_to(:facility) }
+  it { should have_many(:visits).inverse_of(:patient).dependent(:destroy) }
+
+  it { should validate_presence_of(:treatment_number) }
   it {
-    is_expected.to validate_uniqueness_of(:treatment_number)
+    should validate_uniqueness_of(:treatment_number)
                      .scoped_to(:facility_id)
                      .case_insensitive
                      .with_message("should be unique per facility")
