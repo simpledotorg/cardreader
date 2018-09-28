@@ -82,6 +82,13 @@ class VisitsController < ApplicationController
         :aspirin,
         :statin,
         :beta_blocker,
+        :losartan,
+        :medication1_name,
+        :medication1_dose,
+        :medication2_name,
+        :medication2_dose,
+        :medication3_name,
+        :medication3_dose,
         :referred_to_specialist,
         :next_visit_on
       )

@@ -73,6 +73,14 @@
                 <li><%= drug.to_s.humanize %>: <%= visit.send(drug)%></li>
               <% end %>
             <% end %>
+
+            <% (1..3).each do |drug_number| %>
+              <% if visit.send("medication#{drug_number}_name".to_sym).present? %>
+                <% name = visit.send("medication#{drug_number}_name".to_sym) %>
+                <% dose = visit.send("medication#{drug_number}_dose".to_sym) %>
+                <li><%= name.humanize %>: <%= dose.to_s %></li>
+              <% end %>
+            <% end %>
           </ul>
         </td>
         <td><%= visit.next_visit_on %></td>
