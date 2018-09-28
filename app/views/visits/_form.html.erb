@@ -1,7 +1,7 @@
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
-      <%= form.text_field :measured_on, label: "Date attended" %>
+      <%= form.text_field :measured_on, label: "Date attended", help: "Format: YYYY-MM-DD" %>
       <%= form.text_field :systolic %>
       <%= form.text_field :diastolic %>
       <%= form.text_field :blood_sugar %>
@@ -15,7 +15,7 @@
       <%= form.text_field  :aspirin %>
       <%= form.text_field  :statin %>
       <%= form.text_field  :beta_blocker %>
-      <%= form.text_field  :next_visit_on %>
+      <%= form.text_field  :next_visit_on, help: "Format: YYYY-MM-DD" %>
       <%= form.check_box :referred_to_specialist %>
     </div>
   </div>

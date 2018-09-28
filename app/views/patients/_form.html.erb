@@ -1,7 +1,7 @@
 <%= bootstrap_form_with(model: [@district, @facility, patient], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
-      <%= form.text_field :registered_on, label: "Date of registration", help: "DD/MM/YYYY" %>
+      <%= form.text_field :registered_on, label: "Date of registration", help: "Format: YYYY-MM-DD" %>
       <%= form.text_field :treatment_number, prepend: @patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically" %>
       <%= form.text_field :alternate_id_number, label: "Aadhaar number or any other ID number" %>
 

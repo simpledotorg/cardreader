@@ -2,7 +2,14 @@ class Patient < ApplicationRecord
   belongs_to :facility, inverse_of: :patients
   has_many :visits, inverse_of: :patient, dependent: :destroy
 
-  accepts_nested_attributes_for :visits, reject_if: :all_blank
+  validates_date :registered_on
+
+  validates :treatment_number, presence: true
+  validates :treatment_number, uniqueness: {
+    scope: :facility_id,
+    message: "should be unique per facility",
+    case_sensitive: false
+  }
 
   TREATMENT_NUMBER_DIGITS = 8.freeze
 

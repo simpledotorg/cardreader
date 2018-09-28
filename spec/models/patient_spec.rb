@@ -3,6 +3,14 @@ require 'rails_helper'
 RSpec.describe Patient, type: :model do
   subject(:patient) { build(:patient) }
 
+  it { is_expected.to validate_presence_of(:treatment_number) }
+  it {
+    is_expected.to validate_uniqueness_of(:treatment_number)
+                     .scoped_to(:facility_id)
+                     .case_insensitive
+                     .with_message("should be unique per facility")
+  }
+
   describe "#formatted_treatment_number=" do
     it "works with empty treatment numbers" do
       patient.treatment_number = nil
