@@ -7,10 +7,12 @@ class ImportFacilitiesService
   end
 
   def import
-    uri = URI("#{host}api/v1/facilities/sync?process_since=#{processed_since}")
+    uri = URI("#{host}api/v1/facilities/sync?process_since=#{processed_since}&limit=1000")
     response = Net::HTTP.get_response(uri)
-    return unless response.body['facilities'].present?
-    JSON(response.body)['facilities'].each do |facility|
+    response_body = JSON(response.body)
+    puts response_body
+    return unless response_body['facilities'].present?
+    response_body['facilities'].each do |facility|
       save_facility(facility)
     end
   end

@@ -5,4 +5,9 @@ namespace :import do
 
     ImportFacilitiesService.new(host).import
   end
+
+  desc 'Import card data from speadsheet'
+  task :card_data, [:card_data_file] => :environment do |_t, args|
+    ImportCardsService.new(open(args.card_data_file)).import
+  end
 end
