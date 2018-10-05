@@ -15,9 +15,9 @@ namespace :sync do
     host = ENV.fetch('SIMPLE_SERVER_HOST')
     user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
     access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
-    # SyncPatientService.new(host, user_id, access_token).sync
-    # SyncBloodPressureService.new(host, user_id, access_token).sync
-    # SyncAppointmentService.new(host, user_id, access_token).sync
+    SyncPatientService.new(host, user_id, access_token).sync
+    SyncBloodPressureService.new(host, user_id, access_token).sync
+    SyncAppointmentService.new(host, user_id, access_token).sync
     SyncMedicalHistoryService.new(host, user_id, access_token).sync
   end
 end

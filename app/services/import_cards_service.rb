@@ -49,7 +49,7 @@ class ImportCardsService
         .merge(get_values(:hypertension_treatment_at_registration, column))
         .merge(facility_id: facility.id)
 
-    existing_patient = Patient.find_by(attributes.slice(*uniquely_identifying_attributes))
+    existing_patient = Patient.find_by(attributes.slice(*patient_id_attributes))
     if existing_patient.present?
       existing_patient.update(attributes)
       existing_patient

@@ -98,12 +98,16 @@ class SyncPatientService
     if patient.phone.present?
       phone_numbers << { id: patient.phone_uuid,
                          number: patient.phone,
+                         phone_type: 'mobile',
+                         active: true,
                          created_at: device_created_at(patient),
                          updated_at: now }
     end
     if patient.alternate_phone.present?
       phone_numbers << { id: patient.alternate_phone_uuid,
                          number: patient.alternate_phone,
+                         phone_type: 'mobile',
+                         active: true,
                          created_at: device_created_at(patient),
                          updated_at: now }
     end
