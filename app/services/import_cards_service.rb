@@ -7,17 +7,24 @@ class ImportCardsService
     @file_uri = file_uri
   end
 
+  def import_patient(column)
+    facility_name = get_value(:facility, :name, column) || ""
+    facility = Facility.find_by('lower(name) = ?', facility_name.split.join(" ").downcase)
+    if facility.present?
+      patient = save_patient(facility, column)
+      save_visits(patient, facility, column)
+    else
+      puts "Skipping #{get_value(:patient, :name, column)}; Facility #{facility_name} not found"
+    end
+  end
+
   def import
     file = Roo::Spreadsheet.open(file_uri)
-    for i in START_COLUMN_INDEX..file.last_column
-      column = file.column(i)
-      facility_name = get_value(:facility, :name, column) || ""
-      facility = Facility.find_by('lower(name) = ?', facility_name.split.join(" ").downcase)
-      if facility.present?
-        patient = save_patient(facility, column)
-        save_visits(patient, facility, column)
-      else
-        puts "Skipping #{get_value(:patient, :name, column)}; Facility #{facility_name} not found"
+    for column_index in START_COLUMN_INDEX..file.last_column
+      begin
+        import_patient(file.column(column_index))
+      rescue => error
+        puts "Could not import patient #{patient.name}", error.message
       end
     end
   end
@@ -33,6 +40,7 @@ class ImportCardsService
         .merge(get_values(:hypertension_treatment_at_registration, column))
         .merge(facility_id: facility.id)
 
+    puts attributes[:registered_on].class
     Patient.find_or_create_by(attributes)
   end
 

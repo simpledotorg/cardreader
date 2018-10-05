@@ -26,6 +26,10 @@ class Patient < ApplicationRecord
     prefix
   end
 
+  def first_visit
+    self.visits.order(:measured_on).limit(1).first
+  end
+
   private
 
   def treatment_number_needs_prefix?

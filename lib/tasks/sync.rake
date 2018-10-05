@@ -13,9 +13,8 @@ namespace :sync do
   desc 'Sync patients with simple server'
   task sync_patients: :environment do
     host = ENV.fetch('SIMPLE_SERVER_HOST')
-
-    Patient.all.find_in_batches do |patients|
-
-    end
+    user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
+    access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
+    SyncPatientService.new(host, user_id, access_token).sync
   end
 end
