@@ -21,10 +21,11 @@ class ImportCardsService
   def import
     file = Roo::Spreadsheet.open(file_uri)
     for column_index in START_COLUMN_INDEX..file.last_column
+      column = file.column(column_index)
       begin
-        import_patient(file.column(column_index))
+        import_patient(column)
       rescue => error
-        puts "Could not import patient #{patient.name}", error.message
+        puts "Could not import patient #{get_value(:patient, :name, column)}", error.message
       end
     end
   end
@@ -33,6 +34,10 @@ class ImportCardsService
 
   attr_reader :file_uri
 
+  def uniquely_identifying_attributes
+    Set[:facility_id, :treatment_number]
+  end
+
   def save_patient(facility, column)
     attributes =
       {}.merge(get_values(:patient, column))
@@ -40,8 +45,13 @@ class ImportCardsService
         .merge(get_values(:hypertension_treatment_at_registration, column))
         .merge(facility_id: facility.id)
 
-    puts attributes[:registered_on].class
-    Patient.find_or_create_by(attributes)
+    existing_patient = Patient.find_by(attributes.slice(*uniquely_identifying_attributes))
+    if existing_patient.present?
+      existing_patient.update(attributes)
+      existing_patient
+    else
+      Patient.create(attributes)
+    end
   end
 
   def save_visits(patient, facility, column)

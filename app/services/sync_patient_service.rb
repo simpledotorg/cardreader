@@ -4,6 +4,8 @@ class SyncPatientService
   attr_reader :host, :user_id, :access_token
 
   TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
+  ERROR_FILE_PREFIX = 'patient-errors-'
+
 
   def initialize(host, user_id, access_token)
     @host = host
@@ -24,16 +26,18 @@ class SyncPatientService
   end
 
   def sync
-    Patient.all.each do |patient|
-      response = api_post('api/v1/patients/sync', { patients: [to_request(patient)] })
-      puts response['errors'] if response['errors'].present?
+    request = Patient.all.map { |patient| to_request(patient) }
+    response = api_post('api/v1/patients/sync', { patients: request })
+    errors = JSON(response.body)['errors'].map do |error|
+      Patient.find_by(patient_uuid: error['id']).attributes.merge(error: error.except('id'))
     end
+    write_errors_to_file(errors)
   end
 
   def to_request(patient)
     { id: patient.patient_uuid,
       gender: to_simple_gender(patient.gender),
-      full_name: patient.name,
+      full_name: patient.name.humanize,
       status: 'active',
       date_of_birth: nil,
       age: patient.age,
@@ -45,6 +49,17 @@ class SyncPatientService
     }
   end
 
+  def write_errors_to_file(errors)
+    return unless errors.present?
+    error_file = ERROR_FILE_PREFIX + Time.now.to_i.to_s + ".csv"
+    CSV.open(error_file, "wb") do |csv|
+      csv << errors.first.keys # adds the attributes name on the first line
+      errors.each do |error|
+        csv << error.values
+      end
+    end
+  end
+
   private
 
   def device_created_at(patient)
@@ -52,7 +67,7 @@ class SyncPatientService
   end
 
   def to_simple_gender(gender)
-    case gender
+    case gender.strip
     when Set['M']
       'male'
     when Set['F']
@@ -68,9 +83,9 @@ class SyncPatientService
 
   def to_simple_address(patient)
     { id: patient.address_uuid,
-      street_address: [patient.house_number, patient.street_name].reject(&:blank?).join(', '),
-      village_or_colony: '',
-      district: patient.district || patient.facility.district.name,
+      street_address: [patient.house_number, patient.street_name].reject(&:blank?).join(', ').humanize,
+      village_or_colony: [patient.area, patient.village].reject(&:blank?).join(', ').humanize,
+      district: (patient.district || patient.facility.district.name).humanize,
       state: 'Punjab',
       country: 'India',
       pin: patient.pincode,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_04_065340) do
+ActiveRecord::Schema.define(version: 2018_10_05_054025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 2018_10_04_065340) do
     t.uuid "address_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "phone_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "alternate_phone_uuid", default: -> { "uuid_generate_v4()" }
+    t.uuid "medical_history_uuid", default: -> { "uuid_generate_v4()" }
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
 
@@ -94,6 +95,8 @@ ActiveRecord::Schema.define(version: 2018_10_04_065340) do
     t.string "medication3_name"
     t.string "medication3_dose"
     t.bigint "facilities_id"
+    t.uuid "blood_pressure_uuid", default: -> { "uuid_generate_v4()" }
+    t.uuid "appointment_uuid", default: -> { "uuid_generate_v4()" }
     t.index ["facilities_id"], name: "index_visits_on_facilities_id"
     t.index ["patient_id"], name: "index_visits_on_patient_id"
   end
