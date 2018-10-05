@@ -34,8 +34,12 @@ class ImportCardsService
 
   attr_reader :file_uri
 
-  def uniquely_identifying_attributes
+  def patient_id_attributes
     Set[:facility_id, :treatment_number]
+  end
+
+  def visit_id_attributes
+    Set[:measured_on, :patient_id]
   end
 
   def save_patient(facility, column)
@@ -58,11 +62,21 @@ class ImportCardsService
     for i in 1..9
       attributes = get_visit_values(i, column)
       begin
-        if attributes[:measured_on].present?
-          Visit.find_or_create_by(attributes.merge(patient_id: patient.id, facilities_id: facility.id))
-        end
+        create_or_update_visit(attributes, facility, patient)
       rescue => error
         puts "Could not create visit #{i + 1} for patient #{patient.name}", error.message
+      end
+    end
+  end
+
+  def create_or_update_visit(attributes, facility, patient)
+    if attributes[:measured_on].present?
+      attributes_with_ids = attributes.merge(patient_id: patient.id, facilities_id: facility.id)
+      existing_visit = Visit.find_by(attributes_with_ids.slice(*visit_id_attributes))
+      if existing_visit.present?
+        existing_visit.update(attributes_with_ids)
+      else
+        Visit.create(attributes_with_ids)
       end
     end
   end
