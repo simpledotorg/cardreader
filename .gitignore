@@ -25,3 +25,6 @@ spec/examples.txt
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# CSV files
+*.csv

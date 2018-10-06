@@ -4,7 +4,7 @@ RSpec.feature "Patients", type: :feature do
   let!(:district) { create(:district, name: "Mansa") }
   let!(:facility) { create(:facility, district: district, name: "District Hospital") }
   let!(:patient) { create(:patient, facility: facility) }
-  let!(:visits) { create_list(:visit, 3, patient: patient) }
+  let!(:visits) { create_list(:visit, 3, patient: patient, facility: facility) }
 
   before do
     visit district_facility_path(district, facility)
