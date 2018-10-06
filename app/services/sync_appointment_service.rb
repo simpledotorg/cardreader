@@ -38,12 +38,13 @@ class SyncAppointmentService
   end
 
   def to_requests(visits)
-    requests = visits.map { |visit| to_request(visit) }
+    requests = visits.map { |visit| to_request(visit) }.reject(&:nil?)
     requests.last[:status] = 'scheduled'
     requests
   end
 
   def to_request(visit)
+    return unless visit.facility.simple_uuid.present?
     { id: visit.appointment_uuid,
       patient_id: visit.patient.patient_uuid,
       facility_id: visit.facility.simple_uuid,
