@@ -37,7 +37,7 @@ class SyncPatientService
   def to_request(patient)
     { id: patient.patient_uuid,
       gender: to_simple_gender(patient.gender),
-      full_name: patient.name.humanize,
+      full_name: patient.name.split(' ').map(&:humanize).join(' '),
       status: 'active',
       date_of_birth: nil,
       age: patient.age,
