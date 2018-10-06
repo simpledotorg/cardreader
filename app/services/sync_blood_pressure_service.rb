@@ -25,7 +25,7 @@ class SyncBloodPressureService
   end
 
   def sync
-    request = Visit.all.map { |visit| to_request(visit) }.reject(&:nil?)
+    request = Visit.all.map { |visit| to_request(visit) }
     response = api_post('api/v1/blood_pressures/sync', { blood_pressures: request })
     errors = JSON(response.body)['errors'].map do |error|
       Visit.find_by(blood_pressure_uuid: error['id']).attributes.merge(error: error.except('id'))
@@ -38,14 +38,13 @@ class SyncBloodPressureService
   end
 
   def to_request(visit)
-    return unless visit.facility.simple_uuid.present?
     { id: visit.blood_pressure_uuid,
       systolic: visit.systolic,
       diastolic: visit.diastolic,
       created_at: device_created_at(visit),
       updated_at: Time.now,
       patient_id: visit.patient.patient_uuid,
-      facility_id: visit.facility.simple_uuid,
+      facility_id: visit.facility.try(:simple_uuid),
       user_id: user_id }
   end
 
