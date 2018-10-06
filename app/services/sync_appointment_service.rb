@@ -46,7 +46,7 @@ class SyncAppointmentService
   def to_request(visit)
     { id: visit.appointment_uuid,
       patient_id: visit.patient.patient_uuid,
-      facility_id: visit.facility.simple_uuid,
+      facility_id: visit.facility.try(:simple_uuid),
       scheduled_date: visit.next_visit_on,
       status: 'visited',
       created_at: device_created_at(visit),

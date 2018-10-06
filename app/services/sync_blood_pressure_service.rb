@@ -44,7 +44,7 @@ class SyncBloodPressureService
       created_at: device_created_at(visit),
       updated_at: Time.now,
       patient_id: visit.patient.patient_uuid,
-      facility_id: visit.facility.simple_uuid,
+      facility_id: visit.facility.try(:simple_uuid),
       user_id: user_id }
   end
 
