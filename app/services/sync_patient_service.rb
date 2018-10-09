@@ -21,6 +21,7 @@ class SyncPatientService
                'Authorization' => "Bearer #{access_token}" }
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+    http.read_timeout = 500
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = request_body.to_json
     http.request(request)
@@ -64,7 +65,11 @@ class SyncPatientService
   private
 
   def device_created_at(patient)
-    patient.first_visit.try(:measured_on).strftime(TIME_WITHOUT_TIMEZONE_FORMAT) || now
+    begin
+      patient.first_visit.try(:measured_on).strftime(TIME_WITHOUT_TIMEZONE_FORMAT) || now
+    rescue => ex
+      puts "Error getting patient first visit measure on date.", ex.message
+    end
   end
 
   def to_simple_gender(gender)

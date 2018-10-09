@@ -20,6 +20,7 @@ class SyncAppointmentService
                'Authorization' => "Bearer #{access_token}" }
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+    http.read_timeout = 500
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = request_body.to_json
     http.request(request)
@@ -39,6 +40,7 @@ class SyncAppointmentService
   end
 
   def to_requests(visits)
+    return [] unless visits.present?
     requests = visits.map { |visit| to_request(visit) }
     requests.last[:status] = 'scheduled'
     requests
