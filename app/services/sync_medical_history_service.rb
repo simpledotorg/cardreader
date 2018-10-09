@@ -36,7 +36,11 @@ class SyncMedicalHistoryService
   end
 
   def device_created_at(patient)
-    patient.first_visit.try(:measured_on).strftime(TIME_WITHOUT_TIMEZONE_FORMAT) || Time.now
+    begin
+      patient.first_visit.try(:measured_on).strftime(TIME_WITHOUT_TIMEZONE_FORMAT) || now
+    rescue => ex
+      puts "Error getting patient first visit measure on date.", ex.message
+    end
   end
 
   def parse_boolean(value)
