@@ -64,7 +64,11 @@ class SyncPatientService
   private
 
   def device_created_at(patient)
-    patient.first_visit.try(:measured_on).strftime(TIME_WITHOUT_TIMEZONE_FORMAT) || now
+    begin
+      patient.first_visit.try(:measured_on).strftime(TIME_WITHOUT_TIMEZONE_FORMAT) || now
+    rescue => ex
+      puts "Error getting patient first visit measure on date.", ex.message
+    end
   end
 
   def to_simple_gender(gender)
