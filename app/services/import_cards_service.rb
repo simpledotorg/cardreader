@@ -59,7 +59,7 @@ class ImportCardsService
   end
 
   def save_visits(patient, facility, column)
-    for i in 1..9
+    for i in 1..15
       attributes = get_visit_values(i, column)
       begin
         create_or_update_visit(attributes, facility, patient)
