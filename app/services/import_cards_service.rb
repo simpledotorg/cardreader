@@ -8,8 +8,10 @@ class ImportCardsService
   end
 
   def import_patient(column)
+    district_name = get_value(:facility, :district, column) || ""
     facility_name = get_value(:facility, :name, column) || ""
-    facility = Facility.find_by('lower(name) = ?', facility_name.split.join(" ").downcase)
+    district = District.find_by('lower(name) = ?', district_name.split.join(" ").downcase)
+    facility = district.facilities.find_by('lower(name) = ?', facility_name.split.join(" ").downcase)
     if facility.present?
       patient = save_patient(facility, column)
       save_visits(patient, facility, column)
