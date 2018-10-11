@@ -1,7 +1,7 @@
 require 'net/http'
 
 class SyncPatientService
-  attr_reader :host, :user_id, :access_token
+  attr_reader :host, :user_id, :access_token, :error_file
 
   TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
   ERROR_FILE_PREFIX = 'patient-errors-'
@@ -11,6 +11,7 @@ class SyncPatientService
     @host = host
     @user_id = user_id
     @access_token = access_token
+    @error_file = ERROR_FILE_PREFIX + Time.now.to_i.to_s + ".csv"
   end
 
   def api_post(path, request_body)
@@ -28,7 +29,7 @@ class SyncPatientService
   end
 
   def sync
-    request = Patient.all.map { |patient| to_request(patient) }
+    request = Patient.all.map { |patient| to_request(patient) }.reject(&:nil?)
     response = api_post('api/v1/patients/sync', { patients: request })
     errors = JSON(response.body)['errors'].map do |error|
       Patient.find_by(patient_uuid: error['id']).attributes.merge(error: error.except('id'))
@@ -37,24 +38,27 @@ class SyncPatientService
   end
 
   def to_request(patient)
-    { id: patient.patient_uuid,
-      gender: to_simple_gender(patient.gender),
-      full_name: patient.name.split(' ').map(&:humanize).join(' '),
-      status: 'active',
-      date_of_birth: nil,
-      age: patient.age,
-      age_updated_at: now,
-      created_at: device_created_at(patient),
-      updated_at: now,
-      address: to_simple_address(patient),
-      phone_numbers: to_simple_phone_numbers(patient)
-    }
+    begin
+      { id: patient.patient_uuid,
+        gender: to_simple_gender(patient.gender),
+        full_name: patient.name.split(' ').map(&:humanize).join(' '),
+        status: 'active',
+        date_of_birth: nil,
+        age: patient.age,
+        age_updated_at: now,
+        created_at: device_created_at(patient),
+        updated_at: now,
+        address: to_simple_address(patient),
+        phone_numbers: to_simple_phone_numbers(patient)
+      }
+    rescue => error
+      write_errors_to_file([patient.attributes.merge(error: [error.message])])
+    end
   end
 
   def write_errors_to_file(errors)
     return unless errors.present?
-    error_file = ERROR_FILE_PREFIX + Time.now.to_i.to_s + ".csv"
-    CSV.open(error_file, "wb") do |csv|
+    CSV.open(error_file, "wb+") do |csv|
       csv << errors.first.keys # adds the attributes name on the first line
       errors.each do |error|
         csv << error.values
