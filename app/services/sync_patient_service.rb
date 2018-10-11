@@ -53,6 +53,7 @@ class SyncPatientService
       }
     rescue => error
       write_errors_to_file([patient.attributes.merge(error: [error.message])])
+      nil
     end
   end
 
