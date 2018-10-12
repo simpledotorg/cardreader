@@ -54,6 +54,7 @@ class SyncMedicalHistoryService
       prior_stroke: parse_boolean(patient.prior_stroke),
       chronic_kidney_disease: parse_boolean(patient.chronic_kidney_disease),
       receiving_treatment_for_hypertension: parse_boolean(patient.already_on_treatment),
+      diagnosed_with_hypertension: parse_boolean(patient.diagnosed_with_hypertension),
       diabetes: parse_boolean(nil), # This information is not present in the red cards
       created_at: device_created_at(patient),
       updated_at: Time.now }
