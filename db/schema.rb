@@ -32,15 +32,15 @@ ActiveRecord::Schema.define(version: 2018_10_12_064542) do
   end
 
   create_table "patients", force: :cascade do |t|
-    t.text "treatment_number", null: false
+    t.string "treatment_number"
     t.date "registered_on"
-    t.integer "facility_id", null: false
+    t.bigint "facility_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "alternate_id_number"
-    t.text "name", null: false
-    t.text "gender", null: false
-    t.integer "age", null: false
+    t.string "name"
+    t.string "gender"
+    t.integer "age"
     t.string "house_number"
     t.string "street_name"
     t.string "area"
@@ -72,10 +72,10 @@ ActiveRecord::Schema.define(version: 2018_10_12_064542) do
   end
 
   create_table "visits", force: :cascade do |t|
-    t.integer "patient_id", null: false
-    t.integer "systolic", null: false
-    t.integer "diastolic", null: false
-    t.date "measured_on", null: false
+    t.bigint "patient_id"
+    t.integer "systolic"
+    t.integer "diastolic"
+    t.date "measured_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "blood_sugar"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 2018_10_12_064542) do
     t.string "statin"
     t.string "beta_blocker"
     t.boolean "referred_to_specialist"
-    t.date "next_visit_on", null: false
+    t.date "next_visit_on"
     t.string "losartan"
     t.string "medication1_name"
     t.string "medication1_dose"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2018_10_12_064542) do
     t.string "medication2_dose"
     t.string "medication3_name"
     t.string "medication3_dose"
-    t.integer "facilities_id", null: false
+    t.bigint "facilities_id"
     t.uuid "blood_pressure_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "appointment_uuid", default: -> { "uuid_generate_v4()" }
     t.index ["facilities_id"], name: "index_visits_on_facilities_id"
