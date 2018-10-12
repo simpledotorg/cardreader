@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_05_054025) do
+ActiveRecord::Schema.define(version: 2018_10_12_064542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,15 +32,15 @@ ActiveRecord::Schema.define(version: 2018_10_05_054025) do
   end
 
   create_table "patients", force: :cascade do |t|
-    t.string "treatment_number"
+    t.text "treatment_number", null: false
     t.date "registered_on"
-    t.bigint "facility_id"
+    t.integer "facility_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "alternate_id_number"
-    t.string "name"
-    t.string "gender"
-    t.integer "age"
+    t.text "name", null: false
+    t.text "gender", null: false
+    t.integer "age", null: false
     t.string "house_number"
     t.string "street_name"
     t.string "area"
@@ -67,14 +67,15 @@ ActiveRecord::Schema.define(version: 2018_10_05_054025) do
     t.uuid "phone_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "alternate_phone_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "medical_history_uuid", default: -> { "uuid_generate_v4()" }
+    t.boolean "diagnosed_with_hypertension"
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
 
   create_table "visits", force: :cascade do |t|
-    t.bigint "patient_id"
-    t.integer "systolic"
-    t.integer "diastolic"
-    t.date "measured_on"
+    t.integer "patient_id", null: false
+    t.integer "systolic", null: false
+    t.integer "diastolic", null: false
+    t.date "measured_on", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "blood_sugar"
@@ -86,7 +87,7 @@ ActiveRecord::Schema.define(version: 2018_10_05_054025) do
     t.string "statin"
     t.string "beta_blocker"
     t.boolean "referred_to_specialist"
-    t.date "next_visit_on"
+    t.date "next_visit_on", null: false
     t.string "losartan"
     t.string "medication1_name"
     t.string "medication1_dose"
@@ -94,7 +95,7 @@ ActiveRecord::Schema.define(version: 2018_10_05_054025) do
     t.string "medication2_dose"
     t.string "medication3_name"
     t.string "medication3_dose"
-    t.bigint "facilities_id"
+    t.integer "facilities_id", null: false
     t.uuid "blood_pressure_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "appointment_uuid", default: -> { "uuid_generate_v4()" }
     t.index ["facilities_id"], name: "index_visits_on_facilities_id"
