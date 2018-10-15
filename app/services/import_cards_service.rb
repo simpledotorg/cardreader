@@ -47,7 +47,7 @@ class ImportCardsService
   def save_patient(facility, column)
     attributes =
       {}.merge(get_values(:patient, column))
-        .merge(get_values(:medical_history, column))
+        .merge(Hash[get_values(:medical_history, column).map {|k, v| [k, to_boolean(v)]}])
         .merge(get_values(:hypertension_treatment_at_registration, column))
         .merge(facility_id: facility.id)
 
@@ -58,6 +58,10 @@ class ImportCardsService
     else
       Patient.create(attributes)
     end
+  end
+
+  def to_boolean(value)
+    !!value.match(/Y/i) if value.present?
   end
 
   def save_visits(patient, facility, column)
