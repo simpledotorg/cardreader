@@ -1,20 +1,20 @@
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
-      <%= form.text_field :measured_on, label: "Date attended", help: "Format: YYYY-MM-DD" %>
-      <%= form.text_field :systolic %>
-      <%= form.text_field :diastolic %>
+      <%= form.text_field :measured_on, label: "Date attended", help: "Format: DD/MM/YYYY", required: true, type: 'date', autofocus: true, min: '2018-01-01', max: '2019-01-01' %>
+      <%= form.number_field :systolic, required: true, min: 50, max: 400 %>
+      <%= form.number_field :diastolic, required: true, min: 30, max: 400 %>
       <%= form.text_field :blood_sugar %>
 
       <h4>Treatment doses</h4>
-      <%= form.text_field :amlodipine, label: "Amlodipine dose"%>
-      <%= form.text_field :telmisartan, label: "Telmisartan dose"%>
-      <%= form.text_field :enalpril, label: "Enalpril dose"%>
-      <%= form.text_field :chlorthalidone, label: "Chlorthalidone dose"%>
-      <%= form.text_field :aspirin, label: "Aspirin dose"%>
-      <%= form.text_field :statin, label: "Statin dose"%>
-      <%= form.text_field :beta_blocker, label: "Beta blocker dose"%>
-      <%= form.text_field :losartan, label: "Losartan dose"%>
+      <%= form.text_field :amlodipine, label: "Amlodipine dose", pattern: '[^YNyn]*' %>
+      <%= form.text_field :telmisartan, label: "Telmisartan dose", pattern: '[^YNyn]*' %>
+      <%= form.text_field :enalpril, label: "Enalpril dose", pattern: '[^YNyn]*' %>
+      <%= form.text_field :chlorthalidone, label: "Chlorthalidone dose", pattern: '[^YNyn]*' %>
+      <%= form.text_field :aspirin, label: "Aspirin dose", pattern: '[^YNyn]*' %>
+      <%= form.text_field :statin, label: "Statin dose", pattern: '[^YNyn]*' %>
+      <%= form.text_field :beta_blocker, label: "Beta blocker dose", pattern: '[^YNyn]*' %>
+      <%= form.text_field :losartan, label: "Losartan dose", pattern: '[^YNyn]*' %>
 
       <% 3.times do |i| %>
         <div class="form-row">
@@ -27,7 +27,7 @@
         </div>
       <% end %>
 
-      <%= form.text_field  :next_visit_on, help: "Format: YYYY-MM-DD" %>
+      <%= form.text_field  :next_visit_on, help: "Format: DD/MM/YYYY", type: 'date', autofocus: true, min: '2018-01-01', max: '2019-01-01' %>
       <%= form.check_box :referred_to_specialist %>
     </div>
   </div>
