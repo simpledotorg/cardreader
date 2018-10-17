@@ -1,8 +1,9 @@
 <%= bootstrap_form_with(model: [@district, @facility, patient], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
-      <%= form.text_field :registered_on, label: "Date of registration", help: "Format: DD/MM/YYYY", required: true, type: 'date', autofocus: true, min: '2018-01-01', max: '2019-01-01' %>
-      <%= form.text_field :treatment_number, prepend: @patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically", required: true %>
+      <%= form.text_field :registered_on, label: "Date of registration", required: true, autofocus: true,
+                          help: "Format: DD/MM/YYYY", type: 'date', min: '2018-01-01', max: '2019-01-01', value: patient.registered_on || '2018-01-01' %>
+      <%= form.text_field :treatment_number, prepend: patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically", required: true %>
       <%= form.text_field :alternate_id_number, label: "Aadhaar number or any other ID number" %>
 
       <h4>A. Patient Identification Information</h4>
@@ -11,8 +12,8 @@
 
       <%= form.label :gender %>
       <%= form.form_group :gender do %>
-        <%= form.radio_button :gender, "Female", inline: true, required: true %>
         <%= form.radio_button :gender, "Male", inline: true, required: true %>
+        <%= form.radio_button :gender, "Female", inline: true, required: true %>
         <%= form.radio_button :gender, "Transgender", inline: true, required: true %>
       <% end %>
 
