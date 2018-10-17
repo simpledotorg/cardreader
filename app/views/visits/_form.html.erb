@@ -1,3 +1,4 @@
+<%= link_to "Add details from previous visit", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true') %>
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
@@ -8,7 +9,7 @@
       <%= form.text_field :blood_sugar %>
 
       <h4>Treatment doses</h4>
-      <p class="text-info">Please enter dosages like '5mg', or '1 tablet' wherever possible. Do not enter OD, BD, etc.</p>
+      <p class="text-light bg-info p-3">Please enter dosages like '5mg', or '1 tablet' wherever possible. Do not enter OD, BD, etc.</p>
       <%= form.text_field :amlodipine, label: "Amlodipine dose", pattern: '[^YNyn]*' %>
       <%= form.text_field :telmisartan, label: "Telmisartan dose", pattern: '[^YNyn]*' %>
       <%= form.text_field :enalpril, label: "Enalpril dose", pattern: '[^YNyn]*' %>
