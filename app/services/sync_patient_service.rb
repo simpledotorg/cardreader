@@ -79,11 +79,11 @@ class SyncPatientService
 
   def to_simple_gender(gender)
     case gender.strip
-    when Set['M']
+    when Set['M', 'Male']
       'male'
-    when Set['F']
+    when Set['F', 'Female']
       'female'
-    when Set['T']
+    when Set['T', 'Transgender']
       'transgender'
     end
   end
