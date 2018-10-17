@@ -12,7 +12,11 @@ class VisitsController < ApplicationController
   end
 
   def new
-    @visit = @patient.visits.build
+    if params[:prefill_from_previous_visit]
+      @visit = @patient.visits.build(previous_visit_details)
+    else
+      @visit = @patient.visits.build
+    end
   end
 
   def edit
@@ -53,6 +57,12 @@ class VisitsController < ApplicationController
   end
 
   private
+
+    def previous_visit_details
+      drug_keys = %w(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker losartan medication1_name medication1_dose medication2_name medication2_dose medication3_name medication3_dose)
+      @patient.visits.order(measured_on: :desc).first.attributes.slice(*drug_keys)
+    end
+
     def set_district
       @district = District.find(params[:district_id])
     end

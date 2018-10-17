@@ -1,3 +1,4 @@
+<%= link_to "Add details from previous visit", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true') %>
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
