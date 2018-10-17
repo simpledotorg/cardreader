@@ -8,7 +8,7 @@
 
       <h4>A. Patient Identification Information</h4>
 
-      <%= form.text_field  :name, label: "Full Name", required: true, minlength: 3 %>
+      <%= form.text_field :name, label: "Full Name", required: true, minlength: 3 %>
 
       <%= form.label :gender %>
       <%= form.form_group :gender do %>
@@ -18,14 +18,14 @@
       <% end %>
 
       <%= form.number_field :age, required: true, min: 16, max: 120 %>
-      <%= form.text_field  :house_number %>
-      <%= form.text_field  :street_name, minlength: 3 %>
-      <%= form.text_field  :area, label: "Area/Colony" %>
-      <%= form.text_field  :village, label: "Village/Town" %>
-      <%= form.text_field  :district, label: "District name" %>
-      <%= form.text_field  :pincode, pattern: '\d+', minlength: 3, help: "Please enter the 6 digit PIN code of the area" %>
-      <%= form.text_field  :phone, label: "Patient phone", pattern: '\d+', minlength: 6 %>
-      <%= form.text_field  :alternate_phone, pattern: '\d+', minlength: 6 %>
+      <%= form.text_field :house_number %>
+      <%= form.text_field :street_name, minlength: 3 %>
+      <%= form.text_field :area, label: "Area/Colony" %>
+      <%= form.text_field :village, label: "Village/Town" %>
+      <%= form.text_field :district, label: "District name" %>
+      <%= form.text_field :pincode, pattern: '\d+', minlength: 3, help: "Please enter the 6 digit PIN code of the area" %>
+      <%= form.text_field :phone, label: "Patient phone", pattern: '\d+', minlength: 6 %>
+      <%= form.text_field :alternate_phone, pattern: '\d+', minlength: 6 %>
 
       <h4>B. Diagnosis</h4>
 
@@ -55,18 +55,18 @@
   <%= form.submit "Save Treatment Card", class: "btn btn-primary" %>
 <% end %>
 
- <script>
-   $(function() {
-     $("#patient_treatment_number").on("input", function() {
-       treatment_number = $(this).val();
-       max_length = 8;
+<script>
+    $(function () {
+        $("#patient_treatment_number").on("input", function () {
+            treatment_number = $(this).val();
+            max_length = 8;
 
-       prefix = "2018-";
-       if (treatment_number.length < max_length) {
-         prefix += "0".repeat(max_length - treatment_number.length);
-       }
+            prefix = "2018-";
+            if (treatment_number.length < max_length) {
+                prefix += "0".repeat(max_length - treatment_number.length);
+            }
 
-       $(this).parent(".input-group").find(".input-group-text").html(prefix);
-     });
-   });
- </script>
+            $(this).parent(".input-group").find(".input-group-text").html(prefix);
+        });
+    });
+</script>
