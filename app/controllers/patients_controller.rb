@@ -86,6 +86,7 @@ class PatientsController < ApplicationController
         :heard_attack_in_last_3_years,
         :prior_stroke,
         :chronic_kidney_disease,
+        :diagnosed_with_hypertension,
         :medication1_name,
         :medication1_dose,
         :medication2_name,
