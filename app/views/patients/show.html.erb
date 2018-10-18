@@ -30,12 +30,24 @@
   <div class="col-md-6">
     <h3>B. Diagnosis</h3>
     <ul class="list-group">
-      <li class="list-group-item"><strong>Diagnosed with hypertension?</strong>: <%= @patient.diagnosed_with_hypertension? ? "Yes" : "No " %></li>
-      <li class="list-group-item"><strong>Already on treatment?</strong>: <%= @patient.already_on_treatment? ? "Yes" : "No " %></li>
-      <li class="list-group-item"><strong>Prior heart attack?</strong>: <%= @patient.prior_heart_attack? ? "Yes" : "No " %></li>
-      <li class="list-group-item"><strong>Heart attack in last 3 years?</strong>: <%= @patient.heard_attack_in_last_3_years? ? "Yes" : "No " %></li>
-      <li class="list-group-item"><strong>Prior stroke?</strong>: <%= @patient.prior_stroke? ? "Yes" : "No " %></li>
-      <li class="list-group-item"><strong>Chronic kidney disease?</strong>: <%= @patient.chronic_kidney_disease? ? "Yes" : "No " %></li>
+      <li class="list-group-item"><strong>Diagnosed with hypertension?</strong>:
+        <span><%= @patient.diagnosed_with_hypertension? ? "Yes" : (@patient.diagnosed_with_hypertension == false ? "No" : "Don't know") %></span>
+      </li>
+      <li class="list-group-item"><strong>Already on treatment?</strong>:
+        <span><%= @patient.already_on_treatment? ? "Yes" : (@patient.already_on_treatment == false ? "No" : "Don't know") %></span>
+      </li>
+      <li class="list-group-item"><strong>Prior heart attack?</strong>:
+        <span><%= @patient.prior_heart_attack? ? "Yes" : (@patient.prior_heart_attack == false ? "No" : "Don't know") %></span>
+      </li>
+      <li class="list-group-item"><strong>Heart attack in last 3 years?</strong>:
+        <span><%= @patient.heard_attack_in_last_3_years? ? "Yes" : (@patient.heard_attack_in_last_3_years == false ? "No" : "Don't know") %></span>
+      </li>
+      <li class="list-group-item"><strong>Prior stroke?</strong>:
+        <span><%= @patient.prior_stroke? ? "Yes" : (@patient.prior_stroke == false ? "No" : "Don't know") %></span>
+      </li>
+      <li class="list-group-item"><strong>Chronic kidney disease?</strong>:
+        <span><%= @patient.chronic_kidney_disease? ? "Yes" : (@patient.chronic_kidney_disease == false ? "No" : "Don't know") %></span>
+      </li>
     </ul>
 
     <h3 class="mt-4">C. Hypertension treatment at registration</h3>
