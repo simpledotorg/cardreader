@@ -30,10 +30,10 @@
   <div class="col-md-6">
     <h3>B. Diagnosis</h3>
     <ul class="list-group">
-      <li class="list-group-item"><strong>Diagnosed with hypertension?</strong>:
+      <li class="list-group-item"><strong>Hypertension. Yes, treatment initiated.</strong>:
         <span><%= @patient.diagnosed_with_hypertension? ? "Yes" : (@patient.diagnosed_with_hypertension == false ? "No" : "Don't know") %></span>
       </li>
-      <li class="list-group-item"><strong>Already on treatment?</strong>:
+      <li class="list-group-item"><strong>Yes, was already on treatment when registered.</strong>:
         <span><%= @patient.already_on_treatment? ? "Yes" : (@patient.already_on_treatment == false ? "No" : "Don't know") %></span>
       </li>
       <li class="list-group-item"><strong>Prior heart attack?</strong>:

@@ -18,7 +18,7 @@ class PatientsController < ApplicationController
   end
 
   def create
-    @patient = @facility.patients.new(patient_params)
+    @patient = @facility.patients.new(patient_with_parsed_medical_history)
 
     respond_to do |format|
       if @patient.save
@@ -33,7 +33,7 @@ class PatientsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @patient.update(patient_params)
+      if @patient.update(patient_with_parsed_medical_history)
         format.html { redirect_to [@district, @facility, @patient], notice: 'Patient was successfully updated.' }
         format.json { render :show, status: :ok, location: @patient }
       else
@@ -97,4 +97,22 @@ class PatientsController < ApplicationController
         :medication4_dose
       )
     end
+
+  def parse_boolean(value)
+    case value.strip
+    when Set['Yes']
+      true
+    when Set['No']
+      false
+    when Set[nil, '']
+      nil
+    end
+  end
+
+  def patient_with_parsed_medical_history
+    medical_history_keys = [:prior_heart_attack, :heard_attack_in_last_3_years, :prior_stroke, :chronic_kidney_disease]
+    patient_params.merge(patient_params.to_h.slice(*medical_history_keys).map do |k, v|
+      [k, parse_boolean(v)]
+    end)
+  end
 end
