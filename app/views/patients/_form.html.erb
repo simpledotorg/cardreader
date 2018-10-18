@@ -30,8 +30,8 @@
       <h4>B. Diagnosis</h4>
 
       <div class="mb-4">
-        <%= form.check_box :diagnosed_with_hypertension %>
-        <%= form.check_box :already_on_treatment %>
+        <%= form.check_box :diagnosed_with_hypertension, label: "Hypertension. Yes, treatment initiated." %>
+        <%= form.check_box :already_on_treatment, label: "Yes, was already on treatment when registered." %>
         <div class="form-row">
           <div class="col"><%= form.label :prior_heart_attack %></div>
           <%= form.form_group :prior_heart_attack do %>
