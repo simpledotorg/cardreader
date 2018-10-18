@@ -125,7 +125,7 @@ class ImportCardsService
         diagnosed_with_hypertension: 19,
         already_on_treatment: 20,
         prior_heart_attack: 21,
-        heard_attack_in_last_3_years: 22,
+        heart_attack_in_last_3_years: 22,
         prior_stroke: 23,
         chronic_kidney_disease: 24
       },

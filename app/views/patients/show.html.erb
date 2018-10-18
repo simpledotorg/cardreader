@@ -39,7 +39,7 @@
         <span><%= @patient.prior_heart_attack? ? "Yes" : (@patient.prior_heart_attack == false ? "No" : "Don't know") %></span>
       </li>
       <li class="list-group-item"><strong>Heart attack in last 3 years?</strong>:
-        <span><%= @patient.heard_attack_in_last_3_years? ? "Yes" : (@patient.heard_attack_in_last_3_years == false ? "No" : "Don't know") %></span>
+        <span><%= @patient.heart_attack_in_last_3_years? ? "Yes" : (@patient.heart_attack_in_last_3_years == false ? "No" : "Don't know") %></span>
       </li>
       <li class="list-group-item"><strong>Prior stroke?</strong>:
         <span><%= @patient.prior_stroke? ? "Yes" : (@patient.prior_stroke == false ? "No" : "Don't know") %></span>

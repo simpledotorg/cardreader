@@ -17,7 +17,7 @@ FactoryBot.define do
     alternate_phone ""
     already_on_treatment false
     prior_heart_attack false
-    heard_attack_in_last_3_years false
+    heart_attack_in_last_3_years false
     prior_stroke false
     chronic_kidney_disease false
     medication1_name "Ibuprofen"
