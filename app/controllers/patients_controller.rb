@@ -69,7 +69,6 @@ class PatientsController < ApplicationController
       params.require(:patient).permit(
         :treatment_number,
         :registered_on,
-        :alternate_id_number,
         :name,
         :gender,
         :age,

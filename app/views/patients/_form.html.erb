@@ -4,7 +4,6 @@
       <%= form.text_field :registered_on, label: "Date of registration", required: true, autofocus: true,
                           help: "Format: DD/MM/YYYY", type: 'date', min: '2018-01-01', max: '2019-01-01', value: patient.registered_on || '2018-01-01' %>
       <%= form.text_field :treatment_number, prepend: patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically", required: true %>
-      <%= form.text_field :alternate_id_number, label: "Aadhaar number or any other ID number" %>
 
       <h4>A. Patient Identification Information</h4>
 
