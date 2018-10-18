@@ -4,7 +4,6 @@ FactoryBot.define do
 
     sequence(:treatment_number) { |n| "2018-%08i" % n }
     registered_on { 3.months.ago }
-    alternate_id_number ""
     name "Amir Singh"
     gender "Male"
     age 65
