@@ -25,26 +25,26 @@ class VisitsController < ApplicationController
   def create
     @visit = @patient.visits.new(visit_params)
 
-    respond_to do |format|
-      if @visit.save
-        format.html { redirect_to [@district, @facility, @patient], notice: 'Visit was successfully created.' }
-        format.json { render :show, status: :created, location: @visit }
+    if @visit.save
+      if add_new_after_update?
+        redirect_to new_district_facility_patient_visit_url(@district, @facility, @patient), notice: 'Visit was successfully created.'
       else
-        format.html { render :new }
-        format.json { render json: @visit.errors, status: :unprocessable_entity }
+        redirect_to [@district, @facility, @patient], notice: 'Visit was successfully created.'
       end
+    else
+      render :new
     end
   end
 
   def update
-    respond_to do |format|
-      if @visit.update(visit_params)
-        format.html { redirect_to [@district, @facility, @patient], notice: 'Visit was successfully updated.' }
-        format.json { render :show, status: :ok, location: @visit }
+    if @visit.update(visit_params)
+      if add_new_after_update?
+        redirect_to new_district_facility_patient_visit_url(@district, @facility, @patient), notice: 'Visit was successfully updated.'
       else
-        format.html { render :edit }
-        format.json { render json: @visit.errors, status: :unprocessable_entity }
+        redirect_to [@district, @facility, @patient], notice: 'Visit was successfully updated.'
       end
+    else
+      render :edit
     end
   end
 
@@ -102,5 +102,9 @@ class VisitsController < ApplicationController
         :referred_to_specialist,
         :next_visit_on
       )
+    end
+
+    def add_new_after_update?
+      params[:commit] == "Save and Add New Visit"
     end
 end
