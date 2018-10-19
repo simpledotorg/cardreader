@@ -23,7 +23,7 @@ class VisitsController < ApplicationController
   end
 
   def create
-    @visit = @patient.visits.new(visit_params.merge(facilities_id: @facility.id))
+    @visit = @patient.visits.new(visit_params)
 
     respond_to do |format|
       if @visit.save

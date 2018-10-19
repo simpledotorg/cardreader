@@ -77,7 +77,7 @@ class ImportCardsService
 
   def create_or_update_visit(attributes, facility, patient)
     if attributes[:measured_on].present?
-      attributes_with_ids = attributes.merge(patient_id: patient.id, facilities_id: facility.id)
+      attributes_with_ids = attributes.merge(patient_id: patient.id)
       existing_visit = Visit.find_by(attributes_with_ids.slice(*visit_id_attributes))
       if existing_visit.present?
         existing_visit.update(attributes_with_ids)
