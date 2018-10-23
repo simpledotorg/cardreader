@@ -26,8 +26,9 @@ class SyncMedicalHistoryService
     http.request(request)
   end
 
-  def sync
-    request = Patient.all.map { |patient| to_request(patient) }
+  def sync(facilities, since)
+    request = Patient.where(facility: facilities).where('updated_at >= ?', since).map { |patient| to_request(patient) }
+    return if request.empty?
     response = api_post('api/v1/medical_histories/sync', { medical_histories: request })
     errors = JSON(response.body)['errors'].map do |error|
       Patient.find_by(medical_history_uuid: error['id']).attributes.merge(error: error.except('id'))

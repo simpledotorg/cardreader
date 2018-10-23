@@ -26,8 +26,9 @@ class SyncAppointmentService
     http.request(request)
   end
 
-  def sync
-    request = Patient.all.flat_map { |patient| to_requests(patient.visits.order(:measured_on)) }
+  def sync(facilities, since)
+    request = Patient.where(facility: facilities).where('updated_at >= ?', since).flat_map { |patient| to_requests(patient.visits.order(:measured_on)) }
+    return if request.empty?
     response = api_post('api/v1/appointments/sync', { appointments: request })
     errors = JSON(response.body)['errors'].map do |error|
       Visit.find_by(appointment_uuid: error['id']).attributes.merge(error: error.except('id'))
