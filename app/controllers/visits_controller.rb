@@ -12,6 +12,8 @@ class VisitsController < ApplicationController
   end
 
   def new
+    @previous_visit = @patient.visits.order(:measured_on).last
+
     if params[:prefill_from_previous_visit]
       @visit = @patient.visits.build(previous_visit_details)
     else
@@ -20,6 +22,7 @@ class VisitsController < ApplicationController
   end
 
   def edit
+    @previous_visit = @patient.visits.where.not(id: @visit.id).order(:measured_on).last
   end
 
   def create
