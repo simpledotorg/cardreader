@@ -28,8 +28,9 @@ class SyncPatientService
     http.request(request)
   end
 
-  def sync
-    request = Patient.all.map { |patient| to_request(patient) }.reject(&:nil?)
+  def sync(facilities, since)
+    request = Patient.where(facility: facilities).where('updated_at >= ?', since).map { |patient| to_request(patient) }.reject(&:nil?)
+    return if request.empty?
     response = api_post('api/v1/patients/sync', { patients: request })
     errors = JSON(response.body)['errors'].map do |error|
       Patient.find_by(patient_uuid: error['id']).attributes.merge(error: error.except('id'))
