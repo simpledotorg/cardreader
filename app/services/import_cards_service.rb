@@ -109,7 +109,6 @@ class ImportCardsService
       patient: {
         registered_on: 5,
         treatment_number: 6,
-        alternate_id_number: 7,
         name: 8,
         gender: 9,
         age: 10,
