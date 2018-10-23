@@ -90,7 +90,7 @@
               <% if visit.send("medication#{drug_number}_name".to_sym).present? %>
                 <% name = visit.send("medication#{drug_number}_name".to_sym) %>
                 <% dose = visit.send("medication#{drug_number}_dose".to_sym) %>
-                <li><%= name.humanize %>: <%= dose.to_s %></li>
+                <li><%= name %>: <%= dose.to_s %></li>
               <% end %>
             <% end %>
           </ul>
