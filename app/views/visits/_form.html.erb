@@ -20,12 +20,17 @@
       <% end %>
 
       <% 3.times do |i| %>
+        <% drug = "medication#{i + 1}_name".to_sym %>
+        <% dose = "medication#{i + 1}_dose".to_sym %>
+
         <div class="form-row">
           <div class="col-8">
-            <%= form.text_field "medication#{i + 1}_name".to_sym, label: "Other Medication" %>
+            <%= form.text_field drug, label: "Other Medication",
+                                help: @previous_visit.send(drug).present? ? "Previous visit: #{@previous_visit.send(drug)}" : "" %>
           </div>
           <div class="col-4">
-            <%= form.text_field "medication#{i + 1}_dose".to_sym, label: "Dose" %>
+            <%= form.text_field dose, label: "Dose",
+                                help: @previous_visit.send(dose).present? ? "Previous visit: #{@previous_visit.send(dose)}" : "" %>
           </div>
         </div>
       <% end %>
