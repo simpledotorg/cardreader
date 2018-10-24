@@ -18,7 +18,7 @@
     <% @facility.patients.sort_by { |p| p.treatment_number.to_i }.each do |patient| %>
       <tr>
         <td><%= link_to patient.formatted_treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
-        <td><%= patient.registered_on.strftime("%d-%m-%Y") %></td>
+        <td><%= patient.registered_on.strftime("%d/%m/%Y") %></td>
       </tr>
     <% end %>
   </tbody>
