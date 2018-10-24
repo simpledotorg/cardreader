@@ -24,9 +24,13 @@ namespace :sync do
     since = last_updated_since.present? ? last_updated_since.to_time : Time.new(0)
     facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
 
-    SyncPatientService.new(host, user_id, access_token).sync(facilities, since)
-    SyncBloodPressureService.new(host, user_id, access_token).sync(facilities, since)
-    SyncAppointmentService.new(host, user_id, access_token).sync(facilities, since)
-    SyncMedicalHistoryService.new(host, user_id, access_token).sync(facilities, since)
+    patients = Patient.where(facility: facilities).where('updated_at >= ?', since)
+    visits = Visit.where(facility: facilities).where('updated_at >= ?', since)
+
+    sync_service = SyncService.new(host, user_id, access_token)
+    sync_service.sync('patients', patients, SyncPatientPayload)
+    sync_service.sync('blood_pressures', visits, SyncBloodPressurePayload)
+    sync_service.sync('medical_histories', patients, SyncMedicalHistoryPayload)
+    sync_service.sync('appointments', patients, SyncAppointmentPayload)
   end
 end
