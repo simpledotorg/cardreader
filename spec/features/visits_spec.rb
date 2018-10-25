@@ -4,7 +4,7 @@ RSpec.feature "Visits", type: :feature do
   let!(:district) { create(:district, name: "Mansa") }
   let!(:facility) { create(:facility, district: district, name: "District Hospital") }
   let!(:patient) { create(:patient, facility: facility) }
-  let!(:visits) { create_list(:visit, 3, patient: patient, facility: facility ) }
+  let!(:visits) { create_list(:visit, 3, patient: patient) }
 
   before do
     visit district_facility_patient_path(district, facility, patient)
@@ -22,7 +22,7 @@ RSpec.feature "Visits", type: :feature do
       fill_in "Amlodipine", with: "10mg"
       fill_in "visit_medication1_name", with: "Ibuprofen"
       fill_in "visit_medication1_dose", with: "200mg"
-      click_button "Create Visit"
+      click_button "Save"
 
       expect(page).to have_content("145 / 95")
       expect(page).to have_content("Amlodipine: 10mg")
@@ -42,7 +42,7 @@ RSpec.feature "Visits", type: :feature do
       fill_in "Diastolic", with: 95
       fill_in "Amlodipine", with: "20mg"
       fill_in "Telmisartan", with: "90mg"
-      click_button("Update Visit")
+      click_button("Save")
 
       within find("tr", text: "145 / 95") do
         expect(page).to have_content("Amlodipine: 20mg")

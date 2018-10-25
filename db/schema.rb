@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_18_193223) do
+ActiveRecord::Schema.define(version: 2018_10_19_012456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2018_10_18_193223) do
     t.string "alternate_phone"
     t.boolean "already_on_treatment"
     t.boolean "prior_heart_attack"
-    t.boolean "heard_attack_in_last_3_years"
+    t.boolean "heart_attack_in_last_3_years"
     t.boolean "prior_stroke"
     t.boolean "chronic_kidney_disease"
     t.string "medication1_name"
@@ -94,10 +94,8 @@ ActiveRecord::Schema.define(version: 2018_10_18_193223) do
     t.string "medication2_dose"
     t.string "medication3_name"
     t.string "medication3_dose"
-    t.bigint "facilities_id"
     t.uuid "blood_pressure_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "appointment_uuid", default: -> { "uuid_generate_v4()" }
-    t.index ["facilities_id"], name: "index_visits_on_facilities_id"
     t.index ["patient_id"], name: "index_visits_on_patient_id"
   end
 

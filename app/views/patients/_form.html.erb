@@ -39,10 +39,10 @@
           <% end %>
         </div>
         <div class="form-row">
-          <div class="col"><%= form.label :heard_attack_in_last_3_years %></div>
-          <%= form.form_group :heard_attack_in_last_3_years do %>
-            <%= form.radio_button :heard_attack_in_last_3_years, "Yes", inline: true, checked: patient.heard_attack_in_last_3_years || nil %>
-            <%= form.radio_button :heard_attack_in_last_3_years, "No", inline: true, checked: patient.heard_attack_in_last_3_years === false %>
+          <div class="col"><%= form.label :heart_attack_in_last_3_years %></div>
+          <%= form.form_group :heart_attack_in_last_3_years do %>
+            <%= form.radio_button :heart_attack_in_last_3_years, "Yes", inline: true, checked: patient.heart_attack_in_last_3_years || nil %>
+            <%= form.radio_button :heart_attack_in_last_3_years, "No", inline: true, checked: patient.heart_attack_in_last_3_years === false %>
           <% end %>
         </div>
         <div class="form-row">
