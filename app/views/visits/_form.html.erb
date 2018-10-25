@@ -8,15 +8,17 @@
       <%= form.text_field :blood_sugar %>
 
       <h4>Treatment doses</h4>
-      <p>
-        <%= link_to "Copy medications from previous visit on #{@previous_visit.measured_on}", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true'), autofocus: true %>
-      </p>
+      <% if @previous_visit.present? %>
+        <p>
+          <%= link_to "Copy medications from previous visit on #{@previous_visit.measured_on}", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true'), autofocus: true %>
+        </p>
+      <% end %>
 
       <p class="text-light bg-info p-3">Please enter dosages like '5mg', or '1 tablet' wherever possible. Do not enter OD, BD, etc.</p>
 
       <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
         <%= form.text_field drug, label: "#{drug.to_s.humanize} dose", pattern: '[^YNyn]*',
-                            help: @previous_visit.send(drug).present? ? "Previous visit: #{@previous_visit.send(drug)}" : "" %>
+                            help: @previous_visit.present? && @previous_visit.send(drug).present? ? "Previous visit: #{@previous_visit.send(drug)}" : "" %>
       <% end %>
 
       <% 3.times do |i| %>
@@ -26,11 +28,11 @@
         <div class="form-row">
           <div class="col-8">
             <%= form.text_field drug, label: "Other Medication",
-                                help: @previous_visit.send(drug).present? ? "Previous visit: #{@previous_visit.send(drug)}" : "" %>
+                                help: @previous_visit.present? && @previous_visit.send(drug).present? ? "Previous visit: #{@previous_visit.send(drug)}" : "" %>
           </div>
           <div class="col-4">
             <%= form.text_field dose, label: "Dose",
-                                help: @previous_visit.send(dose).present? ? "Previous visit: #{@previous_visit.send(dose)}" : "" %>
+                                help: @previous_visit.present? && @previous_visit.send(dose).present? ? "Previous visit: #{@previous_visit.send(dose)}" : "" %>
           </div>
         </div>
       <% end %>
