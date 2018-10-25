@@ -8,7 +8,7 @@ class SyncPatientPayload
     @user_id = user_id
   end
 
-  def to_request
+  def to_payload
     { id: patient.patient_uuid,
       gender: simple_gender,
       full_name: patient.name.split(' ').map(&:humanize).join(' '),

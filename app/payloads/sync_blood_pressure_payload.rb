@@ -12,7 +12,7 @@ class SyncBloodPressurePayload
     visit.measured_on.strftime(TIME_WITHOUT_TIMEZONE_FORMAT)
   end
 
-  def to_request
+  def to_payload
     { id: visit.blood_pressure_uuid,
       systolic: visit.systolic,
       diastolic: visit.diastolic,

@@ -25,7 +25,7 @@ class SyncService
   def to_request(records, request_payload)
     requests = records.flat_map do |record|
       begin
-        request_payload.new(record, user_id).to_request
+        request_payload.new(record, user_id).to_payload
       rescue => error
         write_errors_to_file(request_key, [record.attributes.merge(error: [error.message])])
         nil

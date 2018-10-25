@@ -20,7 +20,7 @@ class SyncMedicalHistoryPayload
     value || false
   end
 
-  def to_request
+  def to_payload
     { id: patient.medical_history_uuid,
       patient_id: patient.patient_uuid,
       prior_heart_attack: parse_boolean(patient.prior_heart_attack),
