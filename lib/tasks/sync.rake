@@ -32,5 +32,6 @@ namespace :sync do
     sync_service.sync('blood_pressures', visits, SyncBloodPressurePayload)
     sync_service.sync('medical_histories', patients, SyncMedicalHistoryPayload)
     sync_service.sync('appointments', patients, SyncAppointmentPayload)
+    sync_service.sync('prescription_drugs', patients, SyncPrescriptionDrugPayload)
   end
 end

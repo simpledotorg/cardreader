@@ -27,7 +27,6 @@ class SyncService
       begin
         request_payload.new(record, user_id).to_request
       rescue => error
-        puts error
         write_errors_to_file(request_key, [record.attributes.merge(error: [error.message])])
         nil
       end
