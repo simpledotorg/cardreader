@@ -12,7 +12,7 @@ class SyncService
   end
 
   def sync(request_key, records, request_payload)
-    request = to_request(records, request_payload)
+    request = to_request(request_key, records, request_payload)
     return if request.empty?
     response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
     errors = JSON(response.body)['errors'].map do |error|
@@ -22,7 +22,7 @@ class SyncService
     write_errors_to_file(request_key, errors)
   end
 
-  def to_request(records, request_payload)
+  def to_request(request_key, records, request_payload)
     requests = records.flat_map do |record|
       begin
         request_payload.new(record, user_id).to_payload
@@ -47,7 +47,7 @@ class SyncService
   private
 
   def error_file(request_key)
-    "#{request_key}-errors-#{Time.now.to_i.to_s}.csv"
+    "#{request_key}-errors-#{Date.today.to_s}.csv"
   end
 
   def now
