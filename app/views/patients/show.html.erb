@@ -6,7 +6,9 @@
 
 <%= link_to "Edit Patient", edit_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-secondary float-right" %>
 
-<h1>Treatment Number <%= @patient.formatted_treatment_number %></h1>
+<h1>
+  Treatment Number <%= @patient.formatted_treatment_number %>
+</h1>
 
 <div class="row my-5">
   <div class="col-md-6">
@@ -29,23 +31,23 @@
   <div class="col-md-6">
     <h3>B. Diagnosis</h3>
     <ul class="list-group">
-      <li class="list-group-item"><strong>Hypertension. Yes, treatment initiated.</strong>:
-        <span><%= @patient.diagnosed_with_hypertension? ? "Yes" : (@patient.diagnosed_with_hypertension == false ? "No" : "Don't know") %></span>
+      <li class="list-group-item"><strong>Hypertension. Yes, treatment initiated:</strong>
+        <span><%= display_yes_no_field(@patient.diagnosed_with_hypertension) %></span>
       </li>
-      <li class="list-group-item"><strong>Yes, was already on treatment when registered.</strong>:
-        <span><%= @patient.already_on_treatment? ? "Yes" : (@patient.already_on_treatment == false ? "No" : "Don't know") %></span>
+      <li class="list-group-item"><strong>Yes, was already on treatment when registered:</strong>
+        <span><%= display_yes_no_field(@patient.already_on_treatment) %></span>
       </li>
-      <li class="list-group-item"><strong>Prior heart attack?</strong>:
-        <span><%= @patient.prior_heart_attack? ? "Yes" : (@patient.prior_heart_attack == false ? "No" : "Don't know") %></span>
+      <li class="list-group-item"><strong>Prior heart attack?</strong>
+        <span><%= display_yes_no_field(@patient.prior_heart_attack) %></span>
       </li>
-      <li class="list-group-item"><strong>Heart attack in last 3 years?</strong>:
-        <span><%= @patient.heard_attack_in_last_3_years? ? "Yes" : (@patient.heard_attack_in_last_3_years == false ? "No" : "Don't know") %></span>
+      <li class="list-group-item"><strong>Heart attack in last 3 years?</strong>
+        <span><%= display_yes_no_field(@patient.heart_attack_in_last_3_years) %></span>
       </li>
-      <li class="list-group-item"><strong>Prior stroke?</strong>:
-        <span><%= @patient.prior_stroke? ? "Yes" : (@patient.prior_stroke == false ? "No" : "Don't know") %></span>
+      <li class="list-group-item"><strong>Prior stroke?</strong>
+        <span><%= display_yes_no_field(@patient.prior_stroke) %></span>
       </li>
-      <li class="list-group-item"><strong>Chronic kidney disease?</strong>:
-        <span><%= @patient.chronic_kidney_disease? ? "Yes" : (@patient.chronic_kidney_disease == false ? "No" : "Don't know") %></span>
+      <li class="list-group-item"><strong>Chronic kidney disease?</strong>
+        <span><%= display_yes_no_field(@patient.chronic_kidney_disease) %></span>
       </li>
     </ul>
 
@@ -90,7 +92,7 @@
               <% if visit.send("medication#{drug_number}_name".to_sym).present? %>
                 <% name = visit.send("medication#{drug_number}_name".to_sym) %>
                 <% dose = visit.send("medication#{drug_number}_dose".to_sym) %>
-                <li><%= name.humanize %>: <%= dose.to_s %></li>
+                <li><%= name %>: <%= dose.to_s %></li>
               <% end %>
             <% end %>
           </ul>
@@ -102,4 +104,7 @@
   </tbody>
 </table>
 
-<%= link_to "Delete Patient", district_facility_patient_path(@district, @facility, @patient), method: :delete, class: "btn btn-sm btn-outline-danger", data: { confirm: "Are you sure you want to delete this patient?" } %>
+<%= link_to "Delete Patient", district_facility_patient_path(@district, @facility, @patient), method: :delete, class: "btn btn-sm btn-outline-danger float-right", data: { confirm: "Are you sure you want to delete this patient?" } %>
+
+<%= link_to "Save and Add New Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %><br>
+

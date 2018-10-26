@@ -1,4 +1,3 @@
-<%= link_to "Add details from previous visit", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true') %>
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
@@ -9,23 +8,31 @@
       <%= form.text_field :blood_sugar %>
 
       <h4>Treatment doses</h4>
+      <% if @previous_visit.present? %>
+        <p>
+          <%= link_to "Copy medications from previous visit on #{@previous_visit.measured_on}", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true'), autofocus: true %>
+        </p>
+      <% end %>
+
       <p class="text-light bg-info p-3">Please enter dosages like '5mg', or '1 tablet' wherever possible. Do not enter OD, BD, etc.</p>
-      <%= form.text_field :amlodipine, label: "Amlodipine dose", pattern: '[^YNyn]*' %>
-      <%= form.text_field :telmisartan, label: "Telmisartan dose", pattern: '[^YNyn]*' %>
-      <%= form.text_field :enalpril, label: "Enalpril dose", pattern: '[^YNyn]*' %>
-      <%= form.text_field :chlorthalidone, label: "Chlorthalidone dose", pattern: '[^YNyn]*' %>
-      <%= form.text_field :aspirin, label: "Aspirin dose", pattern: '[^YNyn]*' %>
-      <%= form.text_field :statin, label: "Statin dose", pattern: '[^YNyn]*' %>
-      <%= form.text_field :beta_blocker, label: "Beta blocker dose", pattern: '[^YNyn]*' %>
-      <%= form.text_field :losartan, label: "Losartan dose", pattern: '[^YNyn]*' %>
+
+      <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
+        <%= form.text_field drug, label: "#{drug.to_s.humanize} dose", pattern: '[^YNyn]*',
+                            help: @previous_visit.present? && @previous_visit.send(drug).present? ? "Previous visit: #{@previous_visit.send(drug)}" : "" %>
+      <% end %>
 
       <% 3.times do |i| %>
+        <% drug = "medication#{i + 1}_name".to_sym %>
+        <% dose = "medication#{i + 1}_dose".to_sym %>
+
         <div class="form-row">
           <div class="col-8">
-            <%= form.text_field "medication#{i + 1}_name".to_sym, label: "Other Medication" %>
+            <%= form.text_field drug, label: "Other Medication",
+                                help: @previous_visit.present? && @previous_visit.send(drug).present? ? "Previous visit: #{@previous_visit.send(drug)}" : "" %>
           </div>
           <div class="col-4">
-            <%= form.text_field "medication#{i + 1}_dose".to_sym, label: "Dose" %>
+            <%= form.text_field dose, label: "Dose",
+                                help: @previous_visit.present? && @previous_visit.send(dose).present? ? "Previous visit: #{@previous_visit.send(dose)}" : "" %>
           </div>
         </div>
       <% end %>
@@ -36,5 +43,7 @@
     </div>
   </div>
 
-  <%= form.primary %>
+  <%= form.submit "Save", class: "btn btn-outline-primary" %>
+  <%= form.primary "Save and Add New Visit" %>
+  <%= form.primary "Save and Add New Treatment Card" %>
 <% end %>

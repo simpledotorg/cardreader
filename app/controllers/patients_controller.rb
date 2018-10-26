@@ -82,7 +82,7 @@ class PatientsController < ApplicationController
         :alternate_phone,
         :already_on_treatment,
         :prior_heart_attack,
-        :heard_attack_in_last_3_years,
+        :heart_attack_in_last_3_years,
         :prior_stroke,
         :chronic_kidney_disease,
         :diagnosed_with_hypertension,
@@ -109,7 +109,7 @@ class PatientsController < ApplicationController
   end
 
   def patient_with_parsed_medical_history
-    medical_history_keys = [:prior_heart_attack, :heard_attack_in_last_3_years, :prior_stroke, :chronic_kidney_disease]
+    medical_history_keys = [:prior_heart_attack, :heart_attack_in_last_3_years, :prior_stroke, :chronic_kidney_disease]
     patient_params.merge(patient_params.to_h.slice(*medical_history_keys).map do |k, v|
       [k, parse_boolean(v)]
     end)
