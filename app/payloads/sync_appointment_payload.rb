@@ -1,6 +1,5 @@
 class SyncAppointmentPayload
   attr_reader :patient
-  TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
 
   def initialize(patient, user_id)
     @patient = patient
@@ -10,25 +9,21 @@ class SyncAppointmentPayload
   def to_payload
     visits = patient.visits
     return [] unless visits.present?
-    requests = visits.map { |visit| appointment_payload(visit) }.reject(&:nil?)
+    requests = visits.map { |visit| appointment_payload(visit) }.compact
     requests.last[:status] = 'scheduled' if requests.present?
     requests
   end
 
   private
 
-  def device_created_at(visit)
-    visit.measured_on.strftime(TIME_WITHOUT_TIMEZONE_FORMAT)
-  end
-
   def appointment_payload(visit)
     return nil if visit.next_visit_on.blank?
     { id: visit.appointment_uuid,
       patient_id: visit.patient.patient_uuid,
-      facility_id: visit.facility.try(:simple_uuid),
+      facility_id: visit.facility.simple_uuid,
       scheduled_date: visit.next_visit_on,
       status: 'visited',
-      created_at: device_created_at(visit),
+      created_at: visit.measured_on_without_timestamp,
       updated_at: Time.now }
   end
 end

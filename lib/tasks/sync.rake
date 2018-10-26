@@ -25,7 +25,7 @@ namespace :sync do
     facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
 
     patients = Patient.where(facility: facilities).where('updated_at >= ?', since)
-    visits = Visit.where(facility: facilities).where('updated_at >= ?', since)
+    visits = Visit.where(patient: patients).where('updated_at >= ?', since)
 
     sync_service = SyncService.new(host, user_id, access_token)
     sync_service.sync('patients', patients, SyncPatientPayload)

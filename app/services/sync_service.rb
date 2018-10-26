@@ -31,7 +31,7 @@ class SyncService
         nil
       end
     end
-    requests.reject(&:nil?)
+    requests.compact
   end
 
   def write_errors_to_file(request_key, errors)

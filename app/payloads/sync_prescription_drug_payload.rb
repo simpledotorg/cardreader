@@ -1,8 +1,6 @@
 class SyncPrescriptionDrugPayload
   attr_reader :patient, :user_id
 
-  TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
-
   def initialize(patient, user_id)
     @patient = patient
     @user_id = user_id
@@ -11,7 +9,7 @@ class SyncPrescriptionDrugPayload
   def to_request
     visits = patient.visits
     return [] unless visits.present?
-    requests = visits.map { |visit| prescription_drug_request(visit) }.reject(&:nil?)
+    requests = visits.map { |visit| prescription_drug_payload(visit) }.compact
     requests.last.map { |drug| drug[:is_deleted] = false } if requests.present?
     requests.flatten
   end
@@ -32,53 +30,48 @@ class SyncPrescriptionDrugPayload
     %w(medication1_name medication2_name medication3_name)
   end
 
-  def custom_drug_name(drug_value)
-    drug_value.match(/\b [A-z]{3,} \b/x).to_s
-  end
-
-  def custom_drug_dosage(drug_value)
-    drug_value.match(/\d*\s*mg/i).to_s.downcase
+  def custom_drug_dosage
+    %w(medication1_dosage medication2_dosage medication3_dosage)
   end
 
   def device_created_at(visit)
-    visit.measured_on.strftime(TIME_WITHOUT_TIMEZONE_FORMAT)
+    visit.measured_on_without_timestamp
   end
 
-  def prescription_drug_request(visit)
-    visit_attributes = visit.attributes.with_indifferent_access
+  def uuid_hash(drug_name)
+    { patient_id: patient.patient_uuid, facility_id: patient.facility.simple_uuid, name: drug_name }
+  end
 
-    common_drugs = common_drug_keys.map do |key|
-      if visit_attributes[key].present?
-        { id: uuid({ patient_id: patient.patient_uuid, facility_id: patient.facility.simple_uuid, name: key }),
-          name: key.humanize,
-          dosage: visit_attributes[key] || '',
-          is_deleted: true,
-          patient_id: patient.patient_uuid,
-          facility_id: visit.facility.simple_uuid,
-          is_protocol_drug: protocol_drug_keys.include?(key),
-          created_at: device_created_at(visit),
-          updated_at: device_created_at(visit) }
-      else
-        nil
-      end
+  def build_payload(drug_name, visit)
+    drug = visit.read_attribute(drug_name)
+    if drug.present?
+      { id: uuid(uuid_hash(drug_name)),
+        name: drug_name.humanize,
+        dosage: drug || '',
+        is_deleted: true,
+        patient_id: patient.patient_uuid,
+        facility_id: visit.facility.simple_uuid,
+        is_protocol_drug: protocol_drug_keys.include?(drug_name),
+        created_at: device_created_at(visit),
+        updated_at: device_created_at(visit) }
+    else
+      nil
+    end
+  end
+
+  def prescription_drug_payload(visit)
+    common_drugs = common_drug_keys.map do |drug_name|
+      build_payload(drug_name, visit)
     end
 
-    custom_drugs = custom_drug_keys.map do |key|
-      if visit_attributes[key].present?
-        { id: uuid({ visit_id: visit.id, name: key }),
-          name: visit_attributes[key].humanize,
-          dosage: visit_attributes[key] || '',
-          is_deleted: true,
-          patient_id: patient.patient_uuid,
-          facility_id: visit.facility.simple_uuid,
-          is_protocol_drug: false,
-          created_at: device_created_at(visit),
-          updated_at: device_created_at(visit) }
-      else
-        nil
-      end
+    custom_drugs = custom_drug_keys.map do |drug_name|
+      build_payload(drug_name, visit)
+        .merge(
+          name: visit.reat_attibute(drug_name).humanize,
+          dosage: visit.reat_attibute(drug_name.split('_').first + "_dosage")  || ''
+        )
     end
 
-    (common_drugs + custom_drugs).reject(&:nil?)
+    (common_drugs + custom_drugs).compact
   end
 end

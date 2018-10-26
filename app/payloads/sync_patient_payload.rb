@@ -26,10 +26,10 @@ class SyncPatientPayload
   private
 
   def device_created_at
-    begin
-      patient.first_visit.try(:measured_on).strftime(TIME_WITHOUT_TIMEZONE_FORMAT) || now
-    rescue => ex
-      puts "Error getting patient first visit measure on date.", ex.message
+    if patient.first_visit.present?
+      patient.first_visit.measured_on_without_timestamp
+    else
+      Time.now
     end
   end
 
