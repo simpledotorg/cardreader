@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-6">
       <%= form.text_field :measured_on, label: "Date attended", required: true, autofocus: true, placeholder: "DD/MM/YYYY",
-                          help: "Format: DD/MM/YYYY", value: visit.measured_on || '01/01/2018' %>
+                          help: "Format: DD/MM/YYYY", value: visit.measured_on || @patient.registered_on %>
       <%= form.number_field :systolic, min: 50, max: 400 %>
       <%= form.number_field :diastolic, min: 30, max: 400 %>
       <%= form.text_field :blood_sugar %>
@@ -38,7 +38,7 @@
       <% end %>
 
       <%= form.text_field :next_visit_on, label: "Next visit date", autofocus: true, placeholder: "DD/MM/YYYY",
-                          help: "Format: DD/MM/YYYY", value: visit.next_visit_on || '01/01/2018' %>
+                          help: "Format: DD/MM/YYYY", value: visit.next_visit_on %>
       <%= form.check_box :referred_to_specialist %>
     </div>
   </div>
