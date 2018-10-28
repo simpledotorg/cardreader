@@ -13,20 +13,66 @@ RSpec.feature "Visits", type: :feature do
   describe "new" do
     before do
       click_link "Add Visit Details"
+
+      fill_in "Date attended", with: "01/11/2018"
+      fill_in "Systolic", with: "145"
+      fill_in "Diastolic", with: "95"
+      fill_in "Blood sugar", with: "100"
+
+      fill_in "Amlodipine dose", with: "10mg"
+      fill_in "Telmisartan dose", with: "20mg"
+      fill_in "Enalpril dose", with: "30mg"
+      fill_in "Chlorthalidone dose", with: "40mg"
+      fill_in "Aspirin dose", with: "50mg"
+      fill_in "Statin dose", with: "60mg"
+      fill_in "Beta blocker dose", with: "70mg"
+
+      fill_in "visit_medication1_name", with: "Test med 1"
+      fill_in "visit_medication1_dose", with: "100mg"
+      fill_in "visit_medication2_name", with: "Test med 2"
+      fill_in "visit_medication2_dose", with: "200mg"
+      fill_in "visit_medication3_name", with: "Test med 3"
+      fill_in "visit_medication3_dose", with: "300mg"
+
+      fill_in "Next visit date", with: "01/12/2018"
+      check "Referred to specialist"
     end
 
-    it "saves a new visit" do
-      fill_in "Date attended", with: "2018-02-01"
-      fill_in "Systolic", with: 145
-      fill_in "Diastolic", with: 95
-      fill_in "Amlodipine", with: "10mg"
-      fill_in "visit_medication1_name", with: "Ibuprofen"
-      fill_in "visit_medication1_dose", with: "200mg"
+    it "shows a summary of the saved visit data" do
       click_button "Save"
 
       expect(page).to have_content("145 / 95")
       expect(page).to have_content("Amlodipine: 10mg")
-      expect(page).to have_content("Ibuprofen: 200mg")
+      expect(page).to have_content("Test med 1: 100mg")
+    end
+
+    it "saves the visit data" do
+      click_button "Save"
+
+      visit = Visit.order(:created_at).last
+
+      expect(patient.measured_on).to eq(Date.parse("2018-11-01"))
+      expect(patient.systolic).to eq("145")
+      expect(patient.diastolic).to eq("95")
+      expect(patient.blood_sugar).to eq("100")
+
+      expect(patient.amlodipine).to eq("10mg")
+      expect(patient.telmisartan).to eq("20mg")
+      expect(patient.enalpril).to eq("30mg")
+      expect(patient.chlorthalidone).to eq("40mg")
+      expect(patient.aspirin).to eq("50mg")
+      expect(patient.statin).to eq("60mg")
+      expect(patient.beta_blocker).to eq("70mg")
+
+      expect(patient.medication1_name).to eq("Test med 1")
+      expect(patient.medication1_dose).to eq("100mg")
+      expect(patient.medication2_name).to eq("Test med 2")
+      expect(patient.medication2_dose).to eq("200mg")
+      expect(patient.medication3_name).to eq("Test med 3")
+      expect(patient.medication3_dose).to eq("300mg")
+
+      expect(patient.next_visit_on).to eq(Date.parse("2018-12-01"))
+      expect(patient.referred_to_specialist).to eq(true)
     end
   end
 

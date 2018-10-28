@@ -68,7 +68,7 @@ RSpec.feature "Patients", type: :feature do
 
       new_patient = Patient.order(:created_at).last
 
-      expect(new_patient.registered_on).to eq(Date.parse("25/12/2018"))
+      expect(new_patient.registered_on).to eq(Date.parse("2018-12-25"))
       expect(new_patient.treatment_number).to eq("1234")
       expect(new_patient.name).to eq("Deepa Singh")
       expect(new_patient.gender).to eq("Female")
