@@ -1,8 +1,12 @@
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
+      <% if visit.new_record? && @previous_visit.present? %>
+        <p class="bg-light p-3 text-muted">Previous date attended: <%= @previous_visit.measured_on %></p>
+      <% end %>
+
       <%= form.text_field :measured_on, label: "Date attended", required: true, autofocus: true, placeholder: "DD/MM/YYYY",
-                          help: "Format: DD/MM/YYYY", value: visit.measured_on || @patient.registered_on %>
+                          help: "Format: DD/MM/YYYY", value: visit.measured_on || @previous_visit&.measured_on || @patient.registered_on %>
       <%= form.number_field :systolic, min: 50, max: 400 %>
       <%= form.number_field :diastolic, min: 30, max: 400 %>
       <%= form.text_field :blood_sugar %>
