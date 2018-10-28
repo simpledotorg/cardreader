@@ -16,7 +16,7 @@
         <%= form.radio_button :gender, "Transgender", inline: true, required: true %>
       <% end %>
 
-      <%= form.number_field :age, required: true, min: 16, max: 120 %>
+      <%= form.number_field :age, min: 16, max: 120 %>
       <%= form.text_field :house_number %>
       <%= form.text_field :street_name, minlength: 3 %>
       <%= form.text_field :area, label: "Area/Colony" %>
