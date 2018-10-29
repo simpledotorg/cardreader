@@ -51,28 +51,28 @@ RSpec.feature "Visits", type: :feature do
 
       visit = Visit.order(:created_at).last
 
-      expect(patient.measured_on).to eq(Date.parse("2018-11-01"))
-      expect(patient.systolic).to eq("145")
-      expect(patient.diastolic).to eq("95")
-      expect(patient.blood_sugar).to eq("100")
+      expect(visit.measured_on).to eq(Date.parse("2018-11-01"))
+      expect(visit.systolic).to eq(145)
+      expect(visit.diastolic).to eq(95)
+      expect(visit.blood_sugar).to eq("100")
 
-      expect(patient.amlodipine).to eq("10mg")
-      expect(patient.telmisartan).to eq("20mg")
-      expect(patient.enalpril).to eq("30mg")
-      expect(patient.chlorthalidone).to eq("40mg")
-      expect(patient.aspirin).to eq("50mg")
-      expect(patient.statin).to eq("60mg")
-      expect(patient.beta_blocker).to eq("70mg")
+      expect(visit.amlodipine).to eq("10mg")
+      expect(visit.telmisartan).to eq("20mg")
+      expect(visit.enalpril).to eq("30mg")
+      expect(visit.chlorthalidone).to eq("40mg")
+      expect(visit.aspirin).to eq("50mg")
+      expect(visit.statin).to eq("60mg")
+      expect(visit.beta_blocker).to eq("70mg")
 
-      expect(patient.medication1_name).to eq("Test med 1")
-      expect(patient.medication1_dose).to eq("100mg")
-      expect(patient.medication2_name).to eq("Test med 2")
-      expect(patient.medication2_dose).to eq("200mg")
-      expect(patient.medication3_name).to eq("Test med 3")
-      expect(patient.medication3_dose).to eq("300mg")
+      expect(visit.medication1_name).to eq("Test med 1")
+      expect(visit.medication1_dose).to eq("100mg")
+      expect(visit.medication2_name).to eq("Test med 2")
+      expect(visit.medication2_dose).to eq("200mg")
+      expect(visit.medication3_name).to eq("Test med 3")
+      expect(visit.medication3_dose).to eq("300mg")
 
-      expect(patient.next_visit_on).to eq(Date.parse("2018-12-01"))
-      expect(patient.referred_to_specialist).to eq(true)
+      expect(visit.next_visit_on).to eq(Date.parse("2018-12-01"))
+      expect(visit.referred_to_specialist).to eq(true)
     end
   end
 
