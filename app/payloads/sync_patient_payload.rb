@@ -1,11 +1,12 @@
 class SyncPatientPayload
-  attr_reader :patient, :user_id
+  attr_reader :patient, :user_id, :now
 
   TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
 
   def initialize(patient, user_id)
     @patient = patient
     @user_id = user_id
+    @now = Time.now
   end
 
   def to_payload
@@ -36,14 +37,14 @@ class SyncPatientPayload
     end
   end
 
-  def now
-    Time.now
+  def build_address_field(values)
+    values.reject(&:blank?).join(', ').humanize
   end
 
   def simple_address
     { id: patient.address_uuid,
-      street_address: [patient.house_number, patient.street_name].reject(&:blank?).join(', ').humanize,
-      village_or_colony: [patient.area, patient.village].reject(&:blank?).join(', ').humanize,
+      street_address: build_address_field([patient.house_number, patient.street_name]),
+      village_or_colony: build_address_field([patient.area, patient.village]),
       district: (patient.district || patient.facility.district.name).humanize,
       state: 'Punjab',
       country: 'India',

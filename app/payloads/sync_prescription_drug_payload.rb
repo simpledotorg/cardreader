@@ -10,8 +10,7 @@ class SyncPrescriptionDrugPayload
     visits = patient.visits
     return [] unless visits.present?
     requests = visits.map { |visit| prescription_drug_payload(visit) }.compact
-    requests.last.map { |drug| drug[:is_deleted] = false } if requests.present?
-    requests.flatten
+    mark_active_drugs(requests).flatten
   end
 
   def uuid(uniq_hash)
@@ -36,6 +35,13 @@ class SyncPrescriptionDrugPayload
 
   def uuid_hash(drug_name)
     { patient_id: patient.patient_uuid, facility_id: patient.facility.simple_uuid, name: drug_name }
+  end
+
+  def mark_active_drugs(presciption_drugs)
+    return [] unless presciption_drugs.present?
+    deleted_drugs = presciption_drugs[0...-1]
+    active_drugs = presciption_drugs.last.map { |drug| drug[:is_deleted] = false } if requests.present?
+    deleted_drugs + active_drugs
   end
 
   def build_payload(drug_name, visit)
