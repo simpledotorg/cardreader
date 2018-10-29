@@ -1,9 +1,14 @@
 class SyncPrescriptionDrugPayload
-  attr_reader :patient, :user_id
+  attr_reader :patient, :user_id, :now
+
+  PROTOCOL_DRUG_KEYS = %w(amlodipine telmisartan chlorthalidone).freeze
+  COMMON_DRUG_KEYS = %w(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker losartan).freeze
+  CUSTOM_DRUG_KEYS = %w(medication1_name medication2_name medication3_name).freeze
 
   def initialize(patient, user_id)
     @patient = patient
     @user_id = user_id
+    @now = Time.now
   end
 
   def to_payload
@@ -17,30 +22,14 @@ class SyncPrescriptionDrugPayload
     UUIDTools::UUID.md5_create(UUIDTools::UUID_DNS_NAMESPACE, uniq_hash.to_s).to_s
   end
 
-  def protocol_drug_keys
-    %w(amlodipine telmisartan chlorthalidone)
-  end
-
-  def common_drug_keys
-    %w(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker losartan)
-  end
-
-  def custom_drug_keys
-    %w(medication1_name medication2_name medication3_name)
-  end
-
-  def device_created_at(visit)
-    visit.measured_on_without_timestamp
-  end
-
   def uuid_hash(drug_name)
     { patient_id: patient.patient_uuid, facility_id: patient.facility.simple_uuid, name: drug_name }
   end
 
-  def mark_active_drugs(presciption_drugs)
-    return [] unless presciption_drugs.present?
-    deleted_drugs = presciption_drugs[0...-1]
-    active_drugs = presciption_drugs.last.map { |drug| drug[:is_deleted] = false } if requests.present?
+  def mark_active_drugs(prescription_drugs)
+    return [] unless prescription_drugs.present?
+    deleted_drugs = prescription_drugs[0...-1]
+    active_drugs = prescription_drugs.last.map { |drug| drug.merge(is_deleted: false)}
     deleted_drugs + active_drugs
   end
 
@@ -53,25 +42,29 @@ class SyncPrescriptionDrugPayload
         is_deleted: true,
         patient_id: patient.patient_uuid,
         facility_id: visit.facility.simple_uuid,
-        is_protocol_drug: protocol_drug_keys.include?(drug_name),
-        created_at: device_created_at(visit),
-        updated_at: device_created_at(visit) }
+        is_protocol_drug: PROTOCOL_DRUG_KEYS.include?(drug_name),
+        created_at: visit.measured_on_without_timestamp,
+        updated_at: now }
     else
       nil
     end
   end
 
   def prescription_drug_payload(visit)
-    common_drugs = common_drug_keys.map do |drug_name|
+    common_drugs = COMMON_DRUG_KEYS.map do |drug_name|
       build_payload(drug_name, visit)
     end
 
-    custom_drugs = custom_drug_keys.map do |custom_drug_name|
+    custom_drugs = CUSTOM_DRUG_KEYS.map do |custom_drug_name|
       drug_name = visit.read_attribute(custom_drug_name)
       payload = build_payload(drug_name, visit)
-      payload.merge(
-        dosage: visit.read_attribute(custom_drug_name.split('_').first + "_dosage") || ''
-      ) if payload.present?
+      if payload.present?
+        payload.merge(
+          dosage: visit.read_attribute(custom_drug_name.split('_').first + "_dosage") || ''
+        )
+      else
+        nil
+      end
     end
 
     (common_drugs + custom_drugs).compact

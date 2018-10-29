@@ -31,8 +31,8 @@ class Patient < ApplicationRecord
   end
 
   def registered_on_without_timestamp
-    if patient.first_visit.present?
-      patient.first_visit.measured_on_without_timestamp
+    if first_visit.present?
+      first_visit.measured_on_without_timestamp
     else
       Time.now
     end
