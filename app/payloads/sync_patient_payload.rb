@@ -16,7 +16,7 @@ class SyncPatientPayload
       date_of_birth: nil,
       age: patient.age,
       age_updated_at: now,
-      created_at: device_created_at,
+      created_at: patient.registered_on_without_timestamp,
       updated_at: now,
       address: simple_address,
       phone_numbers: simple_phone_numbers
@@ -24,14 +24,6 @@ class SyncPatientPayload
   end
 
   private
-
-  def device_created_at
-    if patient.first_visit.present?
-      patient.first_visit.measured_on_without_timestamp
-    else
-      Time.now
-    end
-  end
 
   def simple_gender
     case patient.gender.strip
@@ -56,7 +48,7 @@ class SyncPatientPayload
       state: 'Punjab',
       country: 'India',
       pin: patient.pincode,
-      created_at: device_created_at,
+      created_at: patient.registered_on_without_timestamp,
       updated_at: now }
   end
 
@@ -67,7 +59,7 @@ class SyncPatientPayload
                          number: patient.phone,
                          phone_type: 'mobile',
                          active: true,
-                         created_at: device_created_at,
+                         created_at: patient.registered_on_without_timestamp,
                          updated_at: now }
     end
     if patient.alternate_phone.present?
@@ -75,7 +67,7 @@ class SyncPatientPayload
                          number: patient.alternate_phone,
                          phone_type: 'mobile',
                          active: true,
-                         created_at: device_created_at,
+                         created_at: patient.registered_on_without_timestamp,
                          updated_at: now }
     end
     phone_numbers

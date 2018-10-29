@@ -8,14 +8,6 @@ class SyncMedicalHistoryPayload
     @user_id = user_id
   end
 
-  def device_created_at
-    if patient.first_visit.present?
-      patient.first_visit.measured_on_without_timestamp
-    else
-      Time.now
-    end
-  end
-
   def parse_boolean(value)
     value || false
   end
@@ -29,7 +21,7 @@ class SyncMedicalHistoryPayload
       receiving_treatment_for_hypertension: parse_boolean(patient.already_on_treatment),
       diagnosed_with_hypertension: parse_boolean(patient.diagnosed_with_hypertension),
       diabetes: parse_boolean(nil), # This information is not present in the red cards
-      created_at: device_created_at,
+      created_at: patient.registered_on_without_timestamp,
       updated_at: Time.now }
   end
 end
