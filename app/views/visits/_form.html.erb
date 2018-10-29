@@ -14,7 +14,7 @@
       <h4>Treatment doses</h4>
       <% if @previous_visit.present? %>
         <p>
-          <%= link_to "Copy medications from previous visit on #{@previous_visit.measured_on}", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true'), autofocus: true %>
+          <%= link_to "Copy medications from previous visit on #{@previous_visit.measured_on}", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true') %>
         </p>
       <% end %>
 
@@ -41,7 +41,7 @@
         </div>
       <% end %>
 
-      <%= form.text_field :next_visit_on, label: "Next visit date", autofocus: true, placeholder: "DD/MM/YYYY",
+      <%= form.text_field :next_visit_on, label: "Next visit date", placeholder: "DD/MM/YYYY",
                           help: "Format: DD/MM/YYYY", value: visit.next_visit_on %>
       <%= form.check_box :referred_to_specialist %>
     </div>
