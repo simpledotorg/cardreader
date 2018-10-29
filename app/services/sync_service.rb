@@ -13,7 +13,7 @@ class SyncService
 
   def sync(request_key, records, request_payload)
     request = to_request(request_key, records, request_payload)
-    return if request.empty?
+    return puts "REQUEST EMPTY" if request.empty?
     response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
     errors = JSON(response.body)['errors'].map do |error|
       uuid_field = "#{request_key.to_s.singularize}_uuid"
