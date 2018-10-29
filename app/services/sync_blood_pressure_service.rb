@@ -27,7 +27,7 @@ class SyncBloodPressureService
   end
 
   def sync(facilities, since)
-    request = Visit.where(facility: facilities).where('updated_at >= ?', since).map { |visit| to_request(visit) }
+    request = Visit.joins(:patient).where("patients.facility_id in (?)", facilities.map(&:id).join(',')).where('visits.updated_at >= ?', since).map { |visit| to_request(visit) }
     return if request.empty?
     response = api_post('api/v1/blood_pressures/sync', { blood_pressures: request })
     errors = JSON(response.body)['errors'].map do |error|
