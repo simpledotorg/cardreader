@@ -22,21 +22,24 @@ class SyncPrescriptionDrugPayload
     UUIDTools::UUID.md5_create(UUIDTools::UUID_DNS_NAMESPACE, uniq_hash.to_s).to_s
   end
 
-  def uuid_hash(drug_name, measured_on)
-    { patient_id: patient.patient_uuid, facility_id: patient.facility.simple_uuid, name: drug_name, measured_on: measured_on  }
+  def uuid_hash(drug_name, drug_dosage measured_on)
+    { patient_id: patient.patient_uuid,
+      facility_id: patient.facility.simple_uuid,
+      name: drug_name,
+      dosage: drug_dosage,
+      measured_on: measured_on }
   end
 
   def mark_active_drugs(prescription_drugs)
     return [] unless prescription_drugs.present?
     deleted_drugs = prescription_drugs[0...-1]
-    active_drugs = prescription_drugs.last.map { |drug| drug.merge(is_deleted: false)}
+    active_drugs = prescription_drugs.last.map { |drug| drug.merge(is_deleted: false) }
     deleted_drugs + active_drugs
   end
 
-  def build_payload(drug_name, visit)
-    drug_dosage = visit.read_attribute(drug_name)
+  def build_payload(drug_name, drug_dosage, visit)
     if drug_dosage.present?
-      { id: uuid(uuid_hash(drug_name, visit.measured_on_without_timestamp)),
+      { id: uuid(uuid_hash(drug_name, drug_dosage, visit.measured_on_without_timestamp)),
         name: drug_name.humanize,
         dosage: drug_dosage || '',
         is_deleted: true,
@@ -52,19 +55,14 @@ class SyncPrescriptionDrugPayload
 
   def prescription_drug_payload(visit)
     common_drugs = COMMON_DRUG_KEYS.map do |drug_name|
-      build_payload(drug_name, visit)
+      drug_dosage = visit.read_attribute(drug_name)
+      build_payload(drug_name, drug_dosage, visit)
     end
 
     custom_drugs = CUSTOM_DRUG_KEYS.map do |custom_drug_name|
       drug_name = visit.read_attribute(custom_drug_name)
-      payload = build_payload(drug_name, visit)
-      if payload.present?
-        payload.merge(
-          dosage: visit.read_attribute(custom_drug_name.split('_').first + "_dosage") || ''
-        )
-      else
-        nil
-      end
+      drug_dosage = visit.read_attribute(custom_drug_name.split('_').first + "_dose")
+      build_payload(drug_name, drug_dosage, visit)
     end
 
     (common_drugs + custom_drugs).compact
