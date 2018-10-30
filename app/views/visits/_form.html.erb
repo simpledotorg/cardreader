@@ -1,16 +1,20 @@
 <%= bootstrap_form_with(model: [@district, @facility, @patient, visit], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
-      <%= form.date_field :measured_on, label: "Date attended", required: true, autofocus: true,
-                          help: "Format: DD/MM/YYYY", min: '2018-01-01', max: '2019-01-01', value: visit.measured_on || '2018-01-01' %>
-      <%= form.number_field :systolic, required: true, min: 50, max: 400 %>
-      <%= form.number_field :diastolic, required: true, min: 30, max: 400 %>
+      <% if visit.new_record? && @previous_visit.present? %>
+        <p class="bg-light p-3 text-muted">Previous date attended: <%= @previous_visit.measured_on %></p>
+      <% end %>
+
+      <%= form.text_field :measured_on, label: "Date attended", required: true, autofocus: true, placeholder: "DD/MM/YYYY",
+                          help: "Format: DD/MM/YYYY", value: visit.measured_on || @previous_visit&.measured_on || @patient.registered_on %>
+      <%= form.number_field :systolic, min: 50, max: 400 %>
+      <%= form.number_field :diastolic, min: 30, max: 400 %>
       <%= form.text_field :blood_sugar %>
 
       <h4>Treatment doses</h4>
       <% if @previous_visit.present? %>
         <p>
-          <%= link_to "Copy medications from previous visit on #{@previous_visit.measured_on}", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true'), autofocus: true %>
+          <%= link_to "Copy medications from previous visit on #{@previous_visit.measured_on}", new_district_facility_patient_visit_path(@district, @facility, @patient, prefill_from_previous_visit: 'true') %>
         </p>
       <% end %>
 
@@ -37,8 +41,8 @@
         </div>
       <% end %>
 
-      <%= form.date_field :next_visit_on,
-                          help: "Format: DD/MM/YYYY", min: '2018-01-01', max: '2019-01-01', value: visit.next_visit_on || '2018-01-01' %>
+      <%= form.text_field :next_visit_on, label: "Next visit date", placeholder: "DD/MM/YYYY",
+                          help: "Format: DD/MM/YYYY", value: visit.next_visit_on %>
       <%= form.check_box :referred_to_specialist %>
     </div>
   </div>

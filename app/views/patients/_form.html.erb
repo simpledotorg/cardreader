@@ -1,13 +1,13 @@
 <%= bootstrap_form_with(model: [@district, @facility, patient], local: true, label_errors: true) do |form| %>
   <div class="row">
     <div class="col-md-6">
-      <%= form.text_field :registered_on, label: "Date of registration", required: true, autofocus: true,
-                          help: "Format: DD/MM/YYYY", type: 'date', min: '2018-01-01', max: '2019-01-01', value: patient.registered_on || '2018-01-01' %>
+      <%= form.text_field :registered_on, label: "Date of registration", required: true, autofocus: true, placeholder: "DD/MM/YYYY",
+                          help: "Format: DD/MM/YYYY", value: patient.registered_on || '01/01/2018' %>
       <%= form.text_field :treatment_number, prepend: patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically", required: true %>
 
       <h4>A. Patient Identification Information</h4>
 
-      <%= form.text_field :name, label: "Full Name", required: true, minlength: 3 %>
+      <%= form.text_field :name, label: "Full name", required: true, minlength: 3 %>
 
       <%= form.label :gender %>
       <%= form.form_group :gender do %>
@@ -16,7 +16,7 @@
         <%= form.radio_button :gender, "Transgender", inline: true, required: true %>
       <% end %>
 
-      <%= form.number_field :age, required: true, min: 16, max: 120 %>
+      <%= form.number_field :age, min: 16, max: 120 %>
       <%= form.text_field :house_number %>
       <%= form.text_field :street_name, minlength: 3 %>
       <%= form.text_field :area, label: "Area/Colony" %>
@@ -62,6 +62,8 @@
       </div>
 
       <h4>C. Hypertension Treatment at Registration</h4>
+
+      <p class="text-light bg-info p-3">Please enter dosages like '5mg', or '1 tablet' wherever possible. Do not enter OD, BD, etc.</p>
 
       <% 4.times do |i| %>
         <div class="form-row">
