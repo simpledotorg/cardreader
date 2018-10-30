@@ -7,7 +7,7 @@
 
       <%= form.date_field :measured_on, label: "Date attended", required: true, autofocus: true, placeholder: "DD/MM/YYYY",
                           min: '2018-01-01', max: '2018-12-31', help: "Format: DD/MM/YYYY",
-                          value: (visit.measured_on || @previous_visit&.measured_on || @patient.registered_on).try(:strftime, "%Y-%m-%d") || '2018-01-01'
+                          value: visit.measured_on.try(:strftime, "%Y-%m-%d") || '2018-01-01'
                           %>
       <%= form.number_field :systolic, min: 50, max: 400 %>
       <%= form.number_field :diastolic, min: 30, max: 400 %>
