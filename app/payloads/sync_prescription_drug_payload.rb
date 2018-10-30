@@ -12,7 +12,7 @@ class SyncPrescriptionDrugPayload
   end
 
   def to_payload
-    visits = patient.visits
+    visits = patient.visits.order(measured_on: :asc)
     return [] unless visits.present?
     requests = visits.map { |visit| prescription_drug_payload(visit) }.compact
     mark_active_drugs(requests).flatten
