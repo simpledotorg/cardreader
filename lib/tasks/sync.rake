@@ -28,10 +28,10 @@ namespace :sync do
     visits = Visit.where(patient: patients).where('updated_at >= ?', since)
 
     sync_service = SyncService.new(host, user_id, access_token)
-    sync_service.sync('patients', patients, SyncPatientPayload)
-    sync_service.sync('blood_pressures', visits, SyncBloodPressurePayload)
-    sync_service.sync('medical_histories', patients, SyncMedicalHistoryPayload)
-    sync_service.sync('appointments', patients, SyncAppointmentPayload)
+    sync_service.sync('patients', patients, SyncPatientPayload, report_errors_on_class: Patient)
+    sync_service.sync('blood_pressures', visits, SyncBloodPressurePayload, report_errors_on_class: Visit)
+    sync_service.sync('medical_histories', patients, SyncMedicalHistoryPayload, report_errors_on_class: Patient)
+    sync_service.sync('appointments', patients, SyncAppointmentPayload, report_errors_on_class: Visit)
     sync_service.sync('prescription_drugs', patients, SyncPrescriptionDrugPayload)
   end
 end
