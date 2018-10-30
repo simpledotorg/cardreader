@@ -22,7 +22,7 @@ class SyncPrescriptionDrugPayload
     UUIDTools::UUID.md5_create(UUIDTools::UUID_DNS_NAMESPACE, uniq_hash.to_s).to_s
   end
 
-  def uuid_hash(drug_name, drug_dosage measured_on)
+  def uuid_hash(drug_name, drug_dosage, measured_on)
     { patient_id: patient.patient_uuid,
       facility_id: patient.facility.simple_uuid,
       name: drug_name,
