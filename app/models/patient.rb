@@ -30,6 +30,14 @@ class Patient < ApplicationRecord
     self.visits.order(:measured_on).limit(1).first
   end
 
+  def registered_on_without_timestamp
+    if first_visit.present?
+      first_visit.measured_on_without_timestamp
+    else
+      Time.now
+    end
+  end
+
   private
 
   def treatment_number_needs_prefix?
