@@ -50,7 +50,7 @@ class SyncService
   private
 
   def error_file(request_key)
-    "#{request_key}-errors-#{Date.today.to_s}.csv"
+    "#{request_key}-errors-#{Date.today.iso8601}.csv"
   end
 
   def now
