@@ -9,6 +9,34 @@
   </head>
 
   <body>
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+      <div class="container">
+        <%= link_to root_path, class: "navbar-brand" do %>
+          <%= image_tag "simple_logo.svg", width: 30, height: 30, class: "d-inline-block mr-2 align-top", alt: "Simple Server Logo" %>
+          Cardreader
+        <% end %>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <% if user_signed_in? %>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <%= link_to('Logout', destroy_user_session_path, method: :delete, class: "nav-link") %>
+              </li>
+            </ul>
+          <% else %>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <%= link_to('Login', new_user_session_path, class: "nav-link") %>
+              </li>
+            </ul>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
     <main class="container">
       <% flash.each do |key, value| %>
         <div class="alert alert-info alert-<%= key %>">
