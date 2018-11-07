@@ -4,6 +4,10 @@ RSpec.feature "Facilities", type: :feature do
   let!(:district) { create(:district, name: "Mansa") }
   let!(:facility) { create(:facility, district: district, name: "District Hospital") }
 
+  before do
+    sign_in(create(:user, :admin))
+  end
+
   describe "show" do
     let!(:patient_1) { create(:patient, facility: facility) }
     let!(:patient_2) { create(:patient, facility: facility) }

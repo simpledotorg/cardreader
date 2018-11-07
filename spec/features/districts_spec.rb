@@ -4,6 +4,10 @@ RSpec.feature "Districts", type: :feature do
   let!(:bathinda) { create(:district, name: "Bathinda") }
   let!(:mansa) { create(:district, name: "Mansa") }
 
+  before do
+    sign_in(create(:user, :admin))
+  end
+
   describe "index" do
     before do
       visit root_path
