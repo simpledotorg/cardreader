@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Admin::Login', type: :feature do
+RSpec.feature 'User login', type: :feature do
   let(:user) { create(:user) }
 
   it 'Log in and see dashboard by default' do
