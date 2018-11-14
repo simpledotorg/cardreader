@@ -9,4 +9,12 @@ module PatientsHelper
       "Don't Know"
     end
   end
+
+  def visit_info(value)
+    if value.present?
+      content_tag(:span, class: "visit-info") { value }
+    else
+      content_tag(:span, class: "visit-info visit-info-null") { value }
+    end
+  end
 end

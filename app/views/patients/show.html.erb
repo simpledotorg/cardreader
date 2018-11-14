@@ -65,41 +65,54 @@
 
 <h4>Visits</h4>
 <div class="row mb-5">
+  <% @patient.visits.order(:measured_on).limit(1).each do |visit| %>
+    <div class="col-md-2">
+      <span class="visit-info visit-header">Date Attended</span>
+      <span class="visit-info visit-header">Systolic</span>
+      <span class="visit-info visit-header">Diastolic</span>
+      <span class="visit-info visit-header">Blood Sugar</span>
+
+      <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
+        <span class="visit-info visit-header"><%= drug.to_s.humanize %></span>
+      <% end %>
+
+      <% (1..3).each do |drug_number| %>
+        <span class="visit-info visit-header">Medication <%= drug_number %></span>
+      <% end %>
+
+      <span class="visit-info visit-header">Referred to Specialist</span>
+      <span class="visit-info visit-header">Date of Next Visit</span>
+    </div>
+  <% end %>
+
   <% @patient.visits.order(:measured_on).each do |visit| %>
     <div class="col-md-2">
-      <dl>
-        <dt class="border-top pt-2">Date Attended</dt>
-        <dd><%= visit.measured_on %></dd>
+      <%= visit_info(visit.measured_on) %>
+      <%= visit_info(visit.systolic) %>
+      <%= visit_info(visit.diastolic) %>
+      <span class="visit-info"><%= visit.measured_on %></span>
 
-        <dt class="border-top pt-2">Systolic</dt>
-        <dd><%= visit.systolic || '<span class="text-muted">none</span>'.html_safe %></dd>
+      <span class="visit-info"><%= visit.systolic || '<span class="text-muted">none</span>'.html_safe %></span>
 
-        <dt class="border-top pt-2">Diastolic</dt>
-        <dd><%= visit.diastolic.present? ? visit.diastolic : '<span class="text-muted">none</span>'.html_safe %></dd>
+      <span class="visit-info"><%= visit.diastolic.present? ? visit.diastolic : '<span class="text-muted">none</span>'.html_safe %></span>
 
-        <dt class="border-top pt-2">Blood Sugar</dt>
-        <dd><%= visit.blood_sugar.present? ? visit.blood_sugar : '<span class="text-muted">none</span>'.html_safe %></dd>
+      <span class="visit-info"><%= visit.blood_sugar.present? ? visit.blood_sugar : '<span class="text-muted">none</span>'.html_safe %></span>
 
-        <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
-          <dt class="border-top pt-2"><%= drug.to_s.humanize %></dt>
-          <dd><%= visit.send(drug).present? ? visit.send(drug).to_s : '<span class="text-muted">none</span>'.html_safe %></dd>
+      <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
+        <span class="visit-info"><%= visit.send(drug).present? ? visit.send(drug).to_s : '<span class="text-muted">none</span>'.html_safe %></span>
+      <% end %>
+
+      <% (1..3).each do |drug_number| %>
+        <% if visit.send("medication#{drug_number}_name".to_sym).present? %>
+          <span class="visit-info"><%= visit.send("medication#{drug_number}_name".to_sym).to_s %><br><%= visit.send("medication#{drug_number}_dose".to_sym) %></span>
+        <% else %>
+          <span class="visit-info"><span class="text-muted">none</span></span>
         <% end %>
+      <% end %>
 
-        <% (1..3).each do |drug_number| %>
-          <dt class="border-top pt-2">Medication <%= drug_number %></dt>
-          <% if visit.send("medication#{drug_number}_name".to_sym).present? %>
-            <dd><%= visit.send("medication#{drug_number}_name".to_sym).to_s %>: <%= visit.send("medication#{drug_number}_dose".to_sym) %></dd>
-          <% else %>
-            <dd><span class="text-muted">none</span></dd>
-          <% end %>
-        <% end %>
+      <span class="visit-info"><%= visit.referred_to_specialist? ? "Yes" : "No" %></span>
 
-        <dt class="border-top pt-2">Referred to Specialist</dt>
-        <dd><%= visit.referred_to_specialist? ? "Yes" : "No" %></dd>
-
-        <dt class="border-top pt-2">Date of Next Visit</dt>
-        <dd><%= visit.next_visit_on.present? ? visit.next_visit_on : '<span class="text-muted">none</span>'.html_safe %></dd>
-      </dl>
+      <span class="visit-info"><%= visit.next_visit_on.present? ? visit.next_visit_on : '<span class="text-muted">none</span>'.html_safe %></span>
 
       <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-sm btn-secondary my-0" %>
     </div>

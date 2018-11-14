@@ -1,3 +1,5 @@
+$accent-color: #FF3355;
+
 @import "bootstrap";
 @import "rails_bootstrap_forms";
 
@@ -25,6 +27,20 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
-dl .text-muted {
-  color: #ccc !important;
+.visit-info {
+  border-top: 1px solid #ddd;
+  padding-top: 0.5rem;
+  display: block;
+  min-height: 3rem;
+  line-height: 1rem;
+  margin-bottom: 0.5rem;
+
+  .text-muted {
+    color: #ccc !important;
+  }
+}
+
+.visit-header {
+  color: #555;
+  font-weight: 500;
 }
