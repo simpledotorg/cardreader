@@ -20,7 +20,7 @@ RSpec.feature 'User login', type: :feature do
 
     click_link 'Logout'
 
-    expect(current_path).to eq(new_user_session_path)
+    expect(current_path).to eq(root_path)
     expect(page).to have_content('Login')
   end
 end
