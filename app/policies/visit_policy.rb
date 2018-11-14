@@ -1,0 +1,2 @@
+class VisitPolicy < PatientPolicy
+end
