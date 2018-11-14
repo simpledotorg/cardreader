@@ -1,0 +1,2 @@
+class DistrictPolicy < PatientPolicy
+end

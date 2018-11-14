@@ -22,9 +22,11 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <% if user_signed_in? %>
             <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <%= link_to "Cards", root_path, class: "nav-link #{active_controller?(*%w(districts facilities patients visits))}" %>
-              </li>
+              <% if policy(District).index? %>
+                <li class="nav-item">
+                  <%= link_to "Cards", root_path, class: "nav-link #{active_controller?(*%w(districts facilities patients visits))}" %>
+                </li>
+              <% end %>
 
               <% if policy(User).index? %>
                 <li class="nav-item">

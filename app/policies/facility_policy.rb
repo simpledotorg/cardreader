@@ -1,0 +1,2 @@
+class FacilityPolicy < PatientPolicy
+end
