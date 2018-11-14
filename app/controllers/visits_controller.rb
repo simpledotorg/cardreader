@@ -5,6 +5,7 @@ class VisitsController < ApplicationController
   before_action :set_visit, only: [:show, :edit, :update, :destroy]
 
   def index
+    authorize Visit
     @visits = @patient.visits
   end
 
@@ -19,6 +20,8 @@ class VisitsController < ApplicationController
     else
       @visit = @patient.visits.build
     end
+
+    authorize @visit
   end
 
   def edit
@@ -27,6 +30,7 @@ class VisitsController < ApplicationController
 
   def create
     @visit = @patient.visits.new(visit_params)
+    authorize @visit
 
     if @visit.save
       if add_new_after_update?
@@ -68,18 +72,22 @@ class VisitsController < ApplicationController
 
     def set_district
       @district = District.find(params[:district_id])
+      authorize @district
     end
 
     def set_facility
       @facility = @district.facilities.find(params[:facility_id])
+      authorize @facility
     end
 
     def set_patient
       @patient = @facility.patients.find(params[:patient_id])
+      authorize @patient
     end
 
     def set_visit
       @visit = @patient.visits.find(params[:id])
+      authorize @visit
     end
 
     def visit_params

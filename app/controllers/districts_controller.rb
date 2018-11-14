@@ -1,31 +1,26 @@
 class DistrictsController < ApplicationController
   before_action :set_district, only: [:show, :edit, :update, :destroy]
 
-  # GET /districts
-  # GET /districts.json
   def index
+    authorize District
     @districts = District.all
   end
 
-  # GET /districts/1
-  # GET /districts/1.json
   def show
     @facility = @district.facilities.build
   end
 
-  # GET /districts/new
   def new
     @district = District.new
+    authorize @district
   end
 
-  # GET /districts/1/edit
   def edit
   end
 
-  # POST /districts
-  # POST /districts.json
   def create
     @district = District.new(district_params)
+    authorize @district
 
     respond_to do |format|
       if @district.save
@@ -38,8 +33,6 @@ class DistrictsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /districts/1
-  # PATCH/PUT /districts/1.json
   def update
     respond_to do |format|
       if @district.update(district_params)
@@ -52,8 +45,6 @@ class DistrictsController < ApplicationController
     end
   end
 
-  # DELETE /districts/1
-  # DELETE /districts/1.json
   def destroy
     @district.destroy
     respond_to do |format|
@@ -63,12 +54,11 @@ class DistrictsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_district
       @district = District.find(params[:id])
+      authorize @district
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def district_params
       params.require(:district).permit(:name)
     end
