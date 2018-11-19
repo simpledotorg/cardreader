@@ -22,7 +22,7 @@ class ImportFacilitiesService
 
   def save_facility(facility)
     district = save_district(facility['district'])
-    existing_facility = Facility.find_by(name: facility['name'], district: district)
+    existing_facility = Facility.find_by('lower(name) = ?', facility['name'].downcase, district: district)
     return if existing_facility.present?
     puts "Creating facility: #{facility['name']}"
     Facility.create(
