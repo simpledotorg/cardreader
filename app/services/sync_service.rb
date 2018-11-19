@@ -3,6 +3,8 @@ require 'net/http'
 class SyncService
   attr_reader :request_key, :host, :user_id, :access_token
 
+  API_VERSION = 'v2'.freeze
+
   TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
 
   def initialize(host, user_id, access_token)
@@ -14,7 +16,7 @@ class SyncService
   def sync(request_key, records, request_payload, report_errors_on_class: nil)
     begin
       request = to_request(request_key, records, request_payload)
-      response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
+      response = api_post(sync_path(request_key), Hash[request_key.to_sym, request])
       errors = JSON(response.body)['errors'].map do |error|
         if report_errors_on_class.present?
           uuid_field = "#{request_key.to_s.singularize}_uuid"
@@ -73,5 +75,9 @@ class SyncService
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = request_body.to_json
     http.request(request)
+  end
+
+  def sync_path(request_key)
+    "api/#{API_VERSION}/#{request_key.to_s}/sync"
   end
 end

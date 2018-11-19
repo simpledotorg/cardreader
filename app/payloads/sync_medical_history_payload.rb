@@ -3,13 +3,18 @@ class SyncMedicalHistoryPayload
 
   TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
 
+  INVERTED_MEDICAL_HISTORY_ANSWERS_MAP = {
+    true => :yes,
+    false => :unknown
+  }.with_indifferent_access.freeze
+
   def initialize(patient, user_id)
     @patient = patient
     @user_id = user_id
   end
 
   def parse_boolean(value)
-    value || false
+    INVERTED_MEDICAL_HISTORY_ANSWERS_MAP[value] || :unknown
   end
 
   def to_payload
