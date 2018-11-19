@@ -12,17 +12,21 @@ class SyncService
   end
 
   def sync(request_key, records, request_payload, report_errors_on_class: nil)
-    request = to_request(request_key, records, request_payload)
-    response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
-    errors = JSON(response.body)['errors'].map do |error|
-      if report_errors_on_class.present?
-        uuid_field = "#{request_key.to_s.singularize}_uuid"
-        report_errors_on_class.find_by(Hash[uuid_field, error['id']]).attributes.merge(error: error.except('id'))
-      else
-        error
+    begin
+      request = to_request(request_key, records, request_payload)
+      response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
+      errors = JSON(response.body)['errors'].map do |error|
+        if report_errors_on_class.present?
+          uuid_field = "#{request_key.to_s.singularize}_uuid"
+          report_errors_on_class.find_by(Hash[uuid_field, error['id']]).attributes.merge(error: error.except('id'))
+        else
+          error
+        end
       end
+      write_errors_to_file(request_key, errors)
+    rescue => error
+      puts "Could not sync #{request_key}. Error: #{error.message}"
     end
-    write_errors_to_file(request_key, errors)
   end
 
   def to_request(request_key, records, request_payload)
