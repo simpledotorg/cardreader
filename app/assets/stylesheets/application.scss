@@ -27,6 +27,11 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
+.visit-header {
+  color: #555;
+  font-weight: 500;
+}
+
 .visit-info {
   border-top: 1px solid #ddd;
   padding-top: 0.5rem;
@@ -34,13 +39,8 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 3rem;
   line-height: 1rem;
   margin-bottom: 0.5rem;
-
-  .text-muted {
-    color: #ccc !important;
-  }
 }
 
-.visit-header {
-  color: #555;
-  font-weight: 500;
+.visit-info-null {
+  color: #ccc;
 }

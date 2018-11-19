@@ -90,29 +90,21 @@
       <%= visit_info(visit.measured_on) %>
       <%= visit_info(visit.systolic) %>
       <%= visit_info(visit.diastolic) %>
-      <span class="visit-info"><%= visit.measured_on %></span>
-
-      <span class="visit-info"><%= visit.systolic || '<span class="text-muted">none</span>'.html_safe %></span>
-
-      <span class="visit-info"><%= visit.diastolic.present? ? visit.diastolic : '<span class="text-muted">none</span>'.html_safe %></span>
-
-      <span class="visit-info"><%= visit.blood_sugar.present? ? visit.blood_sugar : '<span class="text-muted">none</span>'.html_safe %></span>
+      <%= visit_info(visit.blood_sugar) %>
 
       <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
-        <span class="visit-info"><%= visit.send(drug).present? ? visit.send(drug).to_s : '<span class="text-muted">none</span>'.html_safe %></span>
+        <%= visit_info(visit.send(drug)) %>
       <% end %>
 
       <% (1..3).each do |drug_number| %>
-        <% if visit.send("medication#{drug_number}_name".to_sym).present? %>
-          <span class="visit-info"><%= visit.send("medication#{drug_number}_name".to_sym).to_s %><br><%= visit.send("medication#{drug_number}_dose".to_sym) %></span>
-        <% else %>
-          <span class="visit-info"><span class="text-muted">none</span></span>
-        <% end %>
+        <% name = visit.send("medication#{drug_number}_name".to_sym) %>
+        <% dose = visit.send("medication#{drug_number}_dose".to_sym) %>
+
+        <%= visit_info_drug(name, dose) %>
       <% end %>
 
-      <span class="visit-info"><%= visit.referred_to_specialist? ? "Yes" : "No" %></span>
-
-      <span class="visit-info"><%= visit.next_visit_on.present? ? visit.next_visit_on : '<span class="text-muted">none</span>'.html_safe %></span>
+      <%= visit_info(visit.referred_to_specialist? ? "Yes" : "No") %>
+      <%= visit_info(visit.next_visit_on) %>
 
       <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-sm btn-secondary my-0" %>
     </div>
