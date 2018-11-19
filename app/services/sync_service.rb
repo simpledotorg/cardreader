@@ -1,9 +1,7 @@
 require 'net/http'
 
 class SyncService
-  attr_reader :request_key, :host, :user_id, :access_token
-
-  TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
+  attr_reader :host, :user_id, :access_token
 
   def initialize(host, user_id, access_token)
     @host = host
@@ -11,55 +9,73 @@ class SyncService
     @access_token = access_token
   end
 
-  def sync(request_key, records, request_payload, report_errors_on_class: nil)
+  def sync_bulk(request_key, records, payload_class, sync_class)
     begin
-      request = to_request(request_key, records, request_payload)
-      response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
-      errors = JSON(response.body)['errors'].map do |error|
-        if report_errors_on_class.present?
-          uuid_field = "#{request_key.to_s.singularize}_uuid"
-          report_errors_on_class.find_by(Hash[uuid_field, error['id']]).attributes.merge(error: error.except('id'))
-        else
-          error
-        end
-      end
-      write_errors_to_file(request_key, errors)
+      payload = to_request_payload(request_key, payload_class, records)
+      response = request(request_key, payload)
+      errors = JSON(response.body)['errors']
+      after_bulk_response(request_key, payload, errors, sync_class)
     rescue => error
       puts "Could not sync #{request_key}. Error: #{error.message}"
     end
   end
 
-  def to_request(request_key, records, request_payload)
+  def after_bulk_response(request_key, payload, errors, sync_class)
+    failed_record_ids = []
+    errors.each do |error|
+      record = from_uuid(request_key, sync_class, error['id'])
+      record.last_sync_error = error.except('id')
+      failed_record_ids << record.id
+    end
+    payload.each do |hash|
+      record = from_uuid(request_key, sync_class, hash['id'])
+      unless failed_record_ids.include?(record.id)
+        record.update_attributes(synced_at: now, last_sync_error: nil)
+      end
+    end
+  end
+
+  def sync_one_by_one(request_key, records, payload_class)
+    records.each do |record|
+      begin
+        payload = to_request_payload(request_key, payload_class, [record])
+        response = request(request_key, payload)
+        error = payload, JSON(response.body)['errors'].first
+        after_single_response(error, record)
+      rescue => error
+        puts "Could not sync #{request_key}. Error: #{error.message}"
+      end
+    end
+  end
+
+  def after_single_response(error, record)
+    if error.present?
+      record.last_sync_error = error.except('id')
+    else
+      record.update_attributes(synced_at: Time.now, last_sync_error: nil)
+    end
+  end
+
+  def from_uuid(request_key, sync_class, uuid)
+    uuid_field = "#{request_key.to_s.singularize}_uuid"
+    sync_class.find_by(Hash[uuid_field, uuid])
+  end
+
+  def to_request_payload(request_key, payload_class, records)
+    errors = []
     requests = records.flat_map do |record|
       begin
-        request_payload.new(record, user_id).to_payload
+        payload_class.new(record, user_id).to_payload
       rescue => error
-        write_errors_to_file(request_key, [record.attributes.merge(error: [error.message])])
+        errors << record.attributes.merge(error: [error.message])
         nil
       end
     end
+    write_errors_to_file(request_key, errors)
     requests.compact
   end
 
-  def write_errors_to_file(request_key, errors)
-    return unless errors.present?
-    CSV.open(error_file(request_key), "wb+") do |csv|
-      csv << errors.first.keys # adds the attributes name on the first line
-      errors.each do |error|
-        csv << error.values
-      end
-    end
-  end
-
   private
-
-  def error_file(request_key)
-    "#{request_key}-errors-#{Date.today.iso8601}.csv"
-  end
-
-  def now
-    Time.now
-  end
 
   def api_post(path, request_body)
     uri = URI.parse(host + path)
@@ -73,5 +89,23 @@ class SyncService
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = request_body.to_json
     http.request(request)
+  end
+
+  def request(request_key, payload)
+    api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, payload])
+  end
+
+  def write_errors_to_file(request_key, errors)
+    return unless errors.present?
+    CSV.open(error_file(request_key), "wb+") do |csv|
+      csv << errors.first.keys # adds the attributes name on the first line
+      errors.each do |error|
+        csv << error.values
+      end
+    end
+  end
+
+  def error_file(request_key)
+    "#{request_key}-errors-#{Date.today.iso8601}.csv"
   end
 end

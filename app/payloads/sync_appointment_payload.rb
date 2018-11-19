@@ -7,7 +7,7 @@ class SyncAppointmentPayload
   end
 
   def to_payload
-    visits = patient.visits
+    visits = patient.visits.order(next_visit_on: :asc)
     return [] unless visits.present?
     requests = visits.map { |visit| appointment_payload(visit) }.compact
     requests.last[:status] = 'scheduled' if requests.present?

@@ -1,4 +1,6 @@
 class Patient < ApplicationRecord
+  include Syncable
+
   belongs_to :facility, inverse_of: :patients
   has_many :visits, inverse_of: :patient, dependent: :destroy
 
@@ -27,7 +29,11 @@ class Patient < ApplicationRecord
   end
 
   def first_visit
-    self.visits.order(:measured_on).limit(1).first
+    visits.order(measured_on: :asc).first
+  end
+
+  def last_visit
+    visits.order(measured_on: :desc).first
   end
 
   def registered_on_without_timestamp

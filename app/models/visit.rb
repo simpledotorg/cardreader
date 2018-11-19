@@ -1,4 +1,6 @@
 class Visit < ApplicationRecord
+  include Syncable
+
   belongs_to :patient, inverse_of: :visits
 
   delegate :facility, to: :patient
@@ -12,5 +14,9 @@ class Visit < ApplicationRecord
 
   def measured_on_without_timestamp
     self.measured_on.strftime(TIME_WITHOUT_TIMEZONE_FORMAT)
+  end
+
+  def last?
+    id == patient.last_visit.id
   end
 end
