@@ -7,6 +7,7 @@ RSpec.feature "Visits", type: :feature do
   let!(:visits) { create_list(:visit, 3, patient: patient) }
 
   before do
+    sign_in(create(:user, :admin))
     visit district_facility_patient_path(district, facility, patient)
   end
 
