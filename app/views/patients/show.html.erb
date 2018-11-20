@@ -83,25 +83,25 @@
     </div>
 
     <% @patient.visits.order(:measured_on).each do |visit| %>
-      <div class="col-md-2">
-        <%= visit_info(visit.measured_on) %>
-        <%= visit_info(visit.systolic) %>
-        <%= visit_info(visit.diastolic) %>
-        <%= visit_info(visit.blood_sugar) %>
+      <div class="col-md-2 visit">
+        <%= visit_info("measured_on", visit.measured_on) %>
+        <%= visit_info("systolic", visit.systolic) %>
+        <%= visit_info("diastolic", visit.diastolic) %>
+        <%= visit_info("blood_sugar", visit.blood_sugar) %>
 
         <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
-          <%= visit_info(visit.send(drug)) %>
+          <%= visit_info(drug.to_s, visit.send(drug)) %>
         <% end %>
 
         <% (1..3).each do |drug_number| %>
           <% name = visit.send("medication#{drug_number}_name".to_sym) %>
           <% dose = visit.send("medication#{drug_number}_dose".to_sym) %>
 
-          <%= visit_info_drug(name, dose) %>
+          <%= visit_info_drug("medication#{drug_number}", name, dose) %>
         <% end %>
 
-        <%= visit_info(visit.referred_to_specialist? ? "Yes" : "No") %>
-        <%= visit_info(visit.next_visit_on) %>
+        <%= visit_info("referred_to_specialist", visit.referred_to_specialist? ? "Yes" : "No") %>
+        <%= visit_info("next_visit_on", visit.next_visit_on) %>
 
         <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-sm btn-secondary my-0" %>
       </div>
