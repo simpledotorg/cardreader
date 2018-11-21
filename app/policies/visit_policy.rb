@@ -1,2 +1,2 @@
-class VisitPolicy < PatientPolicy
+class VisitPolicy < CardPolicy
 end

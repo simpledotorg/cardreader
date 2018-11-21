@@ -1,2 +1,2 @@
-class FacilityPolicy < PatientPolicy
+class FacilityPolicy < CardPolicy
 end

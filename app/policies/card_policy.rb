@@ -1,4 +1,4 @@
-class DistrictPolicy < CardPolicy
+class CardPolicy < ApplicationPolicy
   def index?
     user.admin? || user.operator?
   end
@@ -8,7 +8,7 @@ class DistrictPolicy < CardPolicy
   end
 
   def create?
-    user.admin?
+    user.admin? || user.operator?
   end
 
   def new?
@@ -16,7 +16,7 @@ class DistrictPolicy < CardPolicy
   end
 
   def update?
-    user.admin?
+    user.admin? || user.operator?
   end
 
   def edit?
@@ -24,6 +24,6 @@ class DistrictPolicy < CardPolicy
   end
 
   def destroy?
-    user.admin?
+    user.admin? || user.operator?
   end
 end
