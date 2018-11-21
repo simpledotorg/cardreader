@@ -7,6 +7,7 @@ class DistrictsController < ApplicationController
   end
 
   def show
+    authorize Facility, :index?
     @facility = @district.facilities.build
   end
 

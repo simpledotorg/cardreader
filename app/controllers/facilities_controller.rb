@@ -9,6 +9,7 @@ class FacilitiesController < ApplicationController
   end
 
   def show
+    authorize Patient, :index?
   end
 
   def new
