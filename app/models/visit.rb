@@ -13,4 +13,8 @@ class Visit < ApplicationRecord
   def measured_on_without_timestamp
     self.measured_on.strftime(TIME_WITHOUT_TIMEZONE_FORMAT)
   end
+
+  def synced?
+    synced_at.present? && (synced_at >= updated_at)
+  end
 end
