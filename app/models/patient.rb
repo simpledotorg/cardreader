@@ -38,6 +38,10 @@ class Patient < ApplicationRecord
     end
   end
 
+  def synced?
+    synced_at.present? && (synced_at >= updated_at)
+  end
+
   private
 
   def treatment_number_needs_prefix?
