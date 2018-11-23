@@ -15,6 +15,6 @@ namespace :import do
   task :sync_times, [:class_to_update, :uuid_field, :csv_file] => :environment do |_t, args|
     ImportSyncTimesService.new(args[:class_to_update].constantize,
                                args[:uuid_field],
-                               args[:csv_file]).import
+                               open(args[:csv_file])).import
   end
 end
