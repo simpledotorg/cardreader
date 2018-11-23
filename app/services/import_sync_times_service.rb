@@ -13,7 +13,7 @@ class ImportSyncTimesService
         id = row.first
         synced_at = row.last.to_time
 
-        record = class_to_update.find(uuid_field => id).first
+        record = class_to_update.find(uuid_field => id)
         record.update_columns(synced_at: synced_at, last_sync_errors: nil)
       rescue => e
         puts "Error while updating #{class_to_update}.#{uuid_field} #{id}: #{e.message}"
