@@ -20,18 +20,10 @@ namespace :sync do
     puts "simple_uuid not set, syncing data for all facilities" unless simple_uuid.present?
 
     facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
-
-    facility_patients = Patient.where(facility: facilities)
-
-    patients_to_sync = Patient.where(facility: facilities).reject { |visit| visit.synced? }
-    visits_to_sync = Visit.where(patient: facility_patients).reject { |visit| visit.synced? }
+    patients = Patient.where(facility: facilities).reject(&:synced?)
 
     sync_service = SyncService.new(host, user_id, access_token)
-    sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)
-    sync_service.sync('blood_pressures', visits_to_sync, SyncBloodPressurePayload, report_errors_on_class: Visit)
-    sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload, report_errors_on_class: Patient)
-    sync_service.sync('appointments', patients_to_sync, SyncAppointmentPayload, report_errors_on_class: Visit)
-    sync_service.sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
+    sync_service.sync(patients)
   end
 
   desc 'Sync prescription drug data with simple server'
