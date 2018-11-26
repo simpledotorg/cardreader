@@ -28,7 +28,7 @@ namespace :sync do
                          .or(Patient.where(synced_at: nil))
     visits_to_sync = Visit.where(patients: facility_patients)
                        .where('updated_at > synced_at')
-                       .or(Patient.where(synced_at: nil))
+                       .or(Visit.where(synced_at: nil))
 
     sync_service = SyncService.new(host, user_id, access_token)
     sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)
