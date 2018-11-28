@@ -44,7 +44,7 @@
       <% end %>
 
       <%= form.date_field :next_visit_on, label: "Next visit date", placeholder: "DD/MM/YYYY",
-                          min: '2018-01-01', max: '2018-12-31',
+                          min: '2018-01-01', max: '2019-12-31',
                           help: "Format: DD/MM/YYYY",
                           value: visit.next_visit_on.try(:strftime, "%Y-%m-%d") || '2018-01-01' %>
       <%= form.check_box :referred_to_specialist %>
