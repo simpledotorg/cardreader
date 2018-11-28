@@ -11,7 +11,9 @@
   <thead>
     <tr>
       <th>Patient Treatment Number</th>
-      <th>Sync Status</th>
+      <% if current_user.admin? %>
+        <th>Sync Status</th>
+      <% end %>
       <th>Registration Date</th>
     </tr>
   </thead>
@@ -19,13 +21,15 @@
     <% @facility.patients.sort_by { |p| p.treatment_number.to_i }.each do |patient| %>
       <tr>
         <td><%= link_to patient.formatted_treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
-        <td>
-          <% if patient.synced? %>
-            <span class="badge badge-success">Synced</span>
-          <% else %>
-            <span class="badge badge-warning">Unsynced</span>
-          <% end %>
-        </td>
+        <% if current_user.admin? %>
+          <td>
+            <% if patient.synced? %>
+              <span class="badge badge-success">Synced</span>
+            <% else %>
+              <span class="badge badge-warning">Unsynced</span>
+            <% end %>
+          </td>
+        <% end %>
         <td><%= patient.registered_on %></td>
       </tr>
     <% end %>
