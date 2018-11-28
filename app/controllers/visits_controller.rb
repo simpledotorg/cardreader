@@ -72,12 +72,12 @@ class VisitsController < ApplicationController
 
     def set_district
       @district = District.find(params[:district_id])
-      authorize @district
+      authorize @district, :show?
     end
 
     def set_facility
       @facility = @district.facilities.find(params[:facility_id])
-      authorize @facility
+      authorize @facility, :show?
     end
 
     def set_patient

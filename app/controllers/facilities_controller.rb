@@ -60,7 +60,7 @@ class FacilitiesController < ApplicationController
   private
     def set_district
       @district = District.find(params[:district_id])
-      authorize @district
+      authorize @district, :show?
     end
 
     def set_facility
