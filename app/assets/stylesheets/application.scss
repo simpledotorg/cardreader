@@ -45,3 +45,25 @@ h3 {
 .form-check {
   margin-bottom: 1rem;
 }
+
+.visit {
+  margin-bottom: 5rem;
+}
+
+.visit-header {
+  color: #555;
+  font-weight: 500;
+}
+
+.visit-info {
+  border-top: 1px solid #ddd;
+  padding-top: 0.5rem;
+  display: block;
+  min-height: 3rem;
+  line-height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.visit-info-null {
+  color: #ccc;
+}

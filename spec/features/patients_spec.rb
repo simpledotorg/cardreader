@@ -20,12 +20,6 @@ RSpec.feature "Patients", type: :feature do
       expect(page).to have_content("Treatment Number #{patient.formatted_treatment_number}")
       expect(page).to have_content(patient.name)
     end
-
-    it "shows blood pressures" do
-      patient.visits.each do |bp|
-        expect(page).to have_content("#{bp.systolic} / #{bp.diastolic}")
-      end
-    end
   end
 
   describe "new" do
