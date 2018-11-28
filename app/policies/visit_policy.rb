@@ -1,0 +1,2 @@
+class VisitPolicy < CardPolicy
+end

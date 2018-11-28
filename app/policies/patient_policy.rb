@@ -1,0 +1,2 @@
+class PatientPolicy < CardPolicy
+end

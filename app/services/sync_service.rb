@@ -15,15 +15,17 @@ class SyncService
     begin
       request = to_request(request_key, records, request_payload)
       response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
-      errors = JSON(response.body)['errors'].map do |error|
-        if report_errors_on_class.present?
-          uuid_field = "#{request_key.to_s.singularize}_uuid"
-          report_errors_on_class.find_by(Hash[uuid_field, error['id']]).attributes.merge(error: error.except('id'))
-        else
-          error
+      error_ids = JSON(response.body)['errors'].map { |error| error['id'] }
+      success_ids = request.map { |record| record[:id] }.reject { |id| error_ids.include?(id) }
+      if report_errors_on_class.present?
+        uuid_field = "#{request_key.to_s.singularize}_uuid"
+        success_ids.each do |id|
+          report_errors_on_class.find_by(uuid_field => id).update_columns(synced_at: Time.now, last_sync_errors: nil)
+        end
+        JSON(response.body)['errors'].map do |error|
+          report_errors_on_class.find_by(uuid_field => error['id']).update_column(:last_sync_errors, error)
         end
       end
-      write_errors_to_file(request_key, errors)
     rescue => error
       puts "Could not sync #{request_key}. Error: #{error.message}"
     end
@@ -39,16 +41,6 @@ class SyncService
       end
     end
     requests.compact
-  end
-
-  def write_errors_to_file(request_key, errors)
-    return unless errors.present?
-    CSV.open(error_file(request_key), "wb+") do |csv|
-      csv << errors.first.keys # adds the attributes name on the first line
-      errors.each do |error|
-        csv << error.values
-      end
-    end
   end
 
   private

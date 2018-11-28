@@ -6,9 +6,19 @@
 
 <%= link_to "Edit Patient", edit_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-secondary float-right" %>
 
-<h1>
-  Treatment Number <%= @patient.formatted_treatment_number %>
-</h1>
+<div class="row">
+  <div class="col-md-9">
+    <h1>Treatment Number <%= @patient.formatted_treatment_number %></h1>
+  </div>
+  <!-- TODO: show badge to admins only -->
+  <div class="col-md-2">
+    <% if @patient.synced? %>
+      <span class="badge badge-success">Synced</span>
+    <% else %>
+      <span class="badge badge-warning">Unsynced</span>
+    <% end %>
+  </div>
+</div>
 
 <div class="row my-5">
   <div class="col-md-6">
@@ -80,6 +90,9 @@
 
       <span class="visit-info visit-header">Referred to Specialist</span>
       <span class="visit-info visit-header">Date of Next Visit</span>
+      <% if current_user.admin? %>
+        <span class="visit-info visit-header">Visit Synced</span>
+      <% end %>
     </div>
 
     <% @patient.visits.order(:measured_on).each do |visit| %>
@@ -102,6 +115,13 @@
 
         <%= visit_info("referred_to_specialist", visit.referred_to_specialist? ? "Yes" : "No") %>
         <%= visit_info("next_visit_on", visit.next_visit_on) %>
+        <% if current_user.admin? %>
+          <% if visit.synced? %>
+            <%= visit_info("synced", '<span class="badge badge-success">Synced</span>'.html_safe) %>
+          <% else %>
+            <%= visit_info("synced", '<span class="badge badge-warning">Not synced</span>'.html_safe) %>
+          <% end %>
+        <% end %>
 
         <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-sm btn-secondary my-0" %>
       </div>

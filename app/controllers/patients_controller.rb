@@ -4,6 +4,7 @@ class PatientsController < ApplicationController
   before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
   def index
+    authorize Patient
     @patients = @facility.patients
   end
 
@@ -12,6 +13,7 @@ class PatientsController < ApplicationController
 
   def new
     @patient = @facility.patients.build
+    authorize @patient
   end
 
   def edit
@@ -19,6 +21,7 @@ class PatientsController < ApplicationController
 
   def create
     @patient = @facility.patients.new(patient_with_parsed_medical_history)
+    authorize @patient
 
     respond_to do |format|
       if @patient.save
@@ -54,14 +57,17 @@ class PatientsController < ApplicationController
   private
     def set_district
       @district = District.find(params[:district_id])
+      authorize @district
     end
 
     def set_facility
       @facility = Facility.find(params[:facility_id])
+      authorize @facility
     end
 
     def set_patient
       @patient = Patient.find(params[:id])
+      authorize @patient
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

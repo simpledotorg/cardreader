@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Admin::Login', type: :feature do
+RSpec.feature 'User login', type: :feature do
   let(:user) { create(:user) }
 
   it 'Log in and see dashboard by default' do
@@ -20,7 +20,7 @@ RSpec.feature 'Admin::Login', type: :feature do
 
     click_link 'Logout'
 
-    expect(current_path).to eq(new_user_session_path)
+    expect(current_path).to eq(root_path)
     expect(page).to have_content('Login')
   end
 end
