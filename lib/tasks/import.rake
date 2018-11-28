@@ -10,4 +10,11 @@ namespace :import do
   task :card_data, [:card_data_file] => :environment do |_t, args|
     ImportCardsService.new(open(args.card_data_file)).import
   end
+
+  desc 'Import sync times from CSV'
+  task :sync_times, [:class_to_update, :uuid_field, :csv_file] => :environment do |_t, args|
+    ImportSyncTimesService.new(args[:class_to_update].constantize,
+                               args[:uuid_field],
+                               open(args[:csv_file])).import
+  end
 end
