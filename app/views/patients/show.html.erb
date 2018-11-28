@@ -72,63 +72,63 @@
 </div>
 
 <h4>Visits</h4>
-<div class="row mb-5">
-  <% if @patient.visits.any? %>
-    <div class="col-md-2">
-      <span class="visit-info visit-header">Date Attended</span>
-      <span class="visit-info visit-header">Systolic</span>
-      <span class="visit-info visit-header">Diastolic</span>
-      <span class="visit-info visit-header">Blood Sugar</span>
-
-      <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
-        <span class="visit-info visit-header"><%= drug.to_s.humanize %></span>
-      <% end %>
-
-      <% (1..3).each do |drug_number| %>
-        <span class="visit-info visit-header">Medication <%= drug_number %></span>
-      <% end %>
-
-      <span class="visit-info visit-header">Referred to Specialist</span>
-      <span class="visit-info visit-header">Date of Next Visit</span>
-      <% if current_user.admin? %>
-        <span class="visit-info visit-header">Visit Synced</span>
-      <% end %>
-    </div>
-
-    <% @patient.visits.order(:measured_on).each do |visit| %>
+<div class="row">
+  <% @patient.visits.order(:measured_on).each_with_index do |visit, index| %>
+    <% if index % 5 == 0 %>
       <div class="col-md-2 visit">
-        <%= visit_info("measured_on", visit.measured_on) %>
-        <%= visit_info("systolic", visit.systolic) %>
-        <%= visit_info("diastolic", visit.diastolic) %>
-        <%= visit_info("blood_sugar", visit.blood_sugar) %>
+        <span class="visit-info visit-header">Date Attended</span>
+        <span class="visit-info visit-header">Systolic</span>
+        <span class="visit-info visit-header">Diastolic</span>
+        <span class="visit-info visit-header">Blood Sugar</span>
 
         <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
-          <%= visit_info(drug.to_s, visit.send(drug)) %>
+          <span class="visit-info visit-header"><%= drug.to_s.humanize %></span>
         <% end %>
 
         <% (1..3).each do |drug_number| %>
-          <% name = visit.send("medication#{drug_number}_name".to_sym) %>
-          <% dose = visit.send("medication#{drug_number}_dose".to_sym) %>
-
-          <%= visit_info_drug("medication#{drug_number}", name, dose) %>
+          <span class="visit-info visit-header">Medication <%= drug_number %></span>
         <% end %>
 
-        <%= visit_info("referred_to_specialist", visit.referred_to_specialist? ? "Yes" : "No") %>
-        <%= visit_info("next_visit_on", visit.next_visit_on) %>
+        <span class="visit-info visit-header">Referred to Specialist</span>
+        <span class="visit-info visit-header">Date of Next Visit</span>
         <% if current_user.admin? %>
-          <% if visit.synced? %>
-            <%= visit_info("synced", '<span class="badge badge-success">Synced</span>'.html_safe) %>
-          <% else %>
-            <%= visit_info("synced", '<span class="badge badge-warning">Not synced</span>'.html_safe) %>
-          <% end %>
+          <span class="visit-info visit-header">Visit Synced</span>
         <% end %>
-
-        <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-sm btn-secondary my-0" %>
       </div>
     <% end %>
+
+    <div class="col-md-2 visit">
+      <%= visit_info("measured_on", visit.measured_on) %>
+      <%= visit_info("systolic", visit.systolic) %>
+      <%= visit_info("diastolic", visit.diastolic) %>
+      <%= visit_info("blood_sugar", visit.blood_sugar) %>
+
+      <% %i(amlodipine telmisartan enalpril chlorthalidone aspirin statin beta_blocker).each do |drug| %>
+        <%= visit_info(drug.to_s, visit.send(drug)) %>
+      <% end %>
+
+      <% (1..3).each do |drug_number| %>
+        <% name = visit.send("medication#{drug_number}_name".to_sym) %>
+        <% dose = visit.send("medication#{drug_number}_dose".to_sym) %>
+
+        <%= visit_info_drug("medication#{drug_number}", name, dose) %>
+      <% end %>
+
+      <%= visit_info("referred_to_specialist", visit.referred_to_specialist? ? "Yes" : "No") %>
+      <%= visit_info("next_visit_on", visit.next_visit_on) %>
+      <% if current_user.admin? %>
+        <% if visit.synced? %>
+          <%= visit_info("synced", '<span class="badge badge-success">Synced</span>'.html_safe) %>
+        <% else %>
+          <%= visit_info("synced", '<span class="badge badge-warning">Not synced</span>'.html_safe) %>
+        <% end %>
+      <% end %>
+
+      <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-sm btn-secondary my-0" %>
+    </div>
   <% end %>
 
-  <div class="col-md-2">
+  <div class="col-md-2 visit">
     <%= link_to "Add Visit", new_district_facility_patient_visit_path(@district, @facility, @patient), class: "btn btn-primary" %>
   </div>
 </div>
