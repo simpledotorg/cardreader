@@ -2,31 +2,27 @@ class FacilitiesController < ApplicationController
   before_action :set_district
   before_action :set_facility, only: [:show, :edit, :update, :destroy]
 
-  # GET /facilities
-  # GET /facilities.json
   def index
+    authorize Facility
     @facilities = Facility.all
     @facility = Facility.new
   end
 
-  # GET /facilities/1
-  # GET /facilities/1.json
   def show
+    authorize Patient, :index?
   end
 
-  # GET /facilities/new
   def new
     @facility = Facility.new
+    authorize @facility
   end
 
-  # GET /facilities/1/edit
   def edit
   end
 
-  # POST /facilities
-  # POST /facilities.json
   def create
     @facility = Facility.new(facility_params.merge(district: @district))
+    authorize @facility
 
     respond_to do |format|
       if @facility.save
@@ -41,8 +37,6 @@ class FacilitiesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /facilities/1
-  # PATCH/PUT /facilities/1.json
   def update
     respond_to do |format|
       if @facility.update(facility_params)
@@ -55,8 +49,6 @@ class FacilitiesController < ApplicationController
     end
   end
 
-  # DELETE /facilities/1
-  # DELETE /facilities/1.json
   def destroy
     @facility.destroy
     respond_to do |format|
@@ -68,14 +60,14 @@ class FacilitiesController < ApplicationController
   private
     def set_district
       @district = District.find(params[:district_id])
+      authorize @district
     end
 
-    # Use callbacks to share common setup or constraints between actions.
     def set_facility
       @facility = Facility.find(params[:id])
+      authorize @facility
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def facility_params
       params.require(:facility).permit(:name)
     end
