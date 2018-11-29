@@ -12,11 +12,7 @@
   </div>
   <!-- TODO: show badge to admins only -->
   <div class="col-md-2">
-    <% if @patient.synced? %>
-      <span class="badge badge-success">Synced</span>
-    <% else %>
-      <span class="badge badge-warning">Unsynced</span>
-    <% end %>
+    <span class="badge <%= @patient.synced? ? 'badge-success' :'badge-warning' %>"><%= @patient.sync_status %></span>
   </div>
 </div>
 

@@ -23,8 +23,8 @@ namespace :sync do
 
     facility_patients = Patient.where(facility: facilities)
 
-    patients_to_sync = Patient.where(facility: facilities).reject { |visit| visit.synced? }
-    visits_to_sync = Visit.where(patient: facility_patients).reject { |visit| visit.synced? }
+    patients_to_sync = Patient.where(facility: facilities).reject(&:synced?)
+    visits_to_sync = Visit.where(patient: facility_patients).reject(&:synced?)
 
     sync_service = SyncService.new(host, user_id, access_token)
     sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)

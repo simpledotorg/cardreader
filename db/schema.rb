@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_23_045905) do
+ActiveRecord::Schema.define(version: 2018_11_29_054303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,16 @@ ActiveRecord::Schema.define(version: 2018_11_23_045905) do
     t.datetime "synced_at"
     t.json "last_sync_errors"
     t.index ["facility_id"], name: "index_patients_on_facility_id"
+  end
+
+  create_table "sync_logs", force: :cascade do |t|
+    t.string "simple_model"
+    t.uuid "simple_id"
+    t.datetime "synced_at", null: false
+    t.json "sync_errors"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["simple_model", "simple_id"], name: "index_sync_logs_on_simple_model_and_simple_id"
   end
 
   create_table "users", force: :cascade do |t|

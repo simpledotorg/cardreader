@@ -15,6 +15,34 @@ class Visit < ApplicationRecord
   end
 
   def synced?
-    synced_at.present? && (synced_at >= updated_at)
+    blood_pressure_synced? && appointment_synced?
+  end
+
+  private
+
+  def sync_status(sync_log)
+    return :unsynced unless sync_log.present?
+    if sync_log.sync_errors.present?
+      return :sync_errored
+    elsif sync_log.synced_at > updated_at
+      return :synced
+    end
+    :unsynced
+  end
+
+  def blood_pressure_synced?
+    sync_status(latest_blood_pressure_sync_log) == :synced
+  end
+
+  def appointment_synced?
+    sync_status(latest_appointment_sync_log) == :synced
+  end
+
+  def latest_blood_pressure_sync_log
+    SyncLog.where(simple_id: blood_pressure_uuid, simple_model: 'BloodPressure').order(synced_at: :desc).first
+  end
+
+  def latest_appointment_sync_log
+    SyncLog.where(simple_id: appointment_uuid, simple_model: 'Appointment').order(synced_at: :desc).first
   end
 end

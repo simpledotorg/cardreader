@@ -39,12 +39,30 @@ class Patient < ApplicationRecord
   end
 
   def synced?
-    synced_at.present? && (synced_at >= updated_at)
+    sync_status == :synced
+  end
+
+  def sync_status
+    return :unsynced unless latest_patient_sync_log.present?
+    if latest_patient_sync_log.sync_errors.present?
+      return :sync_errored
+    elsif latest_patient_sync_log.synced_at > updated_at
+      return :synced
+    end
+    :unsynced
   end
 
   private
 
   def treatment_number_needs_prefix?
     true if treatment_number.nil? || Integer(treatment_number) rescue false
+  end
+
+  def latest_patient_sync_log
+    SyncLog.where(simple_id: patient_uuid, simple_model: 'Patient').order(synced_at: :desc).first
+  end
+
+  def latest_medical_history_sync_log
+    SyncLog.where(simple_id: medical_history_uuid, simple_model: 'MedicalHistory').order(synced_at: :desc).first
   end
 end
