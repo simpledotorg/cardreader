@@ -23,11 +23,9 @@
         <td><%= link_to patient.formatted_treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
         <% if current_user.admin? %>
           <td>
-            <% if patient.synced? %>
-              <span class="badge badge-success">Synced</span>
-            <% else %>
-              <span class="badge badge-warning">Unsynced</span>
-            <% end %>
+             <span class="badge <%= sync_status_class(patient.patient_sync_status) %>">
+               Patient - <%= patient.patient_sync_status.to_s.humanize %>
+             </span>
           </td>
         <% end %>
         <td><%= patient.registered_on %></td>

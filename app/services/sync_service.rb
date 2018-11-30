@@ -15,17 +15,14 @@ class SyncService
     begin
       request = to_request(request_key, records, request_payload)
       response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
+
       error_ids = JSON(response.body)['errors'].map { |error| error['id'] }
       success_ids = request.map { |record| record[:id] }.reject { |id| error_ids.include?(id) }
-      if report_errors_on_class.present?
-        uuid_field = "#{request_key.to_s.singularize}_uuid"
-        success_ids.each do |id|
-          report_errors_on_class.find_by(uuid_field => id).update_columns(synced_at: Time.now, last_sync_errors: nil)
-        end
-        JSON(response.body)['errors'].map do |error|
-          report_errors_on_class.find_by(uuid_field => error['id']).update_column(:last_sync_errors, error)
-        end
-      end
+
+      sync_log_hash = { simple_model: request_key.to_s.singularize.camelcase, synced_at: Time.now }
+
+      success_ids.each { |id| SyncLog.create(sync_log_hash.merge(simple_id: id, sync_errors: nil)) }
+      JSON(response.body)['errors'].map { |error| SyncLog.create(sync_log_hash.merge(simple_id: id, sync_errors: error)) }
     rescue => error
       puts "Could not sync #{request_key}. Error: #{error.message}"
     end

@@ -1,4 +1,5 @@
 class Visit < ApplicationRecord
+  include SyncLoggable
   belongs_to :patient, inverse_of: :visits
 
   delegate :facility, to: :patient
@@ -15,6 +16,24 @@ class Visit < ApplicationRecord
   end
 
   def synced?
-    synced_at.present? && (synced_at >= updated_at)
+    false
+  end
+
+  def blood_pressure_sync_status
+    sync_status(latest_blood_pressure_sync_log)
+  end
+
+  def appointment_sync_status
+    sync_status(latest_appointment_sync_log)
+  end
+
+  private
+
+  def latest_blood_pressure_sync_log
+    latest_sync_log(blood_pressure_uuid, 'BloodPressure')
+  end
+
+  def latest_appointment_sync_log
+    latest_sync_log(appointment_uuid, 'Appointment')
   end
 end

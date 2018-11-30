@@ -17,4 +17,9 @@ namespace :import do
                                args[:uuid_field],
                                open(args[:csv_file])).import
   end
+
+  desc 'Import sync logs from simple server audit logs'
+  task :sync_logs, [:audit_logs_file] => :environment do |_t, args|
+    ImportSyncLogsService.new(open(args[:audit_logs_file])).import
+  end
 end
