@@ -1,8 +1,8 @@
 module SyncStatusHelper
   CSS_CLASSES = {
-    unsynced: 'badge-warning',
+    unsynced: 'badge-dark',
     sync_errored: 'badge-danger',
-    updated: 'badge-info',
+    updated: 'badge-warning',
     synced: 'badge-success'
   }.freeze
 
