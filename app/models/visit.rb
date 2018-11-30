@@ -16,7 +16,15 @@ class Visit < ApplicationRecord
   end
 
   def synced?
-    false
+    blood_pressure_synced? && appointment_synced?
+  end
+
+  def blood_pressure_synced?
+    blood_pressure_sync_status == :synced
+  end
+
+  def appointment_synced?
+    appointment_sync_status == :synced
   end
 
   def blood_pressure_sync_status
