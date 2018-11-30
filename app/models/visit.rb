@@ -1,4 +1,5 @@
 class Visit < ApplicationRecord
+  include SyncLoggable
   belongs_to :patient, inverse_of: :visits
 
   delegate :facility, to: :patient
@@ -15,34 +16,24 @@ class Visit < ApplicationRecord
   end
 
   def synced?
-    blood_pressure_synced? && appointment_synced?
+    false
+  end
+
+  def blood_pressure_sync_status
+    sync_status(latest_blood_pressure_sync_log)
+  end
+
+  def appointment_sync_status
+    sync_status(latest_appointment_sync_log)
   end
 
   private
 
-  def sync_status(sync_log)
-    return :unsynced unless sync_log.present?
-    if sync_log.sync_errors.present?
-      return :sync_errored
-    elsif sync_log.synced_at > updated_at
-      return :synced
-    end
-    :unsynced
-  end
-
-  def blood_pressure_synced?
-    sync_status(latest_blood_pressure_sync_log) == :synced
-  end
-
-  def appointment_synced?
-    sync_status(latest_appointment_sync_log) == :synced
-  end
-
   def latest_blood_pressure_sync_log
-    SyncLog.where(simple_id: blood_pressure_uuid, simple_model: 'BloodPressure').order(synced_at: :desc).first
+    latest_sync_log(blood_pressure_uuid, 'BloodPressure')
   end
 
   def latest_appointment_sync_log
-    SyncLog.where(simple_id: appointment_uuid, simple_model: 'Appointment').order(synced_at: :desc).first
+    latest_sync_log(appointment_uuid, 'Appointment')
   end
 end

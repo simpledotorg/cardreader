@@ -1,4 +1,6 @@
 class Patient < ApplicationRecord
+  include SyncLoggable
+
   belongs_to :facility, inverse_of: :patients
   has_many :visits, inverse_of: :patient, dependent: :destroy
 
@@ -39,17 +41,15 @@ class Patient < ApplicationRecord
   end
 
   def synced?
-    sync_status == :synced
+    patient_sync_status == :synced
   end
 
-  def sync_status
-    return :unsynced unless latest_patient_sync_log.present?
-    if latest_patient_sync_log.sync_errors.present?
-      return :sync_errored
-    elsif latest_patient_sync_log.synced_at > updated_at
-      return :synced
-    end
-    :unsynced
+  def patient_sync_status
+    sync_status(latest_patient_sync_log)
+  end
+
+  def medical_history_sync_status
+    sync_status(latest_medical_history_sync_log)
   end
 
   private
@@ -59,10 +59,10 @@ class Patient < ApplicationRecord
   end
 
   def latest_patient_sync_log
-    SyncLog.where(simple_id: patient_uuid, simple_model: 'Patient').order(synced_at: :desc).first
+    latest_sync_log(patient_uuid, 'Patient')
   end
 
   def latest_medical_history_sync_log
-    SyncLog.where(simple_id: medical_history_uuid, simple_model: 'MedicalHistory').order(synced_at: :desc).first
+    latest_sync_log(medical_history_uuid, 'MedicalHistory')
   end
 end

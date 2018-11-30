@@ -7,13 +7,19 @@
 <%= link_to "Edit Patient", edit_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-secondary float-right" %>
 
 <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-12">
     <h1>Treatment Number <%= @patient.formatted_treatment_number %></h1>
   </div>
-  <!-- TODO: show badge to admins only -->
-  <div class="col-md-2">
-    <span class="badge <%= @patient.synced? ? 'badge-success' :'badge-warning' %>"><%= @patient.sync_status %></span>
-  </div>
+  <% if current_user.admin? %>
+    <div class="col-md-12">
+    <span class="badge <%= sync_status_class(@patient.patient_sync_status) %>">
+      Patient - <%= @patient.patient_sync_status.to_s.humanize %>
+    </span>
+      <span class="badge <%= sync_status_class(@patient.medical_history_sync_status) %>">
+      Medical History - <%= @patient.medical_history_sync_status.to_s.humanize %>
+    </span>
+    </div>
+  <% end %>
 </div>
 
 <div class="row my-5">
@@ -59,10 +65,14 @@
 
     <h3 class="mt-4">C. Hypertension treatment at registration</h3>
     <ul class="list-group">
-      <li class="list-group-item"><strong>Medication 1</strong>: <%= [@patient.medication1_name, @patient.medication1_dose].join(" ") %></li>
-      <li class="list-group-item"><strong>Medication 2</strong>: <%= [@patient.medication2_name, @patient.medication2_dose].join(" ") %></li>
-      <li class="list-group-item"><strong>Medication 3</strong>: <%= [@patient.medication3_name, @patient.medication3_dose].join(" ") %></li>
-      <li class="list-group-item"><strong>Medication 4</strong>: <%= [@patient.medication4_name, @patient.medication4_dose].join(" ") %></li>
+      <li class="list-group-item">
+        <strong>Medication 1</strong>: <%= [@patient.medication1_name, @patient.medication1_dose].join(" ") %></li>
+      <li class="list-group-item">
+        <strong>Medication 2</strong>: <%= [@patient.medication2_name, @patient.medication2_dose].join(" ") %></li>
+      <li class="list-group-item">
+        <strong>Medication 3</strong>: <%= [@patient.medication3_name, @patient.medication3_dose].join(" ") %></li>
+      <li class="list-group-item">
+        <strong>Medication 4</strong>: <%= [@patient.medication4_name, @patient.medication4_dose].join(" ") %></li>
     </ul>
   </div>
 </div>
@@ -88,7 +98,7 @@
         <span class="visit-info visit-header">Referred to Specialist</span>
         <span class="visit-info visit-header">Date of Next Visit</span>
         <% if current_user.admin? %>
-          <span class="visit-info visit-header">Visit Synced</span>
+          <span class="visit-info visit-header">Visit Sync Status</span>
         <% end %>
       </div>
     <% end %>
@@ -113,14 +123,16 @@
       <%= visit_info("referred_to_specialist", visit.referred_to_specialist? ? "Yes" : "No") %>
       <%= visit_info("next_visit_on", visit.next_visit_on) %>
       <% if current_user.admin? %>
-        <% if visit.synced? %>
-          <%= visit_info("synced", '<span class="badge badge-success">Synced</span>'.html_safe) %>
-        <% else %>
-          <%= visit_info("synced", '<span class="badge badge-warning">Not synced</span>'.html_safe) %>
-        <% end %>
+        <span class="w-100 badge <%= sync_status_class(visit.blood_pressure_sync_status) %>">
+          BP - <%= visit.blood_pressure_sync_status.to_s.humanize %>
+        </span>
+
+        <span class="w-100 badge <%= sync_status_class(visit.appointment_sync_status) %>">
+          Appointment - <%= visit.appointment_sync_status.to_s.humanize %>
+        </span>
       <% end %>
 
-      <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "btn btn-sm btn-secondary my-0" %>
+      <%= link_to "Edit", edit_district_facility_patient_visit_path(@district, @facility, @patient, visit), class: "w-100 btn btn-sm btn-secondary my-0" %>
     </div>
   <% end %>
 
@@ -131,5 +143,4 @@
 
 <%= link_to "Delete Patient", district_facility_patient_path(@district, @facility, @patient), method: :delete, class: "btn btn-sm btn-outline-danger float-right", data: { confirm: "Are you sure you want to delete this patient?" } %>
 
-<%= link_to "Save and Add New Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %><br>
-
+<%= link_to "Save and Add New Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %>
