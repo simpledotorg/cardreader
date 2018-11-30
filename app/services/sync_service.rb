@@ -22,7 +22,7 @@ class SyncService
       sync_log_hash = { simple_model: request_key.to_s.singularize.camelcase, synced_at: Time.now }
 
       success_ids.each { |id| SyncLog.create(sync_log_hash.merge(simple_id: id, sync_errors: nil)) }
-      JSON(response.body)['errors'].map { |error| SyncLog.create(sync_log_hash.merge(simple_id: id, sync_errors: error)) }
+      JSON(response.body)['errors'].map { |error| SyncLog.create(sync_log_hash.merge(simple_id: error['id'], sync_errors: error)) }
     rescue => error
       puts "Could not sync #{request_key}. Error: #{error.message}"
     end
