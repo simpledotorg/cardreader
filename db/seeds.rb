@@ -10,6 +10,12 @@ District.destroy_all
 Facility.destroy_all
 Patient.destroy_all
 Visit.destroy_all
+User.destroy_all
+
+admin = User.create(
+  email: "admin@example.com",
+  password: "password"
+)
 
 %w(
   Bathinda
@@ -26,11 +32,13 @@ Visit.destroy_all
     facility_type = %w(DH SDH CHC PHC).sample
 
     facility = district.facilities.create(
+      user: admin,
       name: "#{facility_type} #{Faker::Address.city}"
     )
 
     5.times.each do |id|
       patient = facility.patients.create(
+        user: admin,
         treatment_number: id + 1,
         registered_on: Faker::Date.between(3.months.ago, Date.today),
         name: "Test User #{id + 1}",
@@ -44,6 +52,7 @@ Visit.destroy_all
         measured_on = Faker::Date.between(3.months.ago, Date.today)
 
         patient.visits.create(
+          user: admin,
           systolic: rand(110..190),
           diastolic: rand(70.140),
           measured_on: measured_on,
