@@ -9,5 +9,9 @@ class User < ApplicationRecord
     :operator
   ]
 
+  has_many :facilities
+  has_many :patients
+  has_many :visits
+
   validates :role, presence: true
 end

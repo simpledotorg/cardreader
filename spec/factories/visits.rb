@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :visit do
     patient
+    user
 
     systolic { rand(100.160) }
     diastolic { rand(60..120) }

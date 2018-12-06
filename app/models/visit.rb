@@ -1,6 +1,7 @@
 class Visit < ApplicationRecord
   include SyncLoggable
   belongs_to :patient, inverse_of: :visits
+  belongs_to :user
 
   delegate :facility, to: :patient
 

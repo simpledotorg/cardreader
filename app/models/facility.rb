@@ -1,5 +1,6 @@
 class Facility < ApplicationRecord
   belongs_to :district
+  belongs_to :user
 
   has_many :patients, inverse_of: :facility, dependent: :destroy
 
