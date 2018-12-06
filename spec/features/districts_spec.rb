@@ -4,8 +4,10 @@ RSpec.feature "Districts", type: :feature do
   let!(:bathinda) { create(:district, name: "Bathinda") }
   let!(:mansa) { create(:district, name: "Mansa") }
 
+  let(:admin) { create(:user, :admin) }
+
   before do
-    sign_in(create(:user, :admin))
+    sign_in(admin)
   end
 
   describe "index" do
@@ -44,6 +46,10 @@ RSpec.feature "Districts", type: :feature do
         click_button "Add Facility"
 
         expect(page).to have_link("PHC Paldi")
+
+        new_facility = Facility.find_by(name: "PHC Paldi")
+        expect(new_facility.district).to eq(mansa)
+        expect(new_facility.user).to eq(admin)
       end
 
       it "shows the correct error if name is blank" do

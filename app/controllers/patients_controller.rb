@@ -12,7 +12,7 @@ class PatientsController < ApplicationController
   end
 
   def new
-    @patient = @facility.patients.build
+    @patient = @facility.patients.build(user: current_user)
     authorize @patient
   end
 
@@ -20,7 +20,7 @@ class PatientsController < ApplicationController
   end
 
   def create
-    @patient = @facility.patients.new(patient_with_parsed_medical_history)
+    @patient = @facility.patients.new(patient_with_parsed_medical_history.merge(user: current_user))
     authorize @patient
 
     respond_to do |format|

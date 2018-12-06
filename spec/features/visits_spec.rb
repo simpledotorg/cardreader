@@ -6,8 +6,10 @@ RSpec.feature "Visits", type: :feature do
   let!(:patient) { create(:patient, facility: facility) }
   let!(:visits) { create_list(:visit, 3, patient: patient) }
 
+  let(:user) { create(:user, :operator) }
+
   before do
-    sign_in(create(:user, :admin))
+    sign_in(user)
     visit district_facility_patient_path(district, facility, patient)
   end
 
@@ -50,30 +52,32 @@ RSpec.feature "Visits", type: :feature do
     it "saves the visit data" do
       click_button "Save"
 
-      visit = Visit.order(:created_at).last
+      new_visit = Visit.order(:created_at).last
 
-      expect(visit.measured_on).to eq(Date.parse("2018-11-25"))
-      expect(visit.systolic).to eq(145)
-      expect(visit.diastolic).to eq(95)
-      expect(visit.blood_sugar).to eq("100")
+      expect(new_visit.measured_on).to eq(Date.parse("2018-11-25"))
+      expect(new_visit.systolic).to eq(145)
+      expect(new_visit.diastolic).to eq(95)
+      expect(new_visit.blood_sugar).to eq("100")
 
-      expect(visit.amlodipine).to eq("10mg")
-      expect(visit.telmisartan).to eq("20mg")
-      expect(visit.enalpril).to eq("30mg")
-      expect(visit.chlorthalidone).to eq("40mg")
-      expect(visit.aspirin).to eq("50mg")
-      expect(visit.statin).to eq("60mg")
-      expect(visit.beta_blocker).to eq("70mg")
+      expect(new_visit.amlodipine).to eq("10mg")
+      expect(new_visit.telmisartan).to eq("20mg")
+      expect(new_visit.enalpril).to eq("30mg")
+      expect(new_visit.chlorthalidone).to eq("40mg")
+      expect(new_visit.aspirin).to eq("50mg")
+      expect(new_visit.statin).to eq("60mg")
+      expect(new_visit.beta_blocker).to eq("70mg")
 
-      expect(visit.medication1_name).to eq("Test med 1")
-      expect(visit.medication1_dose).to eq("100mg")
-      expect(visit.medication2_name).to eq("Test med 2")
-      expect(visit.medication2_dose).to eq("200mg")
-      expect(visit.medication3_name).to eq("Test med 3")
-      expect(visit.medication3_dose).to eq("300mg")
+      expect(new_visit.medication1_name).to eq("Test med 1")
+      expect(new_visit.medication1_dose).to eq("100mg")
+      expect(new_visit.medication2_name).to eq("Test med 2")
+      expect(new_visit.medication2_dose).to eq("200mg")
+      expect(new_visit.medication3_name).to eq("Test med 3")
+      expect(new_visit.medication3_dose).to eq("300mg")
 
-      expect(visit.next_visit_on).to eq(Date.parse("2018-12-25"))
-      expect(visit.referred_to_specialist).to eq(true)
+      expect(new_visit.next_visit_on).to eq(Date.parse("2018-12-25"))
+      expect(new_visit.referred_to_specialist).to eq(true)
+
+      expect(new_visit.user).to eq(user)
     end
   end
 
