@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :patient do
+    association :author, factory: :user
     facility
-    user
 
     sequence(:treatment_number) { |n| "2018-%08i" % n }
     registered_on { 3.months.ago }

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Facility, type: :model do
   describe "Associations" do
-    it { should belong_to(:user) }
+    it { should belong_to(:author).class_name("User").with_foreign_key("author_id") }
     it { should belong_to(:district) }
     it { should have_many(:patients).inverse_of(:facility).dependent(:destroy) }
   end

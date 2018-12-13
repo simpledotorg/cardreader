@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :facility do
+    association :author, factory: :user
     district
-    user
 
     sequence(:name) { |n| "Facility #{n}" }
   end

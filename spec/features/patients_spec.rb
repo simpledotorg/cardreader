@@ -95,7 +95,7 @@ RSpec.feature "Patients", type: :feature do
       expect(new_patient.medication4_name).to eq("Test med 4")
       expect(new_patient.medication4_dose).to eq("40mg")
 
-      expect(new_patient.user).to eq(user)
+      expect(new_patient.author).to eq(user)
     end
   end
 

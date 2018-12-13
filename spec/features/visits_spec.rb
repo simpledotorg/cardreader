@@ -77,7 +77,7 @@ RSpec.feature "Visits", type: :feature do
       expect(new_visit.next_visit_on).to eq(Date.parse("2018-12-25"))
       expect(new_visit.referred_to_specialist).to eq(true)
 
-      expect(new_visit.user).to eq(user)
+      expect(new_visit.author).to eq(user)
     end
   end
 

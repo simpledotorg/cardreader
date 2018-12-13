@@ -49,7 +49,7 @@ RSpec.feature "Districts", type: :feature do
 
         new_facility = Facility.find_by(name: "PHC Paldi")
         expect(new_facility.district).to eq(mansa)
-        expect(new_facility.user).to eq(admin)
+        expect(new_facility.author).to eq(admin)
       end
 
       it "shows the correct error if name is blank" do

@@ -4,7 +4,7 @@ RSpec.describe Visit, type: :model do
   let(:visit) { build(:visit) }
 
   describe "Associations" do
-    it { should belong_to(:user) }
+    it { should belong_to(:author).class_name("User").with_foreign_key("author_id") }
     it { should belong_to(:patient) }
   end
 
