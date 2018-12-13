@@ -19,7 +19,7 @@
     <tbody>
       <% @users.each do |user| %>
         <tr>
-          <td><%= link_to user.email, user %></td>
+          <td><%= link_to user.email, edit_user_path(user) %></td>
           <td><%= user.role.humanize %></td>
           <td>
             <% if user.invited_to_sign_up? %>
