@@ -1,7 +1,9 @@
 class Patient < ApplicationRecord
   include SyncLoggable
 
+  belongs_to :author, class_name: "User", foreign_key: "author_id"
   belongs_to :facility, inverse_of: :patients
+
   has_many :visits, inverse_of: :patient, dependent: :destroy
 
   validates_date :registered_on

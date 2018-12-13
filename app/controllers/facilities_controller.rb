@@ -13,7 +13,7 @@ class FacilitiesController < ApplicationController
   end
 
   def new
-    @facility = Facility.new
+    @facility = @district.facilities.build(author: current_user)
     authorize @facility
   end
 
@@ -21,7 +21,7 @@ class FacilitiesController < ApplicationController
   end
 
   def create
-    @facility = Facility.new(facility_params.merge(district: @district))
+    @facility = @district.facilities.new(facility_params.merge(author: current_user))
     authorize @facility
 
     respond_to do |format|

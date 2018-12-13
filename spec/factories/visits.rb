@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :visit do
+    association :author, factory: :user
     patient
 
     systolic { rand(100.160) }

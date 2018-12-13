@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_29_054303) do
+ActiveRecord::Schema.define(version: 2018_12_06_030107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2018_11_29_054303) do
     t.datetime "updated_at", null: false
     t.bigint "district_id"
     t.uuid "simple_uuid"
+    t.integer "author_id"
     t.index ["district_id"], name: "index_facilities_on_district_id"
   end
 
@@ -69,6 +70,7 @@ ActiveRecord::Schema.define(version: 2018_11_29_054303) do
     t.boolean "diagnosed_with_hypertension"
     t.datetime "synced_at"
     t.json "last_sync_errors"
+    t.integer "author_id"
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
 
@@ -135,9 +137,13 @@ ActiveRecord::Schema.define(version: 2018_11_29_054303) do
     t.uuid "appointment_uuid", default: -> { "uuid_generate_v4()" }
     t.datetime "synced_at"
     t.json "last_sync_errors"
+    t.integer "author_id"
     t.index ["patient_id"], name: "index_visits_on_patient_id"
   end
 
+  add_foreign_key "facilities", "users", column: "author_id"
   add_foreign_key "patients", "facilities"
+  add_foreign_key "patients", "users", column: "author_id"
   add_foreign_key "visits", "patients"
+  add_foreign_key "visits", "users", column: "author_id"
 end

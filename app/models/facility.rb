@@ -1,5 +1,6 @@
 class Facility < ApplicationRecord
-  belongs_to :district
+  belongs_to :author, class_name: "User", foreign_key: "author_id"
+  belongs_to :district, inverse_of: :facilities
 
   has_many :patients, inverse_of: :facility, dependent: :destroy
 

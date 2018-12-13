@@ -16,7 +16,7 @@ class VisitsController < ApplicationController
     @previous_visit = @patient.visits.order(:measured_on).last
 
     if params[:prefill_from_previous_visit]
-      @visit = @patient.visits.build(previous_visit_details)
+      @visit = @patient.visits.build(previous_visit_details.merge(author: current_user))
     else
       @visit = @patient.visits.build
     end
@@ -29,7 +29,7 @@ class VisitsController < ApplicationController
   end
 
   def create
-    @visit = @patient.visits.new(visit_params)
+    @visit = @patient.visits.new(visit_params.merge(author: current_user))
     authorize @visit
 
     if @visit.save
