@@ -9,5 +9,9 @@ class User < ApplicationRecord
     :operator
   ]
 
+  has_many :facilities, inverse_of: :author
+  has_many :patients, inverse_of: :author
+  has_many :visits, inverse_of: :author
+
   validates :role, presence: true
 end

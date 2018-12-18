@@ -23,6 +23,7 @@ gem 'uuidtools'
 gem 'devise'
 gem 'devise_invitable'
 gem 'pundit'
+gem 'sentry-raven'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

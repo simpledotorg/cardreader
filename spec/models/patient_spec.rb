@@ -3,16 +3,19 @@ require 'rails_helper'
 RSpec.describe Patient, type: :model do
   subject(:patient) { build(:patient) }
 
-  it { should belong_to(:facility) }
-  it { should have_many(:visits).inverse_of(:patient).dependent(:destroy) }
+  describe "Associations" do
+    it { should belong_to(:author).class_name("User").with_foreign_key("author_id") }
+    it { should belong_to(:facility) }
+    it { should have_many(:visits).inverse_of(:patient).dependent(:destroy) }
 
-  it { should validate_presence_of(:treatment_number) }
-  it {
-    should validate_uniqueness_of(:treatment_number)
-                     .scoped_to(:facility_id)
-                     .case_insensitive
-                     .with_message("should be unique per facility")
-  }
+    it { should validate_presence_of(:treatment_number) }
+    it {
+      should validate_uniqueness_of(:treatment_number)
+                       .scoped_to(:facility_id)
+                       .case_insensitive
+                       .with_message("should be unique per facility")
+    }
+  end
 
   describe "#formatted_treatment_number=" do
     it "works with empty treatment numbers" do

@@ -1,5 +1,7 @@
 class Visit < ApplicationRecord
   include SyncLoggable
+
+  belongs_to :author, class_name: "User", foreign_key: "author_id"
   belongs_to :patient, inverse_of: :visits
 
   delegate :facility, to: :patient
