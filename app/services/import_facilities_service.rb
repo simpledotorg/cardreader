@@ -20,6 +20,10 @@ class ImportFacilitiesService
 
   attr_reader :host, :processed_since
 
+  def author
+    User.find_by(email: "bot@simpler.org")
+  end
+
   def save_facility(facility)
     district = save_district(facility['district'])
     existing_facility = Facility.where('lower(name) = ?', facility['name'].downcase).where(district: district).first
@@ -28,7 +32,8 @@ class ImportFacilitiesService
     Facility.create(
       name: facility['name'],
       district_id: district.id,
-      simple_uuid: facility['id']
+      simple_uuid: facility['id'],
+      author: author
     )
   end
 
