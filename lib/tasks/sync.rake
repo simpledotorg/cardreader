@@ -35,25 +35,4 @@ namespace :sync do
       sync_service.sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
     end
   end
-
-  desc 'Sync prescription drug data with simple server'
-  task :sync_prescription_drugs, [:simple_uuid] => :environment do |_t, args|
-    host = ENV.fetch('SIMPLE_SERVER_HOST')
-    user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
-    access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
-    simple_uuid = args[:simple_uuid]
-
-    unless simple_uuid.present?
-      puts "simple_uuid not set; exiting."
-      next
-    end
-
-    since = Time.new(0)
-    facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
-
-    patients = Patient.where(facility: facilities).where('updated_at >= ?', since)
-
-    sync_service = SyncService.new(host, user_id, access_token)
-    sync_service.sync('prescription_drugs', patients, SyncPrescriptionDrugPayload)
-  end
 end
