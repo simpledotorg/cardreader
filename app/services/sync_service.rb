@@ -1,20 +1,21 @@
 require 'net/http'
 
 class SyncService
-  attr_reader :request_key, :host, :user_id, :access_token
+  attr_reader :request_key, :host, :user_id, :access_token, :facility_uuid
 
   TIME_WITHOUT_TIMEZONE_FORMAT = '%FT%T.%3NZ'.freeze
 
-  def initialize(host, user_id, access_token)
+  def initialize(host, user_id, access_token, facility_uuid)
     @host = host
     @user_id = user_id
     @access_token = access_token
+    @facility_uuid = facility_uuid
   end
 
   def sync(request_key, records, request_payload, report_errors_on_class: nil)
     begin
       request = to_request(request_key, records, request_payload)
-      response = api_post("api/v1/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
+      response = api_post("api/v2/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
 
       error_ids = JSON(response.body)['errors'].map { |error| error['id'] }
       success_ids = request.map { |record| record[:id] }.reject { |id| error_ids.include?(id) }
@@ -55,6 +56,7 @@ class SyncService
     header = { 'Content-Type' => 'application/json',
                'ACCEPT' => 'application/json',
                'X-USER-ID' => user_id,
+               'X-FACILITY-ID' => facility_uuid,
                'Authorization' => "Bearer #{access_token}" }
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = ENV['USE_SSL'].present? ? ENV['USE_SSL'] == 'true' : true
