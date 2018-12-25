@@ -21,37 +21,18 @@ namespace :sync do
 
     facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
 
-    facility_patients = Patient.where(facility: facilities)
+    facilities.each do |facility|
+      facility_patients = Patient.where(facility: facility)
 
-    patients_to_sync = Patient.where(facility: facilities).reject(&:synced?)
-    visits_to_sync = Visit.where(patient: facility_patients).reject(&:synced?)
+      patients_to_sync = Patient.where(facility: facility).reject(&:synced?)
+      visits_to_sync = Visit.where(patient: facility_patients).reject(&:synced?)
 
-    sync_service = SyncService.new(host, user_id, access_token)
-    sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)
-    sync_service.sync('blood_pressures', visits_to_sync, SyncBloodPressurePayload, report_errors_on_class: Visit)
-    sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload, report_errors_on_class: Patient)
-    sync_service.sync('appointments', patients_to_sync, SyncAppointmentPayload, report_errors_on_class: Visit)
-    sync_service.sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
-  end
-
-  desc 'Sync prescription drug data with simple server'
-  task :sync_prescription_drugs, [:simple_uuid] => :environment do |_t, args|
-    host = ENV.fetch('SIMPLE_SERVER_HOST')
-    user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
-    access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
-    simple_uuid = args[:simple_uuid]
-
-    unless simple_uuid.present?
-      puts "simple_uuid not set; exiting."
-      next
+      sync_service = SyncService.new(host, user_id, access_token, facility.simple_uuid)
+      sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)
+      sync_service.sync('blood_pressures', visits_to_sync, SyncBloodPressurePayload, report_errors_on_class: Visit)
+      sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload, report_errors_on_class: Patient)
+      sync_service.sync('appointments', patients_to_sync, SyncAppointmentPayload, report_errors_on_class: Visit)
+      sync_service.sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
     end
-
-    since = Time.new(0)
-    facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
-
-    patients = Patient.where(facility: facilities).where('updated_at >= ?', since)
-
-    sync_service = SyncService.new(host, user_id, access_token)
-    sync_service.sync('prescription_drugs', patients, SyncPrescriptionDrugPayload)
   end
 end
