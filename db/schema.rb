@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_06_030107) do
+ActiveRecord::Schema.define(version: 2018_12_28_130259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,8 +68,6 @@ ActiveRecord::Schema.define(version: 2018_12_06_030107) do
     t.uuid "alternate_phone_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "medical_history_uuid", default: -> { "uuid_generate_v4()" }
     t.boolean "diagnosed_with_hypertension"
-    t.datetime "synced_at"
-    t.json "last_sync_errors"
     t.integer "author_id"
     t.index ["facility_id"], name: "index_patients_on_facility_id"
   end
@@ -135,8 +133,6 @@ ActiveRecord::Schema.define(version: 2018_12_06_030107) do
     t.string "medication3_dose"
     t.uuid "blood_pressure_uuid", default: -> { "uuid_generate_v4()" }
     t.uuid "appointment_uuid", default: -> { "uuid_generate_v4()" }
-    t.datetime "synced_at"
-    t.json "last_sync_errors"
     t.integer "author_id"
     t.index ["patient_id"], name: "index_visits_on_patient_id"
   end
