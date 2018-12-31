@@ -22,15 +22,9 @@ namespace :sync do
     facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
 
     facilities.each do |facility|
-      patients_to_sync = Patient.where(facility: facility).select(&:unsynced?)
-      visits_to_sync = Visit.where(patient: patients_to_sync).select(&:unsynced?)
-
       sync_service = SyncService.new(host, user_id, access_token, facility.simple_uuid)
-      sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)
-      sync_service.sync('blood_pressures', visits_to_sync, SyncBloodPressurePayload, report_errors_on_class: Visit)
-      sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload, report_errors_on_class: Patient)
-      sync_service.sync('appointments', patients_to_sync, SyncAppointmentPayload, report_errors_on_class: Visit)
-      sync_service.sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
+      patients_to_sync = Patient.where(facility: facility).select(&:unsynced?)
+      sync_service.sync_all(patients_to_sync)
     end
   end
 end

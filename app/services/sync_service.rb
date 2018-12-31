@@ -12,7 +12,7 @@ class SyncService
     @facility_uuid = facility_uuid
   end
 
-  def sync(request_key, records, request_payload, report_errors_on_class: nil)
+  def sync(request_key, records, request_payload)
     begin
       request = to_request(request_key, records, request_payload)
       response = api_post("api/v2/#{request_key.to_s}/sync", Hash[request_key.to_sym, request])
@@ -27,6 +27,16 @@ class SyncService
     rescue => error
       puts "Could not sync #{request_key}. Error: #{error.message}"
     end
+  end
+
+  def sync_all(patients_to_sync)
+    visits_to_sync = Visit.where(patient: patients_to_sync).select(&:unsynced?)
+
+    sync('patients', patients_to_sync, SyncPatientPayload)
+    sync('blood_pressures', visits_to_sync, SyncBloodPressurePayload)
+    sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload)
+    sync('appointments', patients_to_sync, SyncAppointmentPayload)
+    sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
   end
 
   def to_request(request_key, records, request_payload)
