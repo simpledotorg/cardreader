@@ -24,7 +24,11 @@ namespace :sync do
     facilities.each do |facility|
       sync_service = SyncService.new(host, user_id, access_token, facility.simple_uuid)
       patients_to_sync = Patient.where(facility: facility).select(&:unsynced?)
-      sync_service.sync_all(patients_to_sync)
+      begin
+        sync_service.sync_all(patients_to_sync)
+      rescue SyncError
+        puts "Error while syncing facility #{facility.name} to Simple Server!"
+      end
     end
   end
 end

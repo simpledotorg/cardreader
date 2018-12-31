@@ -1,7 +1,7 @@
 class PatientsController < ApplicationController
   before_action :set_district
   before_action :set_facility
-  before_action :set_patient, only: [:show, :edit, :update, :destroy]
+  before_action :set_patient, only: [:show, :edit, :update, :destroy, :sync]
 
   def index
     authorize Patient
@@ -63,9 +63,13 @@ class PatientsController < ApplicationController
     access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
 
     sync_service = SyncService.new(host, user_id, access_token, @facility.simple_uuid)
-    sync_service.sync_all([@patient])
+    begin
+      sync_service.sync_all([@patient])
+    rescue SyncError => error
+      error = error
+    end
 
-    redirect_back(fallback_location: root_path)
+    redirect_back(fallback_location: root_path, notice: error&.message)
   end
 
   private
