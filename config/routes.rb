@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     resources :facilities do
       resources :patients do
         member do
-          put :sync_to_server
+          post :sync
         end
         resources :visits
       end

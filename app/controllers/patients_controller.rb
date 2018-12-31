@@ -54,8 +54,8 @@ class PatientsController < ApplicationController
     end
   end
 
-  def sync_to_server
-    return redirect_back(fallback_location: root_path) unless @patient.unsynced?
+  def sync
+    return redirect_back(fallback_location: root_path, alert: 'Can only sync unsynced patients!') unless @patient.unsynced?
 
     host = ENV.fetch('SIMPLE_SERVER_HOST')
     user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')

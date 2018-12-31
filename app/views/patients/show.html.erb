@@ -19,7 +19,7 @@
         Medical History - <%= @patient.medical_history_sync_status.to_s.humanize %>
       </span>
       <% if @patient.unsynced? %>
-        <%= link_to "Sync Patient", sync_to_server_district_facility_patient_path(@district, @facility, @patient), method: :put, class: "badge badge-success" %>
+        <%= link_to "Sync Patient", sync_district_facility_patient_path(@district, @facility, @patient), method: :post, class: "badge badge-success" %>
       <% end %>
     </div>
   <% end %>
