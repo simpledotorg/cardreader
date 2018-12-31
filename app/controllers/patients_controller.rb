@@ -55,6 +55,7 @@ class PatientsController < ApplicationController
   end
 
   def sync
+    authorize @patient
     return redirect_back(fallback_location: root_path, alert: 'Can only sync unsynced patients!') unless @patient.unsynced?
 
     host = ENV.fetch('SIMPLE_SERVER_HOST')
