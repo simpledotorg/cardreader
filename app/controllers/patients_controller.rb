@@ -55,16 +55,21 @@ class PatientsController < ApplicationController
   end
 
   def sync_to_server
-    return redirect_back(fallback_location: root_path) if @patient.synced?
+    return redirect_back(fallback_location: root_path) unless @patient.unsynced?
 
     host = ENV.fetch('SIMPLE_SERVER_HOST')
     user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
     access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
 
     patients_to_sync = [@patient]
+    visits_to_sync = @patient.visits.accept(&:unsynced?)
+
     sync_service = SyncService.new(host, user_id, access_token, @facility)
     sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)
+    sync_service.sync('blood_pressures', visits_to_sync, SyncBloodPressurePayload, report_errors_on_class: Visit)
     sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload, report_errors_on_class: Patient)
+    sync_service.sync('appointments', patients_to_sync, SyncAppointmentPayload, report_errors_on_class: Visit)
+    sync_service.sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
 
     redirect_back(fallback_location: root_path)
   end
