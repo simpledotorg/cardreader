@@ -60,7 +60,7 @@ class SyncService
                'Authorization' => "Bearer #{access_token}" }
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = ENV['USE_SSL'].present? ? ENV['USE_SSL'] == 'true' : true
-    http.read_timeout = 1
+    http.read_timeout = 500
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = request_body.to_json
     http.request(request)
