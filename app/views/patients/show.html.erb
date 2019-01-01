@@ -12,12 +12,15 @@
   </div>
   <% if current_user.admin? %>
     <div class="col-md-12">
-    <span class="badge <%= sync_status_class(@patient.patient_sync_status) %>">
-      Patient - <%= @patient.patient_sync_status.to_s.humanize %>
-    </span>
+      <span class="badge <%= sync_status_class(@patient.patient_sync_status) %>">
+        Patient - <%= @patient.patient_sync_status.to_s.humanize %>
+      </span>
       <span class="badge <%= sync_status_class(@patient.medical_history_sync_status) %>">
-      Medical History - <%= @patient.medical_history_sync_status.to_s.humanize %>
-    </span>
+        Medical History - <%= @patient.medical_history_sync_status.to_s.humanize %>
+      </span>
+      <% if policy(@patient).sync? && @patient.unsynced? %>
+        <%= link_to "Sync Patient", sync_district_facility_patient_path(@district, @facility, @patient), method: :post, class: "badge badge-success" %>
+      <% end %>
     </div>
   <% end %>
 </div>

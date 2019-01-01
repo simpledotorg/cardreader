@@ -10,7 +10,7 @@
 # end
 
 namespace :sync do
-  desc 'Sync patients data with simple server'
+  desc 'Sync new patients with simple server'
   task :sync_patients, [:simple_uuid] => :environment do |_t, args|
     host = ENV.fetch('SIMPLE_SERVER_HOST')
     user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
@@ -22,17 +22,13 @@ namespace :sync do
     facilities = simple_uuid.present? ? Facility.where(simple_uuid: simple_uuid) : Facility.all
 
     facilities.each do |facility|
-      facility_patients = Patient.where(facility: facility)
-
-      patients_to_sync = Patient.where(facility: facility).reject(&:synced?)
-      visits_to_sync = Visit.where(patient: facility_patients).reject(&:synced?)
-
       sync_service = SyncService.new(host, user_id, access_token, facility.simple_uuid)
-      sync_service.sync('patients', patients_to_sync, SyncPatientPayload, report_errors_on_class: Patient)
-      sync_service.sync('blood_pressures', visits_to_sync, SyncBloodPressurePayload, report_errors_on_class: Visit)
-      sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload, report_errors_on_class: Patient)
-      sync_service.sync('appointments', patients_to_sync, SyncAppointmentPayload, report_errors_on_class: Visit)
-      sync_service.sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
+      patients_to_sync = Patient.where(facility: facility).select(&:unsynced?)
+      begin
+        sync_service.sync_all(patients_to_sync)
+      rescue SyncError
+        puts "Error while syncing facility #{facility.name} to Simple Server!"
+      end
     end
   end
 end

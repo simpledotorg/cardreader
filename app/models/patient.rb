@@ -46,6 +46,10 @@ class Patient < ApplicationRecord
     patient_sync_status == :synced
   end
 
+  def unsynced?
+    patient_sync_status == :unsynced
+  end
+
   def patient_sync_status
     sync_status(latest_patient_sync_log)
   end

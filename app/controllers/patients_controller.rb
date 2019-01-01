@@ -1,7 +1,7 @@
 class PatientsController < ApplicationController
   before_action :set_district
   before_action :set_facility
-  before_action :set_patient, only: [:show, :edit, :update, :destroy]
+  before_action :set_patient, only: [:show, :edit, :update, :destroy, :sync]
 
   def index
     authorize Patient
@@ -52,6 +52,24 @@ class PatientsController < ApplicationController
       format.html { redirect_to [@district, @facility], notice: 'Patient was successfully deleted.' }
       format.json { head :no_content }
     end
+  end
+
+  def sync
+    authorize @patient
+    return redirect_back(fallback_location: root_path, alert: 'Can only sync unsynced patients!') unless @patient.unsynced?
+
+    host = ENV.fetch('SIMPLE_SERVER_HOST')
+    user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
+    access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
+
+    sync_service = SyncService.new(host, user_id, access_token, @facility.simple_uuid)
+    begin
+      sync_service.sync_all([@patient])
+    rescue SyncError => error
+      error = error
+    end
+
+    redirect_back(fallback_location: root_path, notice: error&.message)
   end
 
   private

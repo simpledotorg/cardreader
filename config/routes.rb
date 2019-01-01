@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   resources :districts do
     resources :facilities do
       resources :patients do
+        member do
+          post :sync
+        end
         resources :visits
       end
     end
