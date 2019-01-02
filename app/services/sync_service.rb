@@ -21,7 +21,7 @@ class SyncService
       sync('appointments', patients_to_sync, SyncAppointmentPayload)
       sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
     rescue => error
-      puts error.message
+      Rails.logger.error("Error while syncing: #{error.message}")
       raise SyncError, "Error while syncing to Simple Server!"
     end
   end
