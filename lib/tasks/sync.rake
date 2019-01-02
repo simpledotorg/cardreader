@@ -45,7 +45,7 @@ namespace :sync do
 
     facilities.each do |facility|
       sync_service = SyncService.new(host, user_id, access_token, facility.simple_uuid)
-      patients_to_sync = Patient.where(id: synced_patients_ids)
+      patients_to_sync = facility.patients.where(id: synced_patients_ids)
       begin
         sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload)
       rescue
