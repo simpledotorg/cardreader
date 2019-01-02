@@ -20,12 +20,11 @@ class SyncService
       sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload)
       sync('appointments', patients_to_sync, SyncAppointmentPayload)
       sync('prescription_drugs', patients_to_sync, SyncPrescriptionDrugPayload)
-    rescue
+    rescue => error
+      Rails.logger.error("Error while syncing: #{error.message}")
       raise SyncError, "Error while syncing to Simple Server!"
     end
   end
-
-  private
 
   def sync(request_key, records, request_payload)
     request = to_request(records, request_payload)
@@ -39,6 +38,8 @@ class SyncService
     success_ids.each { |id| SyncLog.create(sync_log_hash.merge(simple_id: id, sync_errors: nil)) }
     JSON(response.body)['errors'].map { |error| SyncLog.create(sync_log_hash.merge(simple_id: error['id'], sync_errors: error)) }
   end
+  
+  private
 
   def to_request(records, request_payload)
     requests = records.flat_map do |record|
