@@ -31,4 +31,26 @@ namespace :sync do
       end
     end
   end
+
+  desc 'Sync errored medical histories for synced patients'
+  task :sync_errored_medical_histories, [] => :environment do |_t, args|
+    host = ENV.fetch('SIMPLE_SERVER_HOST')
+    user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
+    access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
+    synced_patients_with_errored_histories = Patient.select do |patient|
+      patient.synced? && patient.medical_history_sync_status == :sync_errored
+    end
+    synced_patients_ids = synced_patients_with_errored_histories.map(&:id)
+    facilities = synced_patients_with_errored_histories.map(&:facility).uniq
+
+    facilities.each do |facility|
+      sync_service = SyncService.new(host, user_id, access_token, facility.simple_uuid)
+      patients_to_sync = Patient.where(id: synced_patients_ids)
+      begin
+        sync_service.sync('medical_histories', patients_to_sync, SyncMedicalHistoryPayload)
+      rescue
+        puts "Error while syncing errored medical histories for facility #{facility.name} to Simple Server!"
+      end
+    end
+  end
 end
