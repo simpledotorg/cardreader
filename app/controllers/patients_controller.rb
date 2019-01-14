@@ -1,7 +1,9 @@
 class PatientsController < ApplicationController
+  include SimpleServerSyncable
+
   before_action :set_district
   before_action :set_facility
-  before_action :set_patient, only: [:show, :edit, :update, :destroy, :sync]
+  before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
   def index
     authorize Patient
@@ -55,21 +57,15 @@ class PatientsController < ApplicationController
   end
 
   def sync
+    @patient = Patient.find(params[:patient_id])
     authorize @patient
     return redirect_back(fallback_location: root_path, alert: 'Can only sync unsynced patients!') unless @patient.unsynced?
-
-    host = ENV.fetch('SIMPLE_SERVER_HOST')
-    user_id = ENV.fetch('SIMPLE_SERVER_USER_ID')
-    access_token = ENV.fetch('SIMPLE_SERVER_ACCESS_TOKEN')
-
-    sync_service = SyncService.new(host, user_id, access_token, @facility.simple_uuid)
     begin
-      sync_service.sync_all([@patient])
+      sync_patients_for_facility([@patient], @facility)
+      redirect_back(fallback_location: root_path, notice: 'Patients for facility synced successfully')
     rescue SyncError => error
-      error = error
+      redirect_back(fallback_location: root_path, notice: error&.message)
     end
-
-    redirect_back(fallback_location: root_path, notice: error&.message)
   end
 
   private

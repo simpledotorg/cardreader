@@ -5,6 +5,9 @@
 </ul>
 
 <%= link_to "Edit Patient", edit_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-secondary float-right" %>
+<% if policy(@patient).sync? && @patient.unsynced? %>
+  <%= link_to "Sync Patient", district_facility_patient_sync_path(@district, @facility, @patient), method: :post, class: "btn btn-warning float-right mr-1" %>
+<% end %>
 
 <div class="row">
   <div class="col-md-12">
@@ -18,9 +21,6 @@
       <span class="badge <%= sync_status_class(@patient.medical_history_sync_status) %>">
         Medical History - <%= @patient.medical_history_sync_status.to_s.humanize %>
       </span>
-      <% if policy(@patient).sync? && @patient.unsynced? %>
-        <%= link_to "Sync Patient", sync_district_facility_patient_path(@district, @facility, @patient), method: :post, class: "badge badge-success" %>
-      <% end %>
     </div>
   <% end %>
 </div>
