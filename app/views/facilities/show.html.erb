@@ -6,6 +6,10 @@
 <h1><%= @facility.name %></h1>
 
 <%= link_to "Add Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %>
+<% if policy(@facility).sync? && @facility.patients.map(&:unsynced?).any? %>
+  <%= link_to "Sync Patients For Facility", district_facility_sync_path(@district, @facility), method: :post, class: "btn btn-warning float-right   mr-1" %>
+<% end %>
+
 
 <table class="table table-hover">
   <thead>

@@ -1,4 +1,6 @@
 class FacilitiesController < ApplicationController
+  include SimpleServerSyncable
+
   before_action :set_district
   before_action :set_facility, only: [:show, :edit, :update, :destroy]
 
@@ -54,6 +56,18 @@ class FacilitiesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to facilities_url, notice: 'Facility was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def sync
+    @facility = Facility.find(params[:facility_id])
+    authorize @facility
+    begin
+      patients = Patient.where(facility: @facility).select(&:unsynced?)
+      sync_patients_for_facility(patients, @facility)
+      redirect_back(fallback_location: root_path, notice: 'Patients for facility synced successfully')
+    rescue SyncError => error
+      redirect_back(fallback_location: root_path, notice: error.message)
     end
   end
 
