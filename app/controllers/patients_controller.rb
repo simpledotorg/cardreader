@@ -62,9 +62,9 @@ class PatientsController < ApplicationController
     return redirect_back(fallback_location: root_path, alert: 'Can only sync unsynced patients!') unless @patient.unsynced?
     begin
       sync_patients_for_facility([@patient], @facility)
-      redirect_back(fallback_location: root_path, notice: 'Patients for facility synced successfully')
+      redirect_back(fallback_location: root_path, notice: 'Patient synced successfully')
     rescue SyncError => error
-      redirect_back(fallback_location: root_path, notice: error&.message)
+      redirect_back(fallback_location: root_path, notice: error.message)
     end
   end
 
