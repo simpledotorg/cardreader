@@ -24,6 +24,6 @@ class SyncAppointmentPayload
       scheduled_date: visit.next_visit_on,
       status: 'visited',
       created_at: visit.measured_on_without_timestamp,
-      updated_at: Time.now }
+      updated_at: visit.measured_on_without_timestamp,}
   end
 end

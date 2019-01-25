@@ -18,7 +18,7 @@ class SyncPatientPayload
       age: patient.age,
       age_updated_at: now,
       created_at: patient.registered_on_without_timestamp,
-      updated_at: now,
+      updated_at: patient.registered_on_without_timestamp,
       address: simple_address,
       phone_numbers: simple_phone_numbers
     }
@@ -50,7 +50,7 @@ class SyncPatientPayload
       country: 'India',
       pin: patient.pincode,
       created_at: patient.registered_on_without_timestamp,
-      updated_at: now }
+      updated_at: patient.registered_on_without_timestamp }
   end
 
   def simple_phone_numbers
