@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-6">
       <%= form.date_field :registered_on, label: "Date of registration", required: true, autofocus: true,
-                          min: '2018-01-01', max: '2018-12-31', help: "Format: DD/MM/YYYY", value: patient.registered_on.try(:strftime, "%Y-%m-%d") || '2018-01-01' %>
+                          min: '2018-01-01', max: '2021-12-31', help: "Format: DD/MM/YYYY", value: patient.registered_on.try(:strftime, "%Y-%m-%d") || '2018-01-01' %>
       <%= form.text_field :treatment_number, prepend: patient.treatment_number_prefix, help: "No need to type leading zeroes; they will be added automatically", required: true %>
 
       <h4>A. Patient Identification Information</h4>
