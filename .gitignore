@@ -28,3 +28,6 @@ spec/examples.txt
 
 # CSV files
 *.csv
+
+.env
+.env.production
