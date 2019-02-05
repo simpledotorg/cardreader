@@ -6,26 +6,50 @@ RSpec.feature "Patients", type: :feature do
   let!(:patient) { create(:patient, facility: facility) }
   let!(:visits) { create_list(:visit, 3, patient: patient) }
 
-  let(:user) { create(:user, :operator) }
-
-  before do
-    sign_in(user)
-    visit district_facility_path(district, facility)
-  end
+  let(:admin) { create(:user, :admin) }
+  let(:operator) { create(:user, :operator) }
 
   describe "show" do
-    before do
-      click_link patient.formatted_treatment_number
+    context "as an operator" do
+      before do
+        sign_in(operator)
+        visit district_facility_path(district, facility)
+
+        click_link patient.formatted_treatment_number
+      end
+
+      it "shows patient details" do
+        expect(page).to have_content("Treatment Number #{patient.formatted_treatment_number}")
+        expect(page).to have_content(patient.name)
+      end
+
+      it "allows editing a patient with sync errors" do
+        create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
+
+        expect(page).to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+      end
     end
 
-    it "shows patient details" do
-      expect(page).to have_content("Treatment Number #{patient.formatted_treatment_number}")
-      expect(page).to have_content(patient.name)
+    context "as an admin" do
+      before do
+        sign_in(admin)
+        visit district_facility_path(district, facility)
+        click_link patient.formatted_treatment_number
+      end
+
+      it "allows editing a patient with sync errors" do
+        create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
+
+        expect(page).to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+      end
     end
   end
 
   describe "new" do
     before do
+      sign_in(operator)
+      visit district_facility_path(district, facility)
+
       click_link "Add Treatment Card"
 
       fill_in "Date of registration", with: "25/12/2018"
@@ -95,12 +119,15 @@ RSpec.feature "Patients", type: :feature do
       expect(new_patient.medication4_name).to eq("Test med 4")
       expect(new_patient.medication4_dose).to eq("40mg")
 
-      expect(new_patient.author).to eq(user)
+      expect(new_patient.author).to eq(operator)
     end
   end
 
   describe "edit" do
     before do
+      sign_in(operator)
+      visit district_facility_path(district, facility)
+
       click_link patient.formatted_treatment_number
       click_link "Edit Patient"
     end
@@ -114,6 +141,9 @@ RSpec.feature "Patients", type: :feature do
 
   describe "delete" do
     before do
+      sign_in(operator)
+      visit district_facility_path(district, facility)
+
       click_link patient.formatted_treatment_number
       click_link "Delete Patient"
     end

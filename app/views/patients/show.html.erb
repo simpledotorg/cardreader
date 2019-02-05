@@ -4,7 +4,7 @@
   <%= render "layouts/breadcrumbs/facility" %>
 </ul>
 
-<% if @patient.unsynced? %>
+<% if @patient.unsynced? || @patient.sync_errors? %>
   <%= link_to "Edit Patient", edit_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-secondary float-right" %>
 <% end %>
 <% if policy(@patient).sync? && @patient.unsynced? %>
