@@ -34,7 +34,7 @@ RSpec.feature "Patients", type: :feature do
 
           visit current_path
 
-          expect(page).to_not have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+          expect(page).not_to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
         end
       end
 
@@ -45,7 +45,7 @@ RSpec.feature "Patients", type: :feature do
           patient.update(updated_at: Time.now)
           visit current_path
 
-          expect(page).to_not have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
+          expect(page).not_to have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
         end
       end
     end
@@ -73,7 +73,7 @@ RSpec.feature "Patients", type: :feature do
 
           visit current_path
 
-          expect(page).to_not have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+          expect(page).not_to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
         end
       end
 
@@ -83,7 +83,7 @@ RSpec.feature "Patients", type: :feature do
 
           visit current_path
 
-          expect(page).to_not have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
+          expect(page).not_to have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
         end
 
         it "is allowed for a patient with an updated record" do
@@ -100,7 +100,7 @@ RSpec.feature "Patients", type: :feature do
 
           visit current_path
 
-          expect(page).to_not have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
+          expect(page).not_to have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
         end
       end
     end
