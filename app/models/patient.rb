@@ -50,7 +50,7 @@ class Patient < ApplicationRecord
     patient_sync_status == :unsynced
   end
 
-  def sync_errors?
+  def sync_error?
     patient_sync_status == :sync_errored
   end
 

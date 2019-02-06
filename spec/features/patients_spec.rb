@@ -10,11 +10,10 @@ RSpec.feature "Patients", type: :feature do
   let(:operator) { create(:user, :operator) }
 
   describe "show" do
-    context "as an operator" do
+    context "for an operator" do
       before do
         sign_in(operator)
         visit district_facility_path(district, facility)
-
         click_link patient.formatted_treatment_number
       end
 
@@ -30,7 +29,7 @@ RSpec.feature "Patients", type: :feature do
       end
     end
 
-    context "as an admin" do
+    context "for an admin" do
       before do
         sign_in(admin)
         visit district_facility_path(district, facility)

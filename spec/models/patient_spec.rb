@@ -60,4 +60,19 @@ RSpec.describe Patient, type: :model do
       expect(patient.treatment_number_prefix).to eq("")
     end
   end
+
+  describe "#sync_error?" do
+    it "should return true if the patient's sync status has errors" do
+      patient_with_sync_errors = create(:patient)
+      create(:sync_log, :with_sync_errors, simple_id: patient_with_sync_errors.patient_uuid)
+
+      expect(patient_with_sync_errors.sync_error?).to be true
+    end
+
+    it "should return false if the patient's sync status has no errors" do
+      patient_with_no_sync_errors = create(:patient)
+
+      expect(patient_with_no_sync_errors.sync_error?).to be false
+    end
+  end
 end
