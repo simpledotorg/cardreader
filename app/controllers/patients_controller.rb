@@ -71,53 +71,54 @@ class PatientsController < ApplicationController
   end
 
   private
-    def set_district
-      @district = District.find(params[:district_id])
-      authorize @district, :show?
-    end
 
-    def set_facility
-      @facility = Facility.find(params[:facility_id])
-      authorize @facility, :show?
-    end
+  def set_district
+    @district = District.find(params[:district_id])
+    authorize @district, :show?
+  end
 
-    def set_patient
-      @patient = Patient.find(params[:id])
-      authorize @patient
-    end
+  def set_facility
+    @facility = Facility.find(params[:facility_id])
+    authorize @facility, :show?
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def patient_params
-      params.require(:patient).permit(
-        :treatment_number,
-        :registered_on,
-        :name,
-        :gender,
-        :age,
-        :house_number,
-        :street_name,
-        :area,
-        :village,
-        :district,
-        :pincode,
-        :phone,
-        :alternate_phone,
-        :already_on_treatment,
-        :prior_heart_attack,
-        :heart_attack_in_last_3_years,
-        :prior_stroke,
-        :chronic_kidney_disease,
-        :diagnosed_with_hypertension,
-        :medication1_name,
-        :medication1_dose,
-        :medication2_name,
-        :medication2_dose,
-        :medication3_name,
-        :medication3_dose,
-        :medication4_name,
-        :medication4_dose
-      )
-    end
+  def set_patient
+    @patient = Patient.find(params[:id])
+    authorize @patient
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def patient_params
+    params.require(:patient).permit(
+      :treatment_number,
+      :registered_on,
+      :name,
+      :gender,
+      :age,
+      :house_number,
+      :street_name,
+      :area,
+      :village,
+      :district,
+      :pincode,
+      :phone,
+      :alternate_phone,
+      :already_on_treatment,
+      :prior_heart_attack,
+      :heart_attack_in_last_3_years,
+      :prior_stroke,
+      :chronic_kidney_disease,
+      :diagnosed_with_hypertension,
+      :medication1_name,
+      :medication1_dose,
+      :medication2_name,
+      :medication2_dose,
+      :medication3_name,
+      :medication3_dose,
+      :medication4_name,
+      :medication4_dose
+    )
+  end
 
   def parse_boolean(value)
     case value.strip
