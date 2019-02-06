@@ -19,7 +19,7 @@ RSpec.feature "Facilities", type: :feature do
       click_link facility.name
     end
 
-    context "treatments cards" do
+    context "treatment cards" do
       it "show all in the facility" do
         expect(page).to have_link(patient_1.formatted_treatment_number)
         expect(page).to have_link(patient_2.formatted_treatment_number)
