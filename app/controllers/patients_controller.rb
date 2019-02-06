@@ -38,7 +38,7 @@ class PatientsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @patient.update(patient_with_parsed_medical_history)
+      if @patient.update(patient_with_parsed_medical_history.merge(author: current_user))
         format.html { redirect_to [@district, @facility, @patient], notice: 'Patient was successfully updated.' }
         format.json { render :show, status: :ok, location: @patient }
       else
@@ -59,7 +59,9 @@ class PatientsController < ApplicationController
   def sync
     @patient = Patient.find(params[:patient_id])
     authorize @patient
-    return redirect_back(fallback_location: root_path, alert: 'Can only sync unsynced patients!') unless @patient.unsynced?
+
+    return redirect_back(fallback_location: root_path, alert: 'Can only sync unsynced patients!') unless @patient.syncable?
+
     begin
       sync_patients_for_facility([@patient], @facility)
       redirect_back(fallback_location: root_path, notice: 'Patient synced successfully')

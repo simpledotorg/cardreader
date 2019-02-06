@@ -4,10 +4,10 @@
   <%= render "layouts/breadcrumbs/facility" %>
 </ul>
 
-<% if @patient.unsynced? || @patient.sync_error? %>
+<% if @patient.editable? %>
   <%= link_to "Edit Patient", edit_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-secondary float-right" %>
 <% end %>
-<% if policy(@patient).sync? && @patient.unsynced? %>
+<% if policy(@patient).sync? && @patient.syncable? %>
   <%= link_to "Sync Patient", district_facility_patient_sync_path(@district, @facility, @patient), method: :post, class: "btn btn-warning float-right mr-1" %>
 <% end %>
 

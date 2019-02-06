@@ -17,15 +17,36 @@ RSpec.feature "Patients", type: :feature do
         click_link patient.formatted_treatment_number
       end
 
-      it "shows patient details" do
-        expect(page).to have_content("Treatment Number #{patient.formatted_treatment_number}")
-        expect(page).to have_content(patient.name)
+      context "accessing the edit button" do
+        it "shows patient details" do
+          expect(page).to have_content("Treatment Number #{patient.formatted_treatment_number}")
+          expect(page).to have_content(patient.name)
+        end
+
+        it "is allowed for a patient with sync errors" do
+          create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
+
+          expect(page).to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+        end
+
+        it "is disallowed for a patient that has already been synced" do
+          create(:sync_log, simple_id: patient.patient_uuid)
+
+          visit current_path
+
+          expect(page).to_not have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+        end
       end
 
-      it "allows editing a patient with sync errors" do
-        create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
+      context "accessing the sync button" do
+        it "is disallowed for a patient with an updated record" do
+          create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
 
-        expect(page).to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+          patient.update(updated_at: Time.now)
+          visit current_path
+
+          expect(page).to_not have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
+        end
       end
     end
 
@@ -36,10 +57,51 @@ RSpec.feature "Patients", type: :feature do
         click_link patient.formatted_treatment_number
       end
 
-      it "allows editing a patient with sync errors" do
-        create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
+      context "accessing the edit button" do
+        it "is disallowed for a patient with sync errors" do
+          create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
 
-        expect(page).to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+          expect(page).to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+        end
+
+        it "is allowed for a patient that has never been synced" do
+          expect(page).to have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+        end
+
+        it "is disallowed for an already synced patient" do
+          create(:sync_log, simple_id: patient.patient_uuid)
+
+          visit current_path
+
+          expect(page).to_not have_link(href: edit_district_facility_patient_path(district.id, facility.id, patient.id))
+        end
+      end
+
+      context "accessing the sync button" do
+        it "is disallowed for an already synced patient" do
+          create(:sync_log, simple_id: patient.patient_uuid)
+
+          visit current_path
+
+          expect(page).to_not have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
+        end
+
+        it "is allowed for a patient with an updated record" do
+          create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
+
+          patient.update(updated_at: Time.now)
+          visit current_path
+
+          expect(page).to have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
+        end
+
+        it "is disallowed for a patient with sync errors" do
+          create(:sync_log, :with_sync_errors, simple_id: patient.patient_uuid)
+
+          visit current_path
+
+          expect(page).to_not have_link(href: district_facility_patient_sync_path(district.id, facility.id, patient.id))
+        end
       end
     end
   end
