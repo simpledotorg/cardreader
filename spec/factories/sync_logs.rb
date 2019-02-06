@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :sync_log do
-    simple_id { SecureRandom.uuid }
+    simple_id SecureRandom.uuid
     simple_model 'Patient'
     synced_at { Time.now }
 
