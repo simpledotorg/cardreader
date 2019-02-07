@@ -30,6 +30,6 @@ FactoryBot.define do
     medication4_name ""
     medication4_dose ""
 
-    patient_uuid SecureRandom.uuid
+    patient_uuid { SecureRandom.uuid }
   end
 end
