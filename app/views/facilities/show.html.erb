@@ -3,37 +3,55 @@
   <%= render "layouts/breadcrumbs/district" %>
 </ul>
 
-<h1><%= @facility.name %></h1>
+<h1 class="facility-name"><%= @facility.name %></h1>
 
-<%= link_to "Add Treatment Card", new_district_facility_patient_path(@district, @facility, @patient), class: "btn btn-primary" %>
+<div class="panel panel-default">
+  <ul class="list-group">
+    <li class="list-group-item">Last synced at: <%= @sync_report.last_synced_at %></li>
+    <li class="list-group-item">Synced Patients: <%= @sync_report.synced_patients %></li>
+    <li class="list-group-item">Unsynced Patients: <%= @sync_report.unsynced_patients %></li>
+    <li class="list-group-item">Errored Patients: <%= @sync_report.errored_patients %></li>
+    <li class="list-group-item">Highest treatment number: <%= @sync_report.highest_treatment_number %></li>
+  </ul>
+</div>
+
+<br/>
+
+<%= link_to "Add Treatment Card",
+            new_district_facility_patient_path(@district, @facility, @patient),
+            class: "btn btn-primary" %>
+
 <% if policy(@facility).sync? && @facility.patients.map(&:unsynced?).any? %>
-  <%= link_to "Sync Patients For Facility", district_facility_sync_path(@district, @facility), method: :post, class: "btn btn-warning float-right   mr-1" %>
+  <%= link_to "Sync Patients For Facility",
+              district_facility_sync_path(@district, @facility),
+              method: :post,
+              class: "btn btn-warning float-right mr-1" %>
 <% end %>
 
 
 <table class="table table-hover">
   <thead>
-    <tr>
-      <th>Patient Treatment Number</th>
-      <% if current_user.admin? %>
-        <th>Sync Status</th>
-      <% end %>
-      <th>Registration Date</th>
-    </tr>
+  <tr>
+    <th>Patient Treatment Number</th>
+    <% if current_user.admin? %>
+      <th>Sync Status</th>
+    <% end %>
+    <th>Registration Date</th>
+  </tr>
   </thead>
   <tbody>
-    <% @facility.patients.sort_by { |p| p.treatment_number.to_i }.each do |patient| %>
-      <tr>
-        <td><%= link_to patient.formatted_treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
-        <% if current_user.admin? %>
-          <td>
+  <% @facility.patients.sort_by { |p| p.treatment_number.to_i }.each do |patient| %>
+    <tr>
+      <td><%= link_to patient.formatted_treatment_number, district_facility_patient_path(@district, @facility, patient) %></td>
+      <% if current_user.admin? %>
+        <td>
              <span class="badge <%= sync_status_class(patient.patient_sync_status) %>">
                Patient - <%= patient.patient_sync_status.to_s.humanize %>
              </span>
-          </td>
-        <% end %>
-        <td><%= patient.registered_on %></td>
-      </tr>
-    <% end %>
+        </td>
+      <% end %>
+      <td><%= patient.registered_on %></td>
+    </tr>
+  <% end %>
   </tbody>
 </table>
