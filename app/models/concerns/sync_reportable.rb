@@ -11,15 +11,15 @@ module SyncReportable
   end
 
   def synced
-    @synced ||= patients.select(&:synced?).size
+    patient_sync_statuses.count(:synced)
   end
 
   def unsynced
-    @unsynced ||= patients.select(&:unsynced?).size
+    patient_sync_statuses.count(:unsynced)
   end
 
   def errored
-    @errored ||= patients.select(&:sync_error?).size
+    patient_sync_statuses.count(:sync_errored)
   end
 
   def synced_percentage
@@ -40,5 +40,11 @@ module SyncReportable
 
   def highest_treatment_number
     'N/A'
+  end
+
+  private
+
+  def patient_sync_statuses
+    @patient_sync_statuses ||= patients.map(&:patient_sync_status)
   end
 end
