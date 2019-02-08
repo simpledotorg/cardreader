@@ -1,0 +1,11 @@
+<div class="panel panel-default">
+  <ul class="list-group">
+    <li class="list-group-item">Last synced at: <%= @sync_report.last_synced_at %></li>
+    <li class="list-group-item">Synced <%= resource %>: <%= @sync_report.synced %> (<%= show_percentage(@sync_report.synced_percentage) %>)</li>
+    <li class="list-group-item">Unsynced <%= resource %>: <%= @sync_report.unsynced %> (<%= show_percentage(@sync_report.unsynced_percentage) %>)</li>
+    <li class="list-group-item">Errored <%= resource %>: <%= @sync_report.errored %></li>
+    <li class="list-group-item">Highest treatment number: <%= @sync_report.highest_treatment_number %></li>
+  </ul>
+</div>
+
+<br/>

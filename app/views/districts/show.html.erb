@@ -4,13 +4,21 @@
 
 <h1><%= @district.name %></h1>
 
+<% unless @sync_status %>
+  <%= link_to "Show sync status", district_path(id: @district.id, sync_status: true), class: 'btn btn-info' %>
+<% end %>
+
+<% if @sync_report %>
+  <%= render 'shared/sync_panel', resource: 'Facilities' %>
+<% end %>
+
 <table class="table">
   <tbody>
-    <% @district.facilities.order(:name).each do |facility| %>
-      <tr>
-        <td><%= link_to facility.name, district_facility_path(@district, facility) %></td>
-      </tr>
-    <% end %>
+  <% @district.facilities.order(:name).each do |facility| %>
+    <tr>
+      <td><%= link_to facility.name, district_facility_path(@district, facility) %></td>
+    </tr>
+  <% end %>
   </tbody>
 </table>
 

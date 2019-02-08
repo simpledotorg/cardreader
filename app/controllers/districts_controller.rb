@@ -9,6 +9,9 @@ class DistrictsController < ApplicationController
   def show
     authorize Facility, :index?
     @facility = @district.facilities.build
+
+    @sync_status = params[:sync_status]
+    @sync_report = DistrictSyncReport.new(@district) if @sync_status
   end
 
   def new
@@ -55,12 +58,13 @@ class DistrictsController < ApplicationController
   end
 
   private
-    def set_district
-      @district = District.find(params[:id])
-      authorize @district
-    end
 
-    def district_params
-      params.require(:district).permit(:name)
-    end
+  def set_district
+    @district = District.find(params[:id])
+    authorize @district
+  end
+
+  def district_params
+    params.require(:district).permit(:name)
+  end
 end

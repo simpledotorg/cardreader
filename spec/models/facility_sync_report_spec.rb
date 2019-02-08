@@ -27,11 +27,11 @@ RSpec.describe FacilitySyncReport, type: :model do
 
       sync_report = FacilitySyncReport.new(facility)
 
-      expect(sync_report.synced_patients).to eq(1)
+      expect(sync_report.synced).to eq(1)
     end
   end
 
-  describe '#unsynced_patients' do
+  describe '#unsynced' do
     it 'shows all unsynced patients for the facility' do
       facility = create(:facility, district: create(:district))
       patient_1 = create(:patient, facility: facility)
@@ -43,11 +43,11 @@ RSpec.describe FacilitySyncReport, type: :model do
 
       sync_report = FacilitySyncReport.new(facility)
 
-      expect(sync_report.unsynced_patients).to eq(0)
+      expect(sync_report.unsynced).to eq(0)
     end
   end
 
-  describe '#errored_patients' do
+  describe '#errored' do
     it 'shows all errored patients for the facility' do
       facility = create(:facility, district: create(:district))
       patient_1 = create(:patient, facility: facility)
@@ -60,7 +60,7 @@ RSpec.describe FacilitySyncReport, type: :model do
 
       sync_report = FacilitySyncReport.new(facility)
 
-      expect(sync_report.errored_patients).to eq(1)
+      expect(sync_report.errored).to eq(1)
     end
   end
 
