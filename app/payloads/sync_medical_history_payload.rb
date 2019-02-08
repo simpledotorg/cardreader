@@ -24,6 +24,6 @@ class SyncMedicalHistoryPayload
       diagnosed_with_hypertension: BOOLEAN_TO_ENUM_MAP[patient.diagnosed_with_hypertension],
       diabetes: 'unknown', # This information is not present in the red cards
       created_at: patient.registered_on_without_timestamp,
-      updated_at: Time.now }
+      updated_at: patient.registered_on_without_timestamp,}
   end
 end
