@@ -63,4 +63,17 @@ RSpec.describe FacilitySyncReport, type: :model do
       expect(sync_report.errored_patients).to eq(1)
     end
   end
+
+  describe '#highest_treatment_number' do
+    it 'shows the patient with the highest treatment number value' do
+      facility = create(:facility, district: create(:district))
+      create(:patient, facility: facility, treatment_number: '2018-00000701')
+      create(:patient, facility: facility, treatment_number: '2019-00000702')
+      create(:patient, facility: facility, treatment_number: '2018-00000171')
+
+      sync_report = FacilitySyncReport.new(facility)
+
+      expect(sync_report.highest_treatment_number).to eq('2019-00000702')
+    end
+  end
 end

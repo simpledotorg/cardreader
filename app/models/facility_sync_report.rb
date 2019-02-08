@@ -28,10 +28,16 @@ class FacilitySyncReport < Struct.new(:facility)
   end
 
   def highest_treatment_number
-    0
+    patients
+      .map(&:treatment_number)
+      .max { |t1, t2| treatment_number2int(t1) <=> treatment_number2int(t2) }
   end
 
   private
+
+  def treatment_number2int(number)
+    number.gsub('-', '').to_i
+  end
 
   def patients
     @patients ||= facility.patients
