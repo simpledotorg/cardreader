@@ -25,9 +25,11 @@ class Patient < ApplicationRecord
     return "" unless treatment_number_needs_prefix?
 
     prefix = "2018-"
-    prefix += "0" * [TREATMENT_NUMBER_DIGITS - treatment_number.to_s.length, 0].max
+    prefix + "0" * [TREATMENT_NUMBER_DIGITS - treatment_number.to_s.length, 0].max
+  end
 
-    prefix
+  def treatment_number_without_prefix
+    treatment_number.tr('-', '')
   end
 
   def first_visit
