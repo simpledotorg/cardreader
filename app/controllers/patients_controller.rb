@@ -38,7 +38,7 @@ class PatientsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @patient.update(patient_with_parsed_medical_history.merge(author: current_user))
+      if @patient.update(patient_with_parsed_medical_history)
         format.html { redirect_to [@district, @facility, @patient], notice: 'Patient was successfully updated.' }
         format.json { render :show, status: :ok, location: @patient }
       else
