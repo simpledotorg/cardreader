@@ -29,5 +29,7 @@ FactoryBot.define do
     medication3_dose ""
     medication4_name ""
     medication4_dose ""
+
+    patient_uuid { SecureRandom.uuid }
   end
 end

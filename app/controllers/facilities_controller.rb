@@ -62,9 +62,11 @@ class FacilitiesController < ApplicationController
   def sync
     @facility = Facility.find(params[:facility_id])
     authorize @facility
+
     begin
-      patients = Patient.where(facility: @facility).select(&:unsynced?)
+      patients = Patient.where(facility: @facility).select(&:syncable?)
       sync_patients_for_facility(patients, @facility)
+
       redirect_back(fallback_location: root_path, notice: 'Patients for facility synced successfully')
     rescue SyncError => error
       redirect_back(fallback_location: root_path, notice: error.message)
