@@ -8,10 +8,12 @@ class DistrictsController < ApplicationController
 
   def show
     authorize Facility, :index?
-    @facility = @district.facilities.build
 
-    @sync_status = params[:sync_status]
-    @sync_report = DistrictSyncReport.new(@district) if @sync_status
+    @facility = @district.facilities.build
+    @patients = @district.patients
+
+    @patient_sync_report = SyncReport.new(@patients.sync_statuses)
+    @show_sync_status = ActiveRecord::Type::Boolean.new.cast(params[:show_sync_status])
   end
 
   def new

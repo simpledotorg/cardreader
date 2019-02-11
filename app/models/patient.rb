@@ -15,6 +15,22 @@ class Patient < ApplicationRecord
     case_sensitive: false
   }
 
+  class << self
+    def last_synced_at
+      joins("INNER JOIN sync_logs ON sync_logs.simple_id = patients.patient_uuid")
+        .where(sync_logs: { sync_errors: nil })
+        .maximum('sync_logs.synced_at')
+    end
+
+    def highest_treatment_number
+      pluck(:treatment_number)&.max_by(&:to_i)
+    end
+
+    def sync_statuses
+      all.map(&:patient_sync_status)
+    end
+  end
+
   TREATMENT_NUMBER_DIGITS = 8.freeze
 
   def formatted_treatment_number
@@ -26,10 +42,6 @@ class Patient < ApplicationRecord
 
     prefix = "2018-"
     prefix + "0" * [TREATMENT_NUMBER_DIGITS - treatment_number.to_s.length, 0].max
-  end
-
-  def treatment_number_without_prefix
-    treatment_number.tr('-', '')
   end
 
   def first_visit

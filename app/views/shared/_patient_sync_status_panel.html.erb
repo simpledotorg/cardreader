@@ -1,0 +1,45 @@
+<div class="sync-panel panel panel-default">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <span class="sync-panel-title">
+        Last synced at:
+      </span>
+      <%= display_readable_time(patients.last_synced_at) %>
+    </li>
+
+    <li class="list-group-item">
+      <span class="sync-panel-title">
+        Synced Patient(s):
+      </span>
+
+      <%= sync_report.synced %>
+      (<%= display_percentage(sync_report.synced_percentage) %>)
+    </li>
+
+    <li class="list-group-item">
+      <span class="sync-panel-title">
+        Unsynced Patient(s):
+      </span>
+
+      <%= sync_report.unsynced %>
+      (<%= display_percentage(sync_report.unsynced_percentage) %>)
+    </li>
+
+    <li class="list-group-item">
+      <span class="sync-panel-title">
+        Errored Patient(s):
+      </span>
+
+      <%= sync_report.errored %>
+      (<%= display_percentage(sync_report.sync_error_percentage) %>)
+    </li>
+
+    <li class="list-group-item">
+      <span class="sync-panel-title">
+        Highest treatment number:
+      </span>
+
+      <%= display_not_available_if_false(patients.highest_treatment_number) %>
+    </li>
+  </ul>
+</div>

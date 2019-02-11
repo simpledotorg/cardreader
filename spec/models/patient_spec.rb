@@ -60,4 +60,44 @@ RSpec.describe Patient, type: :model do
       expect(patient.treatment_number_prefix).to eq("")
     end
   end
+
+  describe '.last_synced_at' do
+    it 'shows time for when the last time any patient in the facility was successfully synced' do
+
+      facility = create(:facility, district: create(:district))
+      old_patient = create(:patient, facility: facility)
+      create(:sync_log, simple_id: old_patient.patient_uuid)
+      latest_patient = create(:patient, facility: facility)
+      latest_sync_log = create(:sync_log, simple_id: latest_patient.patient_uuid)
+
+      expect(Patient.last_synced_at).to eq(latest_sync_log.synced_at)
+    end
+
+    it 'returns nil if there are no sync logs' do
+      facility = create(:facility, district: create(:district))
+      create(:patient, facility: facility)
+      create(:patient, facility: facility)
+
+      expect(Patient.last_synced_at).to be_nil
+    end
+
+    it 'returns nil if there are no patients' do
+      expect(Patient.last_synced_at).to be_nil
+    end
+  end
+
+  describe '.highest_treatment_number' do
+    it 'shows the patient with the highest treatment number value' do
+      facility = create(:facility, district: create(:district))
+      create(:patient, facility: facility, treatment_number: '2018-00000701')
+      create(:patient, facility: facility, treatment_number: '2019-00000702')
+      create(:patient, facility: facility, treatment_number: '2018-00000171')
+
+      expect(Patient.highest_treatment_number).to eq('2019-00000702')
+    end
+
+    it 'returns nil if there are no patients' do
+      expect(Patient.highest_treatment_number).to be_nil
+    end
+  end
 end

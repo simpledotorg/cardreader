@@ -12,7 +12,9 @@ class FacilitiesController < ApplicationController
 
   def show
     authorize Patient, :index?
-    @sync_report = FacilitySyncReport.new(@facility)
+
+    @patients = @facility.patients
+    @patient_sync_report = SyncReport.new(@patients.sync_statuses)
   end
 
   def new

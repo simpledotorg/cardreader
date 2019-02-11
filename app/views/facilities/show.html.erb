@@ -5,7 +5,7 @@
 
 <h1 class="facility-name"><%= @facility.name %></h1>
 
-<%= render 'shared/sync_panel', resource: 'Patients' %>
+<%= render 'shared/patient_sync_status_panel', patients: @patients, sync_report: @patient_sync_report %>
 
 <%= link_to "Add Treatment Card",
             new_district_facility_patient_path(@district, @facility, @patient),
