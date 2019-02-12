@@ -21,13 +21,40 @@ RSpec.feature "Facilities", type: :feature do
       click_link facility.name
     end
 
-    it "shows all treatment cards in the facility" do
-      expect(page).to have_link(patient_1.formatted_treatment_number)
-      expect(page).to have_link(patient_2.formatted_treatment_number)
+    context "treatment cards" do
+      it "show all in the facility" do
+        expect(page).to have_link(patient_1.formatted_treatment_number)
+        expect(page).to have_link(patient_2.formatted_treatment_number)
+      end
+
+      it "does not show any from another facility" do
+        expect(page).not_to have_link(other_patient.formatted_treatment_number)
+      end
     end
 
-    it "does not show treatment cards from another facility" do
-      expect(page).not_to have_link(other_patient.formatted_treatment_number)
+    context "facility sync" do
+      it "does not allow syncing patients for facility when all patients are already synced" do
+        create(:sync_log, simple_id: patient_1.patient_uuid)
+        create(:sync_log, simple_id: patient_2.patient_uuid)
+
+        visit current_path
+
+        expect(page).not_to have_link(href: district_facility_sync_path(district.id, facility.id))
+      end
+
+      it "allows syncing patients for facility if any patient was updated" do
+        patient_with_sync_errors = create(:patient, facility: facility)
+        create(:sync_log, :with_sync_errors, simple_id: patient_with_sync_errors.patient_uuid)
+
+        patient_with_sync_errors.update(updated_at: Time.now)
+        visit current_path
+
+        expect(page).to have_link(href: district_facility_sync_path(district.id, facility.id))
+      end
+
+      it "allows syncing patients for facility if any patient is not synced" do
+        expect(page).to have_link(href: district_facility_sync_path(district.id, facility.id))
+      end
     end
   end
 

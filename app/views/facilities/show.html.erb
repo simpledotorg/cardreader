@@ -11,7 +11,7 @@
             new_district_facility_patient_path(@district, @facility, @patient),
             class: "btn btn-primary" %>
 
-<% if policy(@facility).sync? && @facility.patients.map(&:unsynced?).any? %>
+<% if policy(@facility).sync? && @facility.patients.map(&:syncable?).any? %>
   <%= link_to "Sync Patients For Facility",
               district_facility_sync_path(@district, @facility),
               method: :post,

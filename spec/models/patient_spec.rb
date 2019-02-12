@@ -100,4 +100,49 @@ RSpec.describe Patient, type: :model do
       expect(Patient.highest_treatment_number).to be_nil
     end
   end
+
+  describe "#syncable?" do
+    it "should return true if the patient has not been synced" do
+      patient_with_sync_errors = create(:patient)
+
+      expect(patient_with_sync_errors.syncable?).to be true
+    end
+
+    it "should return true if the patient's sync status has no errors" do
+      patient_with_no_sync_errors = create(:patient)
+
+      expect(patient_with_no_sync_errors.syncable?).to be true
+    end
+
+    it "should return false if the patient's sync status has errors" do
+      patient_with_sync_errors = create(:patient)
+      create(:sync_log, :with_sync_errors, simple_id: patient_with_sync_errors.patient_uuid)
+
+      expect(patient_with_sync_errors.syncable?).to be false
+    end
+
+    it "should return true if the patient's record has been updated" do
+      patient_with_sync_errors = create(:patient)
+      create(:sync_log, :with_sync_errors, simple_id: patient_with_sync_errors.patient_uuid)
+
+      patient_with_sync_errors.update(updated_at: Time.now)
+
+      expect(patient_with_sync_errors.syncable?).to be true
+    end
+  end
+
+  describe "#editable?" do
+    it "should return true if the patient's sync status has errors" do
+      patient_with_sync_errors = create(:patient)
+      create(:sync_log, :with_sync_errors, simple_id: patient_with_sync_errors.patient_uuid)
+
+      expect(patient_with_sync_errors.editable?).to be true
+    end
+
+    it "should return true if the patient has not been synced" do
+      patient_with_no_sync_errors = create(:patient)
+
+      expect(patient_with_no_sync_errors.editable?).to be true
+    end
+  end
 end

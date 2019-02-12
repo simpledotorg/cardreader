@@ -6,11 +6,12 @@ module SyncLoggable
   end
 
   def sync_status(sync_log)
-    return :unsynced unless sync_log.present?
+    return :unsynced if sync_log.blank?
+
     if sync_log.synced_at < updated_at
-      return :updated
+      :updated
     elsif sync_log.sync_errors.present?
-      return :sync_errored
+      :sync_errored
     else
       :synced
     end

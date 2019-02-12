@@ -47,7 +47,7 @@ class SyncPrescriptionDrugPayload
         facility_id: visit.facility.simple_uuid,
         is_protocol_drug: PROTOCOL_DRUG_KEYS.include?(drug_name),
         created_at: visit.measured_on_without_timestamp,
-        updated_at: now }
+        updated_at: visit.measured_on_without_timestamp }
     else
       nil
     end

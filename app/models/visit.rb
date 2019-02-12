@@ -44,10 +44,10 @@ class Visit < ApplicationRecord
   private
 
   def latest_blood_pressure_sync_log
-    latest_sync_log(blood_pressure_uuid, 'BloodPressure')
+    latest_sync_logs(blood_pressure_uuid, 'BloodPressure').first
   end
 
   def latest_appointment_sync_log
-    latest_sync_log(appointment_uuid, 'Appointment')
+    latest_sync_logs(appointment_uuid, 'Appointment').first
   end
 end
