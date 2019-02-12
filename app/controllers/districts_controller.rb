@@ -13,7 +13,6 @@ class DistrictsController < ApplicationController
     @patients = @district.patients
 
     @patient_sync_report = SyncReport.new(@patients.sync_statuses)
-    @show_sync_status = ActiveRecord::Type::Boolean.new.cast(params[:show_sync_status])
   end
 
   def new

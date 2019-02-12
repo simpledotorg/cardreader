@@ -1,8 +1,8 @@
 module SyncLoggable
   extend ActiveSupport::Concern
 
-  def latest_sync_log(simple_id, simple_model)
-    SyncLog.where(simple_id: simple_id, simple_model: simple_model).order(synced_at: :desc).first
+  def latest_sync_logs(simple_ids, simple_model)
+    SyncLog.where(simple_id: simple_ids, simple_model: simple_model).order(synced_at: :desc)
   end
 
   def sync_status(sync_log)

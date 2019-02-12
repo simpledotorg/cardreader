@@ -4,11 +4,7 @@
 
 <h1><%= @district.name %></h1>
 
-<% if @show_sync_status %>
-  <%= render 'shared/patient_sync_status_panel', patients: @patients, sync_report: @patient_sync_report %>
-<% else %>
-  <%= link_to "Sync Status", district_path(id: @district.id, show_sync_status: true), class: 'btn btn-info' %>
-<% end %>
+<%= render 'shared/patient_sync_status_panel', patients: @patients, sync_report: @patient_sync_report %>
 
 <table class="table">
   <tbody>
