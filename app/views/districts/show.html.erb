@@ -17,14 +17,7 @@
 </table>
 
 <section>
-  <h3>Facility not listed?</h3>
-
-  <div class="row">
-    <div class="col-6">
-      <%= bootstrap_form_with(model: [@district, @facility], local: true, label_errors: true) do |form| %>
-        <%= form.text_field :name, class: "form-input", label: "Facility name" %>
-        <%= form.primary "Add Facility" %>
-      <% end %>
-    </div>
-  </div>
+  <h2>
+    <%= link_to "Facility not listed?", new_district_facility_path(@district), class: "btn btn-outline-dark" %>
+  </h2>
 </section>

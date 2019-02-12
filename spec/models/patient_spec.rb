@@ -70,7 +70,7 @@ RSpec.describe Patient, type: :model do
       latest_patient = create(:patient, facility: facility)
       latest_sync_log = create(:sync_log, simple_id: latest_patient.patient_uuid)
 
-      expect(Patient.last_synced_at).to eq(latest_sync_log.synced_at)
+      expect(Patient.last_synced_at.to_i).to eq(latest_sync_log.synced_at.to_i)
     end
 
     it 'returns nil if there are no sync logs' do
