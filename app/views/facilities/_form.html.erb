@@ -1,27 +1,8 @@
-<%= form_with(model: facility, local: true) do |form| %>
-  <% if facility.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(facility.errors.count, "error") %> prohibited this facility from being saved:</h2>
-
-      <ul>
-      <% facility.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :facility_name %>
+<div class="row">
+  <div class="col-6">
+    <%= bootstrap_form_with(model: [@district, @facility], local: true, label_errors: true) do |form| %>
+      <%= form.text_field :name, class: "form-input", label: "Facility name" %>
+      <%= form.primary "Add" %>
+    <% end %>
   </div>
-
-  <div class="field">
-    <%= form.label :district %>
-    <%= form.text_field :district, id: :facility_district %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

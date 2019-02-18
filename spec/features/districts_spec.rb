@@ -40,22 +40,8 @@ RSpec.feature "Districts", type: :feature do
       expect(page).not_to have_link(bathinda_chc.name)
     end
 
-    describe "adding a facility" do
-      it "displays the new facility" do
-        fill_in "Facility name", with: "PHC Paldi"
-        click_button "Add Facility"
-
-        expect(page).to have_link("PHC Paldi")
-
-        new_facility = Facility.find_by(name: "PHC Paldi")
-        expect(new_facility.district).to eq(mansa)
-        expect(new_facility.author).to eq(admin)
-      end
-
-      it "shows the correct error if name is blank" do
-        click_button "Add Facility"
-        expect(page).to have_content("Facility name can't be blank")
-      end
+    it 'should have a link to create new facilities' do
+      expect(page).to have_link(href: new_district_facility_path(mansa))
     end
   end
 end

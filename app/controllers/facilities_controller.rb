@@ -12,6 +12,9 @@ class FacilitiesController < ApplicationController
 
   def show
     authorize Patient, :index?
+
+    @patients = @facility.patients
+    @patient_sync_report = SyncReport.new(@patients.sync_statuses)
   end
 
   def new
@@ -33,7 +36,7 @@ class FacilitiesController < ApplicationController
       else
         @facilities = Facility.all
 
-        format.html { render "districts/show" }
+        format.html { render :new }
         format.json { render json: @facility.errors, status: :unprocessable_entity }
       end
     end

@@ -8,7 +8,11 @@ class DistrictsController < ApplicationController
 
   def show
     authorize Facility, :index?
+
     @facility = @district.facilities.build
+    @patients = @district.patients
+
+    @patient_sync_report = SyncReport.new(@patients.sync_statuses)
   end
 
   def new
@@ -55,12 +59,13 @@ class DistrictsController < ApplicationController
   end
 
   private
-    def set_district
-      @district = District.find(params[:id])
-      authorize @district
-    end
 
-    def district_params
-      params.require(:district).permit(:name)
-    end
+  def set_district
+    @district = District.find(params[:id])
+    authorize @district
+  end
+
+  def district_params
+    params.require(:district).permit(:name)
+  end
 end

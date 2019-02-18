@@ -15,6 +15,32 @@ class Patient < ApplicationRecord
     case_sensitive: false
   }
 
+  class << self
+    include SyncLoggable
+
+    def last_synced_at
+      joins("INNER JOIN sync_logs ON sync_logs.simple_id = patients.patient_uuid")
+        .where(sync_logs: { sync_errors: nil })
+        .maximum('sync_logs.synced_at')
+    end
+
+    def highest_treatment_number
+      pluck(:treatment_number)&.max_by(&:to_i)
+    end
+
+    def sync_statuses
+      patients = all
+      patient_uuids = patients.map(&:patient_uuid)
+      grouped_sync_logs = latest_sync_logs(patient_uuids, 'Patient')
+                            .group_by(&:simple_id)
+
+      patients.map do |patient|
+        latest_sync_log = grouped_sync_logs[patient.patient_uuid]&.first
+        patient.sync_status(latest_sync_log)
+      end
+    end
+  end
+
   TREATMENT_NUMBER_DIGITS = 8.freeze
 
   def formatted_treatment_number
@@ -25,9 +51,7 @@ class Patient < ApplicationRecord
     return "" unless treatment_number_needs_prefix?
 
     prefix = "2018-"
-    prefix += "0" * [TREATMENT_NUMBER_DIGITS - treatment_number.to_s.length, 0].max
-
-    prefix
+    prefix + "0" * [TREATMENT_NUMBER_DIGITS - treatment_number.to_s.length, 0].max
   end
 
   def first_visit
@@ -73,10 +97,10 @@ class Patient < ApplicationRecord
   end
 
   def latest_patient_sync_log
-    latest_sync_log(patient_uuid, 'Patient')
+    latest_sync_logs(patient_uuid, 'Patient').first
   end
 
   def latest_medical_history_sync_log
-    latest_sync_log(medical_history_uuid, 'MedicalHistory')
+    latest_sync_logs(medical_history_uuid, 'MedicalHistory').first
   end
 end
