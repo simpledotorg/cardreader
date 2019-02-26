@@ -6,6 +6,13 @@ namespace :import do
     ImportFacilitiesService.new(host).import
   end
 
+  desc 'Import facilites for a district from simple server'
+  task :district_facilities, [:district] => :environment do |_t, args|
+    host = ENV.fetch('SIMPLE_SERVER_HOST')
+
+    ImportFacilitiesService.new(host).import_for_district(args[:district])
+  end
+
   desc 'Import card data from spreadsheet'
   task :card_data, [:card_data_file] => :environment do |_t, args|
     ImportCardsService.new(open(args.card_data_file)).import
