@@ -7,9 +7,11 @@ RSpec.describe SyncAppointmentPayload do
 
   let!(:user) { create(:user, :admin) }
   let!(:appointment_payload) { SyncAppointmentPayload.new(patient, user.id) }
-  let!(:visits) { create_list(:visit, 3, patient: patient) }
+  let!(:visits) { create_list(:visit, 2, patient: patient) }
 
   context "when all the visits have a 'next_visit_on' field" do
+    before { create(:visit, patient: patient) }
+
     it "should mark all visits except the last one as 'visited'" do
       sync_payload = appointment_payload.to_payload
 
@@ -31,21 +33,16 @@ RSpec.describe SyncAppointmentPayload do
   end
 
   context "when all but the last visit have a 'next_visit_on' field" do
-    it "should mark all but the last visit as 'visited'" do
-      visits[2].next_visit_on = nil
-      visits[2].measured_on = 1.day.from_now
-      visits[2].save
+    before { create(:visit, measured_on: 1.day.from_now, next_visit_on: nil, patient: patient) }
 
+    it "should mark all but the last visit as 'visited'" do
       sync_payload = appointment_payload.to_payload
+
       expect(sync_payload[0][:status]).to eq 'visited'
       expect(sync_payload[1][:status]).to eq 'visited'
     end
 
     it "should not have the last visit as part of the sync payload" do
-      visits[2].next_visit_on = nil
-      visits[2].measured_on = 1.day.from_now
-      visits[2].save
-
       sync_payload = appointment_payload.to_payload
 
       expect(sync_payload.count).to be 2
