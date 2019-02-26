@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :users
 
   resources :districts do
-    resources :facilities do
+    resources :facilities, except: [:new, :create] do
       post :sync
       resources :patients do
         post :sync
