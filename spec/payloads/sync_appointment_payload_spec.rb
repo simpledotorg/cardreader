@@ -33,7 +33,7 @@ RSpec.describe SyncAppointmentPayload do
   context "when all but the last visit have a 'next_visit_on' field" do
     it "should mark all but the last visit as 'visited'" do
       visits[2].next_visit_on = nil
-      visits[2].measured_on = 3.months.from_now
+      visits[2].measured_on = 1.day.from_now
       visits[2].save
 
       sync_payload = appointment_payload.to_payload
@@ -43,7 +43,7 @@ RSpec.describe SyncAppointmentPayload do
 
     it "should not have the last visit as part of the sync payload" do
       visits[2].next_visit_on = nil
-      visits[2].measured_on = 3.months.from_now
+      visits[2].measured_on = 1.day.from_now
       visits[2].save
 
       sync_payload = appointment_payload.to_payload
