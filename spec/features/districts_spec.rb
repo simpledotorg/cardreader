@@ -39,9 +39,5 @@ RSpec.feature "Districts", type: :feature do
     it "does not show facilities from other districts" do
       expect(page).not_to have_link(bathinda_chc.name)
     end
-
-    it 'should have a link to create new facilities' do
-      expect(page).to have_link(href: new_district_facility_path(mansa))
-    end
   end
 end
