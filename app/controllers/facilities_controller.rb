@@ -17,29 +17,7 @@ class FacilitiesController < ApplicationController
     @patient_sync_report = SyncReport.new(@patients.sync_statuses)
   end
 
-  def new
-    @facility = @district.facilities.build(author: current_user)
-    authorize @facility
-  end
-
   def edit
-  end
-
-  def create
-    @facility = @district.facilities.new(facility_params.merge(author: current_user))
-    authorize @facility
-
-    respond_to do |format|
-      if @facility.save
-        format.html { redirect_to district_path(@district), notice: 'Facility was successfully created.' }
-        format.json { render :show, status: :created, location: @facility }
-      else
-        @facilities = Facility.all
-
-        format.html { render :new }
-        format.json { render json: @facility.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   def update
