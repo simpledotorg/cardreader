@@ -52,8 +52,9 @@ class DistrictsController < ApplicationController
   end
 
   def import
+    @district = District.find(params[:district_id])
     begin
-      import_facilities_for_district(@district)
+      import_facilities_for_district(@district.name)
       redirect_back(fallback_location: root_path, notice: "Facilities imported successfully for district #{@district}")
     rescue ImportFacilityError => error
       redirect_back(fallback_location: root_path, notice: error.message)
