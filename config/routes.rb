@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   resources :users
 
   resources :districts do
+    post :import
+    resources :facilities
     resources :facilities, only: [:index, :show, :edit, :update, :destroy] do
       post :sync
       resources :patients do

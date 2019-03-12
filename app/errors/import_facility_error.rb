@@ -1,0 +1,2 @@
+class ImportFacilityError < StandardError
+end

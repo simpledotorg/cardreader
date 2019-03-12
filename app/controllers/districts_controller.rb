@@ -1,4 +1,5 @@
 class DistrictsController < ApplicationController
+  include SimpleServerImportable
   before_action :set_district, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -47,6 +48,19 @@ class DistrictsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @district.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def import
+    @host = District.find(params[:host])
+    @district = District.find(params[:district_id])
+    authorize @district
+
+    begin
+      import_facilities_for_district(@host, @district)
+      redirect_back(fallback_location: root_path, notice: "Facilities imported successfully for district #{@district}")
+    rescue ImportFacilityError => error
+      redirect_back(fallback_location: root_path, notice: error.message)
     end
   end
 
