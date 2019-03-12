@@ -15,7 +15,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jbuilder', '~> 2.5'
 gem 'dotenv-rails'
 gem 'jquery-rails'
-gem 'bootstrap', '~> 4.1.3'
+gem 'bootstrap', '~> 4.3.1'
 gem "bootstrap_form", ">= 4.0.0.alpha1"
 gem 'validates_timeliness', '~> 5.0.0.alpha3'
 gem 'roo'
