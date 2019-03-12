@@ -16,7 +16,9 @@
   </tbody>
 </table>
 
-<%= link_to "Import Facilities",
-            nil,
-            method: :post,
-            class: "btn btn-warning float-left mr-1" %>
+<% if policy(@district).import? %>
+  <%= link_to "Import Facilities",
+              district_import_path(@district),
+              method: :post,
+              class: "btn btn-warning float-left mr-1" %>
+<% end %>
