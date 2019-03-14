@@ -7,12 +7,20 @@ class ImportFacilitiesService
   end
 
   def import
-    uri = URI("#{host}api/v1/facilities/sync?process_since=#{processed_since}&limit=1000")
-    response = Net::HTTP.get_response(uri)
-    response_body = JSON(response.body)
-    return unless response_body['facilities'].present?
-    response_body['facilities'].each do |facility|
+    facilities = fetch_facilities
+    return unless facilities.present?
+    facilities.each do |facility|
       save_facility(facility)
+    end
+  end
+
+  def import_for_district(district_name)
+    facilities = fetch_facilities.select { |facility| facility['district'] == district_name}
+    return unless facilities.present?
+    puts "Found #{facilities.size} for #{district_name} district"
+    district = save_district(district_name)
+    facilities.each do |facility|
+      save_facility_for_district(facility, district)
     end
   end
 
@@ -21,11 +29,22 @@ class ImportFacilitiesService
   attr_reader :host, :processed_since
 
   def author
-    User.find_by(email: "bot@simpler.org")
+    User.find_by(email: ENV.fetch('DEFAULT_AUTHOR_EMAIL'))
+  end
+
+  def fetch_facilities
+    uri = URI("#{host}api/v1/facilities/sync?process_since=#{processed_since}&limit=1000")
+    response = Net::HTTP.get_response(uri)
+    response_body = JSON(response.body)
+    response_body['facilities']
   end
 
   def save_facility(facility)
     district = save_district(facility['district'])
+    save_facility_for_district(facility, district)
+  end
+
+  def save_facility_for_district(facility, district)
     existing_facility = Facility.where('lower(name) = ?', facility['name'].downcase).where(district: district).first
     return if existing_facility.present?
     puts "Creating facility: #{facility['name']}"

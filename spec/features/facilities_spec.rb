@@ -57,28 +57,4 @@ RSpec.feature "Facilities", type: :feature do
       end
     end
   end
-
-  describe "new" do
-    describe "adding a facility" do
-      before do
-        visit new_district_facility_path(district)
-      end
-
-      it "displays the new facility" do
-        fill_in "Facility name", with: "PHC Paldi"
-        click_button "Add"
-
-        expect(page).to have_link("PHC Paldi")
-
-        new_facility = Facility.find_by(name: "PHC Paldi")
-        expect(new_facility.district).to eq(district)
-        expect(new_facility.author).to eq(admin)
-      end
-
-      it "shows the correct error if name is blank" do
-        click_button "Add"
-        expect(page).to have_content("Facility name can't be blank")
-      end
-    end
-  end
 end
