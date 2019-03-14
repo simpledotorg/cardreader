@@ -15,7 +15,7 @@ class SyncPatientPayload
       full_name: patient.name.split(' ').map(&:humanize).join(' '),
       status: 'active',
       date_of_birth: nil,
-      age: patient.age,
+      age: patient.age || 0,
       age_updated_at: now,
       created_at: patient.registered_on_without_timestamp,
       updated_at: patient.registered_on_without_timestamp,
