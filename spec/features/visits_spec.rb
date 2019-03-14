@@ -83,7 +83,7 @@ RSpec.feature "Visits", type: :feature do
 
   describe "edit" do
     before do
-      within find(".visit", text: visits.first.measured_on.strftime("%d/%m/%Y")) do
+      within first(".visit", text: visits.first.measured_on.strftime("%d/%m/%Y")) do
         click_link "Edit"
       end
     end
@@ -95,7 +95,7 @@ RSpec.feature "Visits", type: :feature do
       fill_in "Telmisartan", with: "90mg"
       click_button("Save")
 
-      within find(".visit", text: visits.first.measured_on.strftime("%d/%m/%Y")) do
+      within first(".visit", text: visits.first.measured_on.strftime("%d/%m/%Y")) do
         expect(page).to have_selector(".visit-systolic", text: "195")
         expect(page).to have_selector(".visit-diastolic", text: "112")
         expect(page).to have_selector(".visit-amlodipine", text: "20mg")
@@ -106,7 +106,7 @@ RSpec.feature "Visits", type: :feature do
 
   describe "delete" do
     before do
-      within find(".visit", text: visits.first.measured_on.strftime("%d/%m/%Y")) do
+      within first(".visit", text: visits.first.measured_on.strftime("%d/%m/%Y")) do
         click_link "Edit"
       end
 
