@@ -1,5 +1,4 @@
 class DistrictsController < ApplicationController
-  include SimpleServerImportable
   before_action :set_district, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -56,7 +55,7 @@ class DistrictsController < ApplicationController
     begin
       import_facilities_for_district(@district.name)
       redirect_back(fallback_location: root_path, notice: "Facilities imported successfully for district #{@district.name}")
-    rescue ImportFacilityError => error
+    rescue StandardError => error
       redirect_back(fallback_location: root_path, notice: error.message)
     end
   end
@@ -78,5 +77,14 @@ class DistrictsController < ApplicationController
 
   def district_params
     params.require(:district).permit(:name)
+  end
+
+  private
+
+  SIMPLE_SERVER_HOST = ENV.fetch('SIMPLE_SERVER_HOST')
+
+  def import_facilities_for_district(district)
+    import_facility_service = ImportFacilitiesService.new(SIMPLE_SERVER_HOST)
+    import_facility_service.import_for_district(district)
   end
 end

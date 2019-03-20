@@ -1,2 +1,0 @@
-class ImportFacilityError < StandardError
-end
