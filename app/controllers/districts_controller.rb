@@ -53,7 +53,8 @@ class DistrictsController < ApplicationController
   def import
     @district = District.find(params[:district_id])
     begin
-      import_facilities_for_district(@district.name)
+      simple_server_host = ENV.fetch('SIMPLE_SERVER_HOST')
+      ImportFacilitiesService.new(simple_server_host).import_for_district(@district.name)
       redirect_back(fallback_location: root_path, notice: "Facilities imported successfully for district #{@district.name}")
     rescue StandardError => error
       redirect_back(fallback_location: root_path, notice: error.message)
@@ -77,14 +78,5 @@ class DistrictsController < ApplicationController
 
   def district_params
     params.require(:district).permit(:name)
-  end
-
-  private
-
-  SIMPLE_SERVER_HOST = ENV.fetch('SIMPLE_SERVER_HOST')
-
-  def import_facilities_for_district(district)
-    import_facility_service = ImportFacilitiesService.new(SIMPLE_SERVER_HOST)
-    import_facility_service.import_for_district(district)
   end
 end
