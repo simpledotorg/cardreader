@@ -39,5 +39,11 @@ RSpec.feature "Districts", type: :feature do
     it "does not show facilities from other districts" do
       expect(page).not_to have_link(bathinda_chc.name)
     end
+
+    context 'import facilities' do
+      it "should have the 'import facility' button" do
+        expect(page).to have_link(href: district_import_path(mansa.id))
+      end
+    end
   end
 end

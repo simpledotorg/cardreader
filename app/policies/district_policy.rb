@@ -26,4 +26,8 @@ class DistrictPolicy < CardPolicy
   def destroy?
     user.admin?
   end
+
+  def import?
+    user.admin?
+  end
 end

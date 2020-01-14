@@ -50,6 +50,17 @@ class DistrictsController < ApplicationController
     end
   end
 
+  def import
+    @district = District.find(params[:district_id])
+    begin
+      simple_server_host = ENV.fetch('SIMPLE_SERVER_HOST')
+      ImportFacilitiesService.new(simple_server_host).import_for_district(@district.name)
+      redirect_back(fallback_location: root_path, notice: "Facilities imported successfully for district #{@district.name}")
+    rescue StandardError => error
+      redirect_back(fallback_location: root_path, notice: error.message)
+    end
+  end
+
   def destroy
     @district.destroy
     respond_to do |format|

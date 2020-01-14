@@ -25,4 +25,10 @@ RSpec.describe DistrictPolicy do
       expect(subject).not_to permit(operator, District)
     end
   end
+
+  permissions :import? do
+    it "permits admins" do
+      expect(subject).to permit(admin, District)
+    end
+  end
 end
