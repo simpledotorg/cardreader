@@ -1,24 +1,53 @@
-# README
+# Card Reader
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[![Build Status](https://semaphoreci.com/api/v1/resolvetosavelives/cardreader/branches/master/badge.svg)](https://semaphoreci.com/resolvetosavelives/cardreader)
 
-Things you may want to cover:
+This is a companion data-entry app for adding IHMI treatment cards to [Simple Server](https://github.com/simpledotorg/simple-server).
 
-* Ruby version
+## Development Setup
 
-* System dependencies
+First, you need to install [ruby](https://www.ruby-lang.org/en/documentation/installation/). 
+It is recommended to use [rbenv](https://github.com/rbenv/rbenv) to manage ruby versions.
 
-* Configuration
+```bash
+gem install bundler
+bundle install
+rake db:create db:setup db:migrate
+```
 
-* Database creation
+### Running the application locally
 
-* Database initialization
+The application will start at http://localhost:3001.
 
-* How to run the test suite
+```bash
+RAILS_ENV=development bin/rails s -p 3001
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+### Configuring
 
-* Deployment instructions
+The app can be configured using a `.env` file. Look at `.env.development` for sample configuration.
 
-* ...
+To allow syncing from `cardreader` to `Simple`, fill in `SIMPLE_SERVER_HOST`, `SIMPLE_SERVER_USER_ID` and `SIMPLE_SERVER_ACCESS_TOKEN` to have `cardreader` connect to `Simple`. 
+These can be found simply by connecting to a `bin/rails console` on `Simple` and running a command like the following:
+
+```ruby
+User.first.slice(:id, :access_token)
+```
+
+The `SIMPLE_SERVER_HOST` will typically be `http://localhost:3000`
+
+***NOTE:** The user that you pick for sync access will only be able to sync in the facilities they have access to*
+
+## Running the tests
+
+```bash
+RAILS_ENV=test bundle exec rspec
+```
+
+## Deployment
+`cardreader` is deployed using capistrano.
+
+```bash
+bundle exec cap <enviroment> deploy
+# eg: bundle exec cap staging deploy
+```
